@@ -21,9 +21,6 @@ public class Episode {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "season_id", updatable = false)
-    private Long seasonId;
-
     @Column(name = "episode_number", nullable = false)
     private Integer episodeNumber;
 
@@ -49,9 +46,8 @@ public class Episode {
     private String videoUrl;
     
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "season_id", nullable = false)
     @ToString.Exclude
-    private Season season;
+    private Season seasonId;
 
     @Column(name = "created_at")
     private OffsetDateTime createdAt;
