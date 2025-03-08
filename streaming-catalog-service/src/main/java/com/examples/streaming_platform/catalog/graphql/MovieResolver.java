@@ -1,78 +1,69 @@
 package main.java.com.examples.streaming_platform.catalog.graphql;
 
 import com.examples.streaming_platform.catalog.dto.MovieDTO;
-import com.examples.streaming_platform.catalog.model.Movie;
 import com.examples.streaming_platform.catalog.service.MovieService;
+import graphql.kickstart.tools.GraphQLQueryResolver;
+import graphql.kickstart.tools.GraphQLMutationResolver;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.graphql.data.method.annotation.Argument;
-import org.springframework.graphql.data.method.annotation.MutationMapping;
-import org.springframework.graphql.data.method.annotation.QueryMapping;
-import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
-@Controller
+@Component
 @RequiredArgsConstructor
-public class MovieResolver {
+public class MovieResolver implements GraphQLQueryResolver, GraphQLMutationResolver {
 
     private final MovieService movieService;
 
-    @QueryMapping
-    public Page<MovieDTO> movies(@Argument int page, @Argument int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        return movieService.getAllMovies(pageable);
+    // Queries
+    public MovieDTO getMovie(Long id) {
+        return movieService.getMovieById(id);
     }
 
-    @QueryMapping
-    public MovieDTO movie(@Argument String id) {
-        return movieService.getMovieById(Long.valueOf(id));
+    public Map<String, Object> getMovies(Integer page, Integer size, Optional<String> title, Optional<String> genre) {
+        PageRequest pageRequest = PageRequest.of(page != null ? page : 0, size != null ? size : 20);
+        
+        Page<MovieDTO> moviePage;
+        if (title.isPresent() && !title.get().isEmpty()) {
+            moviePage = movieService.searchMoviesByTitle(title.get(), pageRequest);
+        } else if (genre.isPresent() && !genre.get().isEmpty()) {
+            moviePage = movieService.getMoviesByGenre(genre.get(), pageRequest);
+        } else {
+            moviePage = movieService.getAllMovies(pageRequest);
+        }
+        
+        return Map.of(
+                "content", moviePage.getContent(),
+                "totalElements", moviePage.getTotalElements(),
+                "totalPages", moviePage.getTotalPages(),
+                "size", moviePage.getSize(),
+                "number", moviePage.getNumber()
+        );
     }
 
-    @QueryMapping
-    public Page<MovieDTO> searchMovies(@Argument String title, @Argument int page, @Argument int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        return movieService.searchMoviesByTitle(title, pageable);
-    }
-
-    @QueryMapping
-    public Page<MovieDTO> moviesByGenre(@Argument String genre, @Argument int page, @Argument int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        return movieService.getMoviesByGenre(genre, pageable);
-    }
-
-    @QueryMapping
-    public List<MovieDTO> topRatedMovies() {
+    public List<MovieDTO> getTopRatedMovies() {
         return movieService.getTopRatedMovies();
     }
 
-    @QueryMapping
-    public List<MovieDTO> featuredMovies() {
-        return movieService.getFeaturedMovies();
-    }
-
-    @QueryMapping
-    public List<Map<String, Object>> movieGenreStats() {
-        return movieService.getGenreStatistics();
-    }
-
-    @MutationMapping
-    public MovieDTO createMovie(@Argument("input") MovieDTO movieInput) {
+    // Mutations
+    public MovieDTO createMovie(MovieDTO movieInput) {
         return movieService.createMovie(movieInput);
     }
 
-    @MutationMapping
-    public MovieDTO updateMovie(@Argument String id, @Argument("input") MovieDTO movieInput) {
-        return movieService.updateMovie(Long.valueOf(id), movieInput);
+    public MovieDTO updateMovie(Long id, MovieDTO movieInput) {
+        return movieService.updateMovie(id, movieInput);
     }
 
-    @MutationMapping
-    public Boolean deleteMovie(@Argument String id) {
-        movieService.deleteMovie(Long.valueOf(id));
-        return true;
+    public Boolean deleteMovie(Long id) {
+        try {
+            movieService.deleteMovie(id);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }

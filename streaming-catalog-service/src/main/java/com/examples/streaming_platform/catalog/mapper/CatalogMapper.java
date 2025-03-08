@@ -1,48 +1,41 @@
-// mapper/CatalogMapper.java
 package com.examples.streaming_platform.catalog.mapper;
 
 import com.examples.streaming_platform.catalog.dto.*;
 import com.examples.streaming_platform.catalog.model.*;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.*;
 
-@Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface CatalogMapper {
+
     // Movie mappings
     MovieDTO movieToMovieDTO(Movie movie);
-    Movie movieDTOToMovie(MovieDTO movieDTO);
-    void updateMovieFromDTO(MovieDTO movieDTO, @MappingTarget Movie movie);
     
+    Movie movieDTOToMovie(MovieDTO movieDTO);
+    
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void updateMovieFromDTO(MovieDTO dto, @MappingTarget Movie movie);
+
     // Series mappings
-    @Mapping(target = "seasons", ignore = true)
     SeriesDTO seriesToSeriesDTO(Series series);
     
     Series seriesDTOToSeries(SeriesDTO seriesDTO);
     
-    @Mapping(target = "seasons", ignore = true)
-    void updateSeriesFromDTO(SeriesDTO seriesDTO, @MappingTarget Series series);
-    
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void updateSeriesFromDTO(SeriesDTO dto, @MappingTarget Series series);
+
     // Season mappings
-    @Mapping(target = "series", ignore = true)
-    @Mapping(target = "episodes", ignore = true)
     SeasonDTO seasonToSeasonDTO(Season season);
     
-    @Mapping(target = "series", ignore = true)
-    @Mapping(target = "episodes", ignore = true)
     Season seasonDTOToSeason(SeasonDTO seasonDTO);
     
-    @Mapping(target = "series", ignore = true)
-    void updateSeasonFromDTO(SeasonDTO seasonDTO, @MappingTarget Season season);
-    
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void updateSeasonFromDTO(SeasonDTO dto, @MappingTarget Season season);
+
     // Episode mappings
-    @Mapping(target = "season", ignore = true)
     EpisodeDTO episodeToEpisodeDTO(Episode episode);
     
-    @Mapping(target = "season", ignore = true)
     Episode episodeDTOToEpisode(EpisodeDTO episodeDTO);
     
-    @Mapping(target = "season", ignore = true)
-    void updateEpisodeFromDTO(EpisodeDTO episodeDTO, @MappingTarget Episode episode);
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void updateEpisodeFromDTO(EpisodeDTO dto, @MappingTarget Episode episode);
 }

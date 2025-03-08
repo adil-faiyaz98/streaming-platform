@@ -21,8 +21,8 @@ public interface SeriesRepository extends JpaRepository<Series, Long> {
     
     List<Series> findTop10ByOrderByAverageRatingDesc();
     
-    List<Series> findByFeaturedTrue();
+    Page<Series> findByFeaturedTrue(Pageable pageable);
     
-    @Query("SELECT g.genres as genre, COUNT(g) as count FROM Series s JOIN s.genres g GROUP BY g.genres ORDER BY COUNT(g) DESC")
-    List<Object[]> getGenreStats();
+    @Query("SELECT DISTINCT s.startYear FROM Series s ORDER BY s.startYear")
+    List<Integer> findAllReleaseYears();
 }

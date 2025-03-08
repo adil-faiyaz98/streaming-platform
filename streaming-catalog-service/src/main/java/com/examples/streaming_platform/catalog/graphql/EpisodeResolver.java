@@ -2,43 +2,43 @@ package main.java.com.examples.streaming_platform.catalog.graphql;
 
 import com.examples.streaming_platform.catalog.dto.EpisodeDTO;
 import com.examples.streaming_platform.catalog.service.EpisodeService;
+import graphql.kickstart.tools.GraphQLQueryResolver;
+import graphql.kickstart.tools.GraphQLMutationResolver;
 import lombok.RequiredArgsConstructor;
-import org.springframework.graphql.data.method.annotation.Argument;
-import org.springframework.graphql.data.method.annotation.MutationMapping;
-import org.springframework.graphql.data.method.annotation.QueryMapping;
-import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Controller
+@Component
 @RequiredArgsConstructor
-public class EpisodeResolver {
+public class EpisodeResolver implements GraphQLQueryResolver, GraphQLMutationResolver {
 
     private final EpisodeService episodeService;
 
-    @QueryMapping
-    public List<EpisodeDTO> episodesForSeason(@Argument String seasonId) {
-        return episodeService.getEpisodesBySeasonId(Long.valueOf(seasonId));
+    // Queries
+    public EpisodeDTO getEpisode(Long id) {
+        return episodeService.getEpisodeById(id);
     }
 
-    @QueryMapping
-    public EpisodeDTO episode(@Argument String id) {
-        return episodeService.getEpisodeById(Long.valueOf(id));
+    public List<EpisodeDTO> getEpisodesBySeasonId(Long seasonId) {
+        return episodeService.getEpisodesBySeasonId(seasonId);
     }
 
-    @MutationMapping
-    public EpisodeDTO createEpisode(@Argument("input") EpisodeDTO episodeInput) {
+    // Mutations
+    public EpisodeDTO createEpisode(EpisodeDTO episodeInput) {
         return episodeService.createEpisode(episodeInput.getSeasonId(), episodeInput);
     }
 
-    @MutationMapping
-    public EpisodeDTO updateEpisode(@Argument String id, @Argument("input") EpisodeDTO episodeInput) {
-        return episodeService.updateEpisode(Long.valueOf(id), episodeInput);
+    public EpisodeDTO updateEpisode(Long id, EpisodeDTO episodeInput) {
+        return episodeService.updateEpisode(id, episodeInput);
     }
 
-    @MutationMapping
-    public Boolean deleteEpisode(@Argument String id) {
-        episodeService.deleteEpisode(Long.valueOf(id));
-        return true;
+    public Boolean deleteEpisode(Long id) {
+        try {
+            episodeService.deleteEpisode(id);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }

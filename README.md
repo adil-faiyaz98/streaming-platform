@@ -1,7 +1,3 @@
-Here's a professional, concise, and clearly formatted README file documenting all functionalities:
-
----
-
 # Netflix-Inspired Microservices Backend
 ### Java | Spring Boot | GraphQL (Netflix DGS Framework)
 
@@ -13,14 +9,14 @@ This project `streaming-platform` consists of multiple microservices designed an
 
 The backend is structured as modular microservices, each responsible for specific functionality:
 
-- **Streaming Catalog Service**
-- **User Profile & Authentication Service**
-- **Subscription & Billing Service**
-- **Watchlist & Recommendations Service**
-- **Analytics & Metrics Service**
-- **Notification Service**
-- **Content Review & Rating Service**
-- **Content Search Service**
+- **streaming-catalog-service**
+- **user-profile-service**
+- **subscription-billing-service**
+- **watchlist-recommendation-service**
+- **analytics-service**
+- **notification-service**
+- **content-search-service**
+- **review-rating-service**
 
 Each microservice exposes GraphQL APIs, ensuring efficient querying and manipulation of data.
 
@@ -41,7 +37,6 @@ Each microservice exposes GraphQL APIs, ensuring efficient querying and manipula
 
 - REST Assured (API endpoint testing)
 - JUnit 5 (unit and integration tests)
-- Playwright (UI automation testing)
 
 ### Continuous Integration & Deployment (CI/CD)
 
@@ -179,7 +174,7 @@ test('User login validation', async ({ page }) => {
 
 ### Clone Repository
 ```
-git clone https://github.com/adil-faiyaz98/springboot_playwright_restassured.git
+git clone https://github.com/adil-faiyaz98/streaming-platform.git
 ```
 
 ### Compile & Package the application
@@ -223,7 +218,7 @@ Detailed documentation and further assistance are available in the project wiki 
 
 ## Contributors
 
-- [Your Name] - Adil Faiyaz - https://www.linkedin.com/in/adil-faiyaz/
+- Adil Faiyaz - https://www.linkedin.com/in/adil-faiyaz/
 
 ---
 

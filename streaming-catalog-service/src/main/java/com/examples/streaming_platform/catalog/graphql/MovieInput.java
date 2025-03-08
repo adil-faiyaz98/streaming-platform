@@ -1,5 +1,5 @@
 // graphql/fetcher/MovieDataFetcher.java
-package com.examples.streaming_platform.catalog.graphql.fetcher;
+package main.java.com.examples.streaming_platform.catalog.graphql;
 
 import com.netflix.graphql.dgs.DgsComponent;
 import com.netflix.graphql.dgs.DgsQuery;

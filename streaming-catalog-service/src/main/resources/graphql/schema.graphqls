@@ -126,30 +126,33 @@ type GenreStat {
 
 type Query {
     # Movie queries
-    movies(page: Int = 0, size: Int = 20): MoviePage!
     movie(id: ID!): Movie
-    searchMovies(title: String!, page: Int = 0, size: Int = 20): MoviePage!
-    moviesByGenre(genre: String!, page: Int = 0, size: Int = 20): MoviePage!
+    movies(page: Int, size: Int): [Movie!]!
+    moviesPage(page: Int, size: Int): MoviePage!
+    moviesByTitle(title: String!, page: Int, size: Int): [Movie!]!
+    moviesByGenre(genre: String!, page: Int, size: Int): [Movie!]!
     topRatedMovies: [Movie!]!
-    featuredMovies: [Movie!]!
-    movieGenreStats: [GenreStat!]!
     
     # Series queries
-    allSeries(page: Int = 0, size: Int = 20): SeriesPage!
-    series(id: ID!): Series
-    searchSeries(title: String!, page: Int = 0, size: Int = 20): SeriesPage!
-    seriesByGenre(genre: String!, page: Int = 0, size: Int = 20): SeriesPage!
+    seriesById(id: ID!): Series
+    series(page: Int, size: Int): [Series!]!
+    seriesPage(page: Int, size: Int): SeriesPage!
+    seriesByTitle(title: String!, page: Int, size: Int): [Series!]!
+    seriesByGenre(genre: String!, page: Int, size: Int): [Series!]!
     topRatedSeries: [Series!]!
-    featuredSeries: [Series!]!
-    seriesGenreStats: [GenreStat!]!
     
     # Season queries
-    seasonsForSeries(seriesId: ID!): [Season!]!
     season(id: ID!): Season
+    seasons(seriesId: ID!): [Season!]!
+    seasonByNumber(seriesId: ID!, seasonNumber: Int!): Season
     
     # Episode queries
-    episodesForSeason(seasonId: ID!): [Episode!]!
     episode(id: ID!): Episode
+    episodes(seasonId: ID!): [Episode!]!
+    episodeByNumber(seasonId: ID!, episodeNumber: Int!): Episode
+    
+    # Stats queries
+    popularGenres: [GenreStat!]!
 }
 
 type Mutation {

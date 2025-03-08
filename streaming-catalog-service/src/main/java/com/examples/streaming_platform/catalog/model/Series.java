@@ -13,7 +13,10 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table(name = "series")
+@Table(name = "series", indexes = {
+        @Index(name = "idx_series_title", columnList = "title"),
+        @Index(name = "idx_series_featured", columnList = "featured")
+})
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
