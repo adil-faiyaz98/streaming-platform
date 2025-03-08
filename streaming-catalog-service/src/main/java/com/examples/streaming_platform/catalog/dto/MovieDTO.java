@@ -22,11 +22,14 @@ public class MovieDTO {
     
     private String description;
     
-    @PastOrPresent(message = "Release date cannot be in the future")
     private LocalDate releaseDate;
+
+    private LocalDate releaseYear;
     
     @Positive(message = "Duration must be positive")
     private Integer duration;
+
+    private String director;
     
     private String posterUrl;
     private Set<String> genres = new HashSet<>();

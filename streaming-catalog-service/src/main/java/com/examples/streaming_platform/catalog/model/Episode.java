@@ -20,10 +20,19 @@ public class Episode {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
-    @Column(nullable = false)
+
+    @Column(name = "season_id", updatable = false)
+    private Long seasonId;
+
+    @Column(name = "episode_number", nullable = false)
     private Integer episodeNumber;
+
+
+    @Column(nullable = false)
     private String title;
+
+    @Column(columnDefinition = "TEXT")
+    private String description;
     
     @Column(length = 1000)
     private String overview;
@@ -35,6 +44,9 @@ public class Episode {
     
     @Column(name = "image_url")
     private String imageUrl;
+
+    @Column(name = "video_url")
+    private String videoUrl;
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "season_id", nullable = false)

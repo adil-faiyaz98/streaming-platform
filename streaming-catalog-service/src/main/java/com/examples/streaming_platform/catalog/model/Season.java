@@ -42,14 +42,25 @@ public class Season {
     @JoinColumn(name = "series_id", nullable = false)
     private Series series;
 
-    @OneToMany(mappedBy = "season", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Episode> episodes = new ArrayList<>();
-
     @Column(name = "created_at")
     private OffsetDateTime createdAt;
 
     @Column(name = "updated_at")
     private OffsetDateTime updatedAt;
+
+    @OneToMany(mappedBy = "seasonId", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Episode> episodes = new ArrayList<>();
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = OffsetDateTime.now();
+        updatedAt = OffsetDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = OffsetDateTime.now();
+    }
 
     public Season(Integer seasonNumber, String title, String overview, String posterUrl, LocalDate airDate) {
         this.seasonNumber = seasonNumber;

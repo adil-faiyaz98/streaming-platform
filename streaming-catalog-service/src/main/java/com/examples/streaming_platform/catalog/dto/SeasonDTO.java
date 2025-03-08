@@ -19,6 +19,9 @@ public class SeasonDTO {
     @NotNull(message = "Season number is required")
     @Positive(message = "Season number must be positive")
     private Integer seasonNumber;
+
+    @NotNull(message = "SeasonID is required")
+    private Long seasonId;
     
     private String title;
     private String overview;

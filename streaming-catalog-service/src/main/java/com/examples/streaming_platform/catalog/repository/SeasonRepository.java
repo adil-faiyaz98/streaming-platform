@@ -17,4 +17,6 @@ public interface SeasonRepository extends JpaRepository<Season, Long> {
     Page<Season> findByTvShowId(Long tvShowId, Pageable pageable);
     
     Optional<Season> findByTvShowIdAndSeasonNumber(Long tvShowId, Integer seasonNumber);
+
+    Optional<Season> findBySeriesIdAndSeasonNumber(Long seriesId, Integer seasonNumber);
 }

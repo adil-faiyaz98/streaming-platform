@@ -23,6 +23,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -116,13 +117,14 @@ public abstract class CatalogService {
         }
         movieRepository.deleteById(id);
     }
+
+    // --- SERIES METHODS ---
     
     public void incrementMovieViewCount(Long id) {
         log.debug("Incrementing view count for movie with id: {}", id);
         movieRepository.incrementViewCount(id);
     }
 
-    // Series related methods
     
     @Cacheable(value = "series", key = "'page_' + #pageable.pageNumber + '_' + #pageable.pageSize")
     public Page<SeriesDTO> getAllSeries(Pageable pageable) {
@@ -202,7 +204,7 @@ public abstract class CatalogService {
         seriesRepository.incrementViewCount(id);
     }
 
-    // Season related methods
+    // --- SEASON METHODS ---
     
     public List<SeasonDTO> getSeasonsBySeriesId(Long seriesId) {
         log.debug("Fetching seasons for series id: {}", seriesId);
@@ -221,20 +223,44 @@ public abstract class CatalogService {
                 .orElseThrow(() -> new ResourceNotFoundException("Season", "id", id));
         return catalogMapper.seasonToSeasonDTO(season);
     }
+
+    @Transactional
+    @CacheEvict(value = {"seasons", "series"}, allEntries = true)
+    public SeasonDTO createSeason(Long seriesId, SeasonDTO seasonDTO) {
+        log.debug("Creating new season for series id: {}", seriesId);
+        Series series = seriesRepository.findById(seriesId)
+                .orElseThrow(() -> new ResourceNotFoundException("Series", "id", seriesId));
+
+        Season season = catalogMapper.seasonDTOToSeason(seasonDTO);
+        season.setSeries(series);
+
+        Season savedSeason = seasonRepository.save(season);
+        return catalogMapper.seasonToSeasonDTO(savedSeason);
+    }
+
+    @Transactional
+    @CacheEvict(value = {"seasons", "series"}, allEntries = true)
+    public SeasonDTO updateSeason(Long id, SeasonDTO seasonDTO) {
+        log.debug("Updating season with id: {}", id);
+        Season existingSeason = seasonRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Season", "id", id));
+
+        catalogMapper.updateSeasonFromDTO(seasonDTO, existingSeason);
+        Season updatedSeason = seasonRepository.save(existingSeason);
+        return catalogMapper.seasonToSeasonDTO(updatedSeason);
+    }
+
+    @Transactional
+    @CacheEvict(value = {"seasons", "series"}, allEntries = true)
+    public void deleteSeason(Long id) {
+        log.debug("Deleting season with id: {}", id);
+        if (!seasonRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Season", "id", id);
+        }
+        seasonRepository.deleteById(id);
+    }
     
-    // Episode related methods
-
-    @Transactional
-    @CacheEvict(value = {"seasons", "series"}, allEntries = true)
-    public abstract SeasonDTO createSeason(Long seriesId, SeasonDTO seasonDTO);
-
-    @Transactional
-    @CacheEvict(value = {"seasons", "series"}, allEntries = true)
-    public abstract SeasonDTO updateSeason(Long id, SeasonDTO seasonDTO);
-
-    @Transactional
-    @CacheEvict(value = {"seasons", "series"}, allEntries = true)
-    public abstract void deleteSeason(Long id);
+    // --- EPISODE METHODS ---
 
     public List<EpisodeDTO> getEpisodesBySeasonId(Long seasonId) {
         log.debug("Fetching episodes for season id: {}", seasonId);
@@ -256,11 +282,30 @@ public abstract class CatalogService {
 
     @Transactional
     @CacheEvict(value = {"episodes", "seasons"}, allEntries = true)
-    public abstract EpisodeDTO createEpisode(Long seasonId, EpisodeDTO episodeDTO);
+    public EpisodeDTO createEpisode(Long seasonId, EpisodeDTO episodeDTO) {
+        log.debug("Creating new episode for season id: {}", seasonId);
+        Season season = seasonRepository.findById(seasonId)
+                .orElseThrow(() -> new ResourceNotFoundException("Season", "id", seasonId));
+
+        Episode episode = catalogMapper.episodeDTOToEpisode(episodeDTO);
+        episode.setSeason(season);
+
+        Episode savedEpisode = episodeRepository.save(episode);
+        return catalogMapper.episodeToEpisodeDTO(savedEpisode);
+    }
 
     @Transactional
     @CacheEvict(value = {"episodes", "seasons"}, allEntries = true)
-    public abstract EpisodeDTO updateEpisode(Long id, EpisodeDTO episodeDTO);
+    public EpisodeDTO updateEpisode(Long id, EpisodeDTO episodeDTO) {
+        log.debug("Updating episode with id: {}", id);
+        Episode existingEpisode = episodeRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Episode", "id", id));
+
+        catalogMapper.updateEpisodeFromDTO(episodeDTO, existingEpisode);
+        existingEpisode.setUpdatedAt(OffsetDateTime.now());
+        Episode updatedEpisode = episodeRepository.save(existingEpisode);
+        return catalogMapper.episodeToEpisodeDTO(updatedEpisode);
+    }
 
     @Transactional
     @CacheEvict(value = {"episodes", "seasons"}, allEntries = true)

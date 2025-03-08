@@ -56,6 +56,12 @@ public class SeasonService {
                 .orElseThrow(() -> new ResourceNotFoundException("Season", "tvShowId and seasonNumber", tvShowId + " and " + seasonNumber));
         return catalogMapper.seasonToSeasonDTO(season);
     }
+
+    public SeasonDTO getSeasonBySeriesIdAndSeasonNumber(Long seriesId, Integer seasonNumber) {
+        Season season = seasonRepository.findBySeriesIdAndSeasonNumber(seriesId, seasonNumber)
+                .orElseThrow(() -> new ResourceNotFoundException("Season", "seriesId and seasonNumber", seriesId + " and " + seasonNumber));
+        return catalogMapper.seasonToSeasonDTO(season);
+    }
     
     @Transactional
     public SeasonDTO createSeason(Long tvShowId, SeasonDTO seasonDTO) {
@@ -89,5 +95,11 @@ public class SeasonService {
             throw new ResourceNotFoundException("Season", "id", id);
         }
         seasonRepository.deleteById(id);
+    }
+
+    public List<SeasonDTO> get(Long seriesId) {
+        return seasonRepository.findBySeriesIdOrderBySeasonNumber(seriesId).stream()
+                .map(catalogMapper::seasonToSeasonDTO)
+                .collect(Collectors.toList());
     }
 }

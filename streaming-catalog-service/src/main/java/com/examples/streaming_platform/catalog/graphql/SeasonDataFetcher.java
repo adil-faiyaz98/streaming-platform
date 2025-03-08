@@ -21,7 +21,7 @@ public class SeasonDataFetcher {
 
     @DgsQuery
     public List<SeasonDTO> seasons(@InputArgument String seriesId) {
-        return seasonService.getSeasonsBySeriesId(Long.parseLong(seriesId));
+        return seasonService.get(Long.parseLong(seriesId));
     }
 
     @DgsQuery
@@ -36,7 +36,7 @@ public class SeasonDataFetcher {
 
     @DgsMutation
     public SeasonDTO createSeason(@InputArgument("input") SeasonDTO seasonDTO) {
-        return seasonService.createSeason(seasonDTO.getSeriesId(), seasonDTO);
+        return seasonService.createSeason(seasonDTO.getSeasonId(), seasonDTO);
     }
 
     @DgsMutation

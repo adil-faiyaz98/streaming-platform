@@ -289,27 +289,25 @@ public class CatalogServiceImpl implements CatalogService {
     @CacheEvict(value = {"episodes", "seasons"}, allEntries = true)
     @Override
     public EpisodeDTO createEpisode(Long seasonId, EpisodeDTO episodeDTO) {
-        Season season = seasonRepository.findById(seasonId)
-                .orElseThrow(() -> new ResourceNotFoundException("Season", "id", seasonId));
-        
+        log.debug("Creating new episode for season id: {}", seasonId);
+        if(!seasonRepository.existsById(seasonId)) {
+            throw new ResourceNotFoundException("Season", "id", seasonId);
+        }
         Episode episode = catalogMapper.episodeDTOToEpisode(episodeDTO);
-        episode.setSeason(season);
-        episode.setCreatedAt(ZonedDateTime.now());
-        episode.setUpdatedAt(ZonedDateTime.now());
+        episode.setSeasonId(seasonId);
         Episode savedEpisode = episodeRepository.save(episode);
         return catalogMapper.episodeToEpisodeDTO(savedEpisode);
     }
 
     @Transactional
     @CacheEvict(value = {"episodes", "seasons"}, allEntries = true)
-    @Override
     public EpisodeDTO updateEpisode(Long id, EpisodeDTO episodeDTO) {
-        Episode episode = episodeRepository.findById(id)
+        log.debug("Updating episode with id: {}", id);
+        Episode existingEpisode = episodeRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Episode", "id", id));
-        
-        catalogMapper.updateEpisodeFromDTO(episodeDTO, episode);
-        episode.setUpdatedAt(ZonedDateTime.now());
-        Episode updatedEpisode = episodeRepository.save(episode);
+
+        catalogMapper.updateEpisodeFromDTO(episodeDTO, existingEpisode);
+        Episode updatedEpisode = episodeRepository.save(existingEpisode);
         return catalogMapper.episodeToEpisodeDTO(updatedEpisode);
     }
 
