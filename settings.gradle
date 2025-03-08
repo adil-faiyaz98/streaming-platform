@@ -1,0 +1,10 @@
+rootProject.name = 'streaming_platform'
+
+include 'streaming-catalog-service'
+include 'user-profile-service'
+include 'subscription-billing-service'
+include 'watchlist-recommendation-service'
+include 'analytics-service'
+include 'notification-service'
+include 'review-rating-service'
+include 'content-search-service'

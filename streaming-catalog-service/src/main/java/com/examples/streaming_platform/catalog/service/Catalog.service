@@ -1,0 +1,82 @@
+// service/CatalogService.java
+package com.examples.streaming_platform.catalog.service;
+
+import com.examples.streaming_platform.catalog.dto.MovieDTO;
+import com.examples.streaming_platform.catalog.dto.SeriesDTO;
+import com.examples.streaming_platform.catalog.exception.ResourceNotFoundException;
+import com.examples.streaming_platform.catalog.mapper.CatalogMapper;
+import com.examples.streaming_platform.catalog.model.Movie;
+import com.examples.streaming_platform.catalog.repository.MovieRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+@Service
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
+public class CatalogService {
+    private final MovieRepository movieRepository;
+    private final CatalogMapper catalogMapper;
+
+    @Cacheable(value = "movies", key = "#id")
+    public MovieDTO getMovieById(Long id) {
+        Movie movie = movieRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Movie not found with id: " + id));
+        return catalogMapper.movieToMovieDTO(movie);
+    }
+
+    public Page<MovieDTO> getAllMovies(Pageable pageable) {
+        return movieRepository.findAll(pageable)
+            .map(catalogMapper::movieToMovieDTO);
+    }
+
+    public List<MovieDTO> searchMovies(String query) {
+        return movieRepository.findByTitleContainingIgnoreCase(query).stream()
+            .map(catalogMapper::movieToMovieDTO)
+            .toList();
+    }
+
+    public List<MovieDTO> getFeaturedMovies() {
+        return movieRepository.findByFeaturedTrue().stream()
+            .map(catalogMapper::movieToMovieDTO)
+            .toList();
+    }
+
+    @Transactional
+    public MovieDTO createMovie(MovieDTO movieDTO) {
+        Movie movie = catalogMapper.movieDTOToMovie(movieDTO);
+        Movie savedMovie = movieRepository.save(movie);
+        return catalogMapper.movieToMovieDTO(savedMovie);
+    }
+
+    @Transactional
+    public MovieDTO updateMovie(Long id, MovieDTO movieDTO) {
+        Movie existingMovie = movieRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Movie not found with id: " + id));
+
+        catalogMapper.updateMovieFromDTO(movieDTO, existingMovie);
+        Movie updatedMovie = movieRepository.save(existingMovie);
+        return catalogMapper.movieToMovieDTO(updatedMovie);
+    }
+
+    @Transactional
+    public void deleteMovie(Long id) {
+        if (!movieRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Movie not found with id: " + id);
+        }
+        movieRepository.deleteById(id);
+    }
+
+    @Transactional
+    public void incrementViewCount(Long movieId) {
+        Movie movie = movieRepository.findById(movieId)
+            .orElseThrow(() -> new ResourceNotFoundException("Movie not found with id: " + movieId));
+        movie.setViewCount(movie.getViewCount() + 1);
+        movieRepository.save(movie);
+    }
+}

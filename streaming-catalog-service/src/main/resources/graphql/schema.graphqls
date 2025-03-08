@@ -1,0 +1,50 @@
+# resources/graphql/schema.graphqls
+type Movie {
+    id: ID!
+    title: String!
+    description: String
+    releaseYear: Int
+    genres: [String!]!
+    director: String
+    duration: Int
+    maturityRating: String
+    imageUrl: String
+    videoUrl: String
+    averageRating: Float
+    viewCount: Int
+    featured: Boolean
+}
+
+input MovieInput {
+    title: String!
+    description: String
+    releaseYear: Int
+    genres: [String!]!
+    director: String
+    duration: Int
+    maturityRating: String
+    imageUrl: String
+    videoUrl: String
+    featured: Boolean
+}
+
+type MoviePage {
+    content: [Movie!]!
+    totalElements: Int!
+    totalPages: Int!
+    size: Int!
+    number: Int!
+}
+
+type Query {
+    movie(id: ID!): Movie
+    movies(page: Int, size: Int): MoviePage!
+    searchMovies(query: String!): [Movie!]!
+    featuredMovies: [Movie!]!
+}
+
+type Mutation {
+    createMovie(input: MovieInput!): Movie!
+    updateMovie(id: ID!, input: MovieInput!): Movie!
+    deleteMovie(id: ID!): Boolean!
+}
