@@ -27,7 +27,7 @@ public class Movie {
     @Column(nullable = false)
     private String title;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(length = 2000)
     private String description;
 
     @Column(name = "release_year")
@@ -50,17 +50,17 @@ public class Movie {
     private String videoUrl;
 
     @Column(name = "average_rating")
-    private Double averageRating = 0.0;
+    private Float averageRating;
 
     @Column(name = "view_count")
-    private Long viewCount = 0L;
+    private Integer viewCount = 0;
 
     private Boolean featured = false;
 
     @Column(name = "rating")
     private double rating;
 
-    @Column(name = "created_at")
+    @Column(name = "created_at", updatable = false)
     private OffsetDateTime createdAt;
 
     @Column(name = "updated_at")

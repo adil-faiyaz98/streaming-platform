@@ -16,6 +16,7 @@ import com.examples.streaming_platform.catalog.repository.SeasonRepository;
 import com.examples.streaming_platform.catalog.repository.EpisodeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
@@ -23,9 +24,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.OffsetDateTime;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -35,7 +36,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public abstract class CatalogService {
+public class CatalogService {
 
     private final MovieRepository movieRepository;
     private final SeriesRepository seriesRepository;
@@ -43,15 +44,15 @@ public abstract class CatalogService {
     private final EpisodeRepository episodeRepository;
     private final CatalogMapper catalogMapper;
 
-    // Movie related methods
-    
+    // ----- Movie Methods -----
+
     @Cacheable(value = "movies", key = "'page_' + #pageable.pageNumber + '_' + #pageable.pageSize")
     public Page<MovieDTO> getAllMovies(Pageable pageable) {
         log.debug("Fetching all movies with pagination: {}", pageable);
         return movieRepository.findAll(pageable)
-                .map(catalogMapper::movieToMovieDTO);
+                .map((java.util.function.Function<? super Movie, ? extends MovieDTO>) catalogMapper::movieToMovieDTO);
     }
-    
+
     @Cacheable(value = "movies", key = "'id_' + #id")
     public MovieDTO getMovieById(Long id) {
         log.debug("Fetching movie with id: {}", id);
@@ -59,34 +60,35 @@ public abstract class CatalogService {
                 .orElseThrow(() -> new ResourceNotFoundException("Movie", "id", id));
         return catalogMapper.movieToMovieDTO(movie);
     }
-    
+
     public Page<MovieDTO> searchMoviesByTitle(String title, Pageable pageable) {
         log.debug("Searching movies with title containing: {}", title);
         return movieRepository.findByTitleContainingIgnoreCase(title, pageable)
-                .map(catalogMapper::movieToMovieDTO);
+                .map((java.util.function.Function<? super Movie, ? extends MovieDTO>) catalogMapper::movieToMovieDTO);
     }
-    
+
     public Page<MovieDTO> getMoviesByGenre(String genre, Pageable pageable) {
         log.debug("Fetching movies with genre: {}", genre);
         return movieRepository.findByGenre(genre, pageable)
-                .map(catalogMapper::movieToMovieDTO);
+                .map((java.util.function.Function<? super Movie, ? extends MovieDTO>) catalogMapper::movieToMovieDTO);
     }
-    
+
     @Cacheable(value = "topRatedMovies")
     public List<MovieDTO> getTopRatedMovies() {
         log.debug("Fetching top rated movies");
-        return movieRepository.findTop10ByOrderByRatingDesc().stream()
-                .map(catalogMapper::movieToMovieDTO)
+        return movieRepository.findTop10ByOrderByAverageRatingDesc().stream()
+                .map(movie -> catalogMapper.movieToMovieDTO(movie))
                 .collect(Collectors.toList());
     }
-    
-    public List<MovieDTO> getFeaturedMovies() {
+
+    public @NotNull List<Object> getFeaturedMovies() {
         log.debug("Fetching featured movies");
         return movieRepository.findByFeaturedTrue().stream()
+                .map(object -> (Movie) object)
                 .map(catalogMapper::movieToMovieDTO)
                 .collect(Collectors.toList());
     }
-    
+
     @Transactional
     @CacheEvict(value = {"movies", "topRatedMovies"}, allEntries = true)
     public MovieDTO createMovie(MovieDTO movieDTO) {
@@ -95,19 +97,19 @@ public abstract class CatalogService {
         Movie savedMovie = movieRepository.save(movie);
         return catalogMapper.movieToMovieDTO(savedMovie);
     }
-    
+
     @Transactional
     @CacheEvict(value = {"movies", "topRatedMovies"}, allEntries = true)
     public MovieDTO updateMovie(Long id, MovieDTO movieDTO) {
         log.debug("Updating movie with id: {}", id);
         Movie existingMovie = movieRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Movie", "id", id));
-        
+
         catalogMapper.updateMovieFromDTO(movieDTO, existingMovie);
         Movie updatedMovie = movieRepository.save(existingMovie);
         return catalogMapper.movieToMovieDTO(updatedMovie);
     }
-    
+
     @Transactional
     @CacheEvict(value = {"movies", "topRatedMovies"}, allEntries = true)
     public void deleteMovie(Long id) {
@@ -118,21 +120,35 @@ public abstract class CatalogService {
         movieRepository.deleteById(id);
     }
 
-    // --- SERIES METHODS ---
-    
     public void incrementMovieViewCount(Long id) {
         log.debug("Incrementing view count for movie with id: {}", id);
         movieRepository.incrementViewCount(id);
     }
 
-    
+    // Implementation of previously abstract method
+    public Map<String, Long> getMovieGenreStats() {
+        log.debug("Calculating movie genre statistics");
+        Map<String, Long> genreCounts = new HashMap<>();
+
+        List<Movie> movies = movieRepository.findAll();
+        for (Movie movie : movies) {
+            for (String genre : movie.getGenres()) {
+                genreCounts.put(genre, genreCounts.getOrDefault(genre, 0L) + 1);
+            }
+        }
+
+        return genreCounts;
+    }
+
+    // ----- Series Methods -----
+
     @Cacheable(value = "series", key = "'page_' + #pageable.pageNumber + '_' + #pageable.pageSize")
     public Page<SeriesDTO> getAllSeries(Pageable pageable) {
         log.debug("Fetching all series with pagination: {}", pageable);
         return seriesRepository.findAll(pageable)
                 .map(catalogMapper::seriesToSeriesDTO);
     }
-    
+
     @Cacheable(value = "series", key = "'id_' + #id")
     public SeriesDTO getSeriesById(Long id) {
         log.debug("Fetching series with id: {}", id);
@@ -140,19 +156,19 @@ public abstract class CatalogService {
                 .orElseThrow(() -> new ResourceNotFoundException("Series", "id", id));
         return catalogMapper.seriesToSeriesDTO(series);
     }
-    
+
     public Page<SeriesDTO> searchSeriesByTitle(String title, Pageable pageable) {
         log.debug("Searching series with title containing: {}", title);
         return seriesRepository.findByTitleContainingIgnoreCase(title, pageable)
                 .map(catalogMapper::seriesToSeriesDTO);
     }
-    
+
     public Page<SeriesDTO> getSeriesByGenre(String genre, Pageable pageable) {
         log.debug("Fetching series with genre: {}", genre);
         return seriesRepository.findByGenre(genre, pageable)
                 .map(catalogMapper::seriesToSeriesDTO);
     }
-    
+
     @Cacheable(value = "topRatedSeries")
     public List<SeriesDTO> getTopRatedSeries() {
         log.debug("Fetching top rated series");
@@ -160,14 +176,14 @@ public abstract class CatalogService {
                 .map(catalogMapper::seriesToSeriesDTO)
                 .collect(Collectors.toList());
     }
-    
+
     public List<SeriesDTO> getFeaturedSeries() {
         log.debug("Fetching featured series");
         return seriesRepository.findByFeaturedTrue().stream()
                 .map(catalogMapper::seriesToSeriesDTO)
                 .collect(Collectors.toList());
     }
-    
+
     @Transactional
     @CacheEvict(value = {"series", "topRatedSeries"}, allEntries = true)
     public SeriesDTO createSeries(SeriesDTO seriesDTO) {
@@ -176,19 +192,19 @@ public abstract class CatalogService {
         Series savedSeries = seriesRepository.save(series);
         return catalogMapper.seriesToSeriesDTO(savedSeries);
     }
-    
+
     @Transactional
     @CacheEvict(value = {"series", "topRatedSeries"}, allEntries = true)
     public SeriesDTO updateSeries(Long id, SeriesDTO seriesDTO) {
         log.debug("Updating series with id: {}", id);
         Series existingSeries = seriesRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Series", "id", id));
-        
+
         catalogMapper.updateSeriesFromDTO(seriesDTO, existingSeries);
         Series updatedSeries = seriesRepository.save(existingSeries);
         return catalogMapper.seriesToSeriesDTO(updatedSeries);
     }
-    
+
     @Transactional
     @CacheEvict(value = {"series", "topRatedSeries"}, allEntries = true)
     public void deleteSeries(Long id) {
@@ -198,25 +214,34 @@ public abstract class CatalogService {
         }
         seriesRepository.deleteById(id);
     }
-    
+
     public void incrementSeriesViewCount(Long id) {
         log.debug("Incrementing view count for series with id: {}", id);
         seriesRepository.incrementViewCount(id);
     }
 
-    // --- SEASON METHODS ---
-    
+    // Implementation for TV Show delete (as it was abstract before)
+    @Transactional
+    @CacheEvict(value = {"tvShows", "topRatedTvShows"}, allEntries = true)
+    public void deleteTvShow(Long id) {
+        log.debug("Deleting TV show with id: {}", id);
+        // TV Shows are considered the same as Series in this implementation
+        deleteSeries(id);
+    }
+
+    // ----- Season Methods -----
+
     public List<SeasonDTO> getSeasonsBySeriesId(Long seriesId) {
         log.debug("Fetching seasons for series id: {}", seriesId);
         if (!seriesRepository.existsById(seriesId)) {
             throw new ResourceNotFoundException("Series", "id", seriesId);
         }
-        
+
         return seasonRepository.findBySeriesIdOrderBySeasonNumber(seriesId).stream()
                 .map(catalogMapper::seasonToSeasonDTO)
                 .collect(Collectors.toList());
     }
-    
+
     public SeasonDTO getSeasonById(Long id) {
         log.debug("Fetching season with id: {}", id);
         Season season = seasonRepository.findById(id)
@@ -233,7 +258,6 @@ public abstract class CatalogService {
 
         Season season = catalogMapper.seasonDTOToSeason(seasonDTO);
         season.setSeries(series);
-
         Season savedSeason = seasonRepository.save(season);
         return catalogMapper.seasonToSeasonDTO(savedSeason);
     }
@@ -259,20 +283,20 @@ public abstract class CatalogService {
         }
         seasonRepository.deleteById(id);
     }
-    
-    // --- EPISODE METHODS ---
+
+    // ----- Episode Methods -----
 
     public List<EpisodeDTO> getEpisodesBySeasonId(Long seasonId) {
         log.debug("Fetching episodes for season id: {}", seasonId);
         if (!seasonRepository.existsById(seasonId)) {
             throw new ResourceNotFoundException("Season", "id", seasonId);
         }
-        
+
         return episodeRepository.findBySeasonIdOrderByEpisodeNumber(seasonId).stream()
                 .map(catalogMapper::episodeToEpisodeDTO)
                 .collect(Collectors.toList());
     }
-    
+
     public EpisodeDTO getEpisodeById(Long id) {
         log.debug("Fetching episode with id: {}", id);
         Episode episode = episodeRepository.findById(id)
@@ -289,7 +313,6 @@ public abstract class CatalogService {
 
         Episode episode = catalogMapper.episodeDTOToEpisode(episodeDTO);
         episode.setSeason(season);
-
         Episode savedEpisode = episodeRepository.save(episode);
         return catalogMapper.episodeToEpisodeDTO(savedEpisode);
     }
@@ -302,17 +325,18 @@ public abstract class CatalogService {
                 .orElseThrow(() -> new ResourceNotFoundException("Episode", "id", id));
 
         catalogMapper.updateEpisodeFromDTO(episodeDTO, existingEpisode);
-        existingEpisode.setUpdatedAt(OffsetDateTime.now());
         Episode updatedEpisode = episodeRepository.save(existingEpisode);
         return catalogMapper.episodeToEpisodeDTO(updatedEpisode);
     }
 
     @Transactional
     @CacheEvict(value = {"episodes", "seasons"}, allEntries = true)
-    public abstract void deleteEpisode(Long id);
-
-    @Transactional
-    @CacheEvict(value = {"tvShows", "topRatedTvShows"}, allEntries = true)
-    public abstract void deleteTvShow(Long id);
+    public void deleteEpisode(Long id) {
+        log.debug("Deleting episode with id: {}", id);
+        if (!episodeRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Episode", "id", id);
+        }
+        episodeRepository.deleteById(id);
+    }
 }
 

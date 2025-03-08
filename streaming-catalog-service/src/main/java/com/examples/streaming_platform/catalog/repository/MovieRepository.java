@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -37,4 +38,6 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
     void incrementViewCount(@Param("id") Long id);
 
     Page<Movie> findGenresIn(Set<String> genres, Pageable pageable);
+
+    Collection<Object> findTop10ByOrderByAverageRatingDesc();
 }

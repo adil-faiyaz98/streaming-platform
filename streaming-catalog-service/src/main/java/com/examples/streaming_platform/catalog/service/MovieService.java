@@ -23,7 +23,7 @@ public class MovieService {
     
     public Page<MovieDTO> getAllMovies(Pageable pageable) {
         return movieRepository.findAll(pageable)
-                .map(catalogMapper::movieToMovieDTO);
+                .map((java.util.function.Function<? super Movie, ? extends MovieDTO>) catalogMapper::movieToMovieDTO);
     }
     
     public MovieDTO getMovieById(Long id) {
@@ -34,18 +34,18 @@ public class MovieService {
     
     public Page<MovieDTO> searchMoviesByTitle(String title, Pageable pageable) {
         return movieRepository.findByTitleContainingIgnoreCase(title, pageable)
-                .map(catalogMapper::movieToMovieDTO);
+                .map((java.util.function.Function<? super Movie, ? extends MovieDTO>) catalogMapper::movieToMovieDTO);
     }
     
     public Page<MovieDTO> getMoviesByGenre(String genre, Pageable pageable) {
         return movieRepository.findByGenre(genre, pageable)
-                .map(catalogMapper::movieToMovieDTO);
+                .map((java.util.function.Function<? super Movie, ? extends MovieDTO>) catalogMapper::movieToMovieDTO);
     }
     
     public List<MovieDTO> getTopRatedMovies() {
         return movieRepository.findTop10ByOrderByRatingDesc()
                 .stream()
-                .map(catalogMapper::movieToMovieDTO)
+                .map(movie -> catalogMapper.movieToMovieDTO((Movie) movie))
                 .collect(Collectors.toList());
     }
     
