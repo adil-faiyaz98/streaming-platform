@@ -32,6 +32,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-graphql'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-cache'
+    implementation 'com.graphql-java:graphql-java-extended-scalars:21.0'
     
     // Database
     runtimeOnly 'org.postgresql:postgresql:42.7.1'
