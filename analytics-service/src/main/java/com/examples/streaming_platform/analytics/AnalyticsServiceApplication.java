@@ -1,12 +1,12 @@
-package com.examples.streaming_platform.catalog;
+package main.java.com.examples.streaming_platform.analytics;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class CatalogServiceApplication {
-    
+public class AnalyticsServiceApplication {
+
     public static void main(String[] args) {
-        SpringApplication.run(CatalogServiceApplication.class, args);
+        SpringApplication.run(AnalyticsServiceApplication.class, args);
     }
 }
