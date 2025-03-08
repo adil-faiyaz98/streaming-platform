@@ -24,7 +24,6 @@ public class Episode {
     @Column(name = "episode_number", nullable = false)
     private Integer episodeNumber;
 
-
     @Column(nullable = false)
     private String title;
 
@@ -46,12 +45,24 @@ public class Episode {
     private String videoUrl;
     
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "season_id")
     @ToString.Exclude
-    private Season seasonId;
+    private Season season; // Renamed from seasonId to season
 
     @Column(name = "created_at")
     private OffsetDateTime createdAt;
 
     @Column(name = "updated_at")
     private OffsetDateTime updatedAt;
+    
+    @PrePersist
+    protected void onCreate() {
+        createdAt = OffsetDateTime.now();
+        updatedAt = OffsetDateTime.now();
+    }
+    
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = OffsetDateTime.now();
+    }
 }
