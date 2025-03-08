@@ -1,122 +1,96 @@
+
+```markdown
 # Streaming Catalog Service
 
-A microservice that manages the catalog of movies, TV series, seasons, and episodes for a streaming platform.
+## Overview
 
-## Features
+The Streaming Catalog Service is a Spring Boot application that provides a catalog of series, seasons, and episodes. It includes features such as caching, circuit breaker, and database interactions.
 
-- CRUD operations for movies, series, seasons, and episodes
-- RESTful API endpoints for all resources
-- GraphQL API for flexible queries
-- Search and filter functionality by title, genre, rating, etc.
-- Pagination and sorting support
-- Caching with Redis for improved performance
-- PostgreSQL database for persistence
-- Flyway for database migrations
-- OpenAPI documentation
-- Docker support for easy deployment
+## Prerequisites
 
-## Technologies Used
+- Java 21
+- Gradle
+- Docker 
 
-- Java 17
-- Spring Boot 3.x
-- Spring Data JPA
-- Spring GraphQL
-- PostgreSQL
-- Redis (for caching)
-- Flyway (for DB migrations)
-- MapStruct
-- Docker & Docker Compose
-- OpenAPI (Swagger)
+## Getting Started
 
-## API Documentation
+### Clone the repository
 
-### RESTful Endpoints
-
-| HTTP Method | Endpoint                                 | Description                   |
-|-------------|------------------------------------------|-------------------------------|
-| GET         | /api/v1/movies                           | Get all movies (paginated)    |
-| GET         | /api/v1/movies/{id}                      | Get movie by ID               |
-| GET         | /api/v1/movies/search?title={title}      | Search movies by title        |
-| GET         | /api/v1/movies/genre/{genre}             | Get movies by genre           |
-| GET         | /api/v1/movies/top-rated                 | Get top-rated movies          |
-| POST        | /api/v1/movies                           | Create a new movie            |
-| PUT         | /api/v1/movies/{id}                      | Update a movie                |
-| DELETE      | /api/v1/movies/{id}                      | Delete a movie                |
-| GET         | /api/v1/tv-shows                         | Get all TV shows (paginated)  |
-| GET         | /api/v1/tv-shows/{id}                    | Get TV show by ID             |
-| POST        | /api/v1/tv-shows                         | Create a new TV show          |
-| PUT         | /api/v1/tv-shows/{id}                    | Update a TV show              |
-| DELETE      | /api/v1/tv-shows/{id}                    | Delete a TV show              |
-| GET         | /api/v1/tv-shows/{tvShowId}/seasons      | Get seasons for a TV show     |
-| GET         | /api/v1/seasons/{id}                     | Get season by ID              |
-| POST        | /api/v1/tv-shows/{tvShowId}/seasons      | Create a new season           |
-| PUT         | /api/v1/seasons/{id}                     | Update a season               |
-| DELETE      | /api/v1/seasons/{id}                     | Delete a season               |
-| GET         | /api/v1/seasons/{seasonId}/episodes      | Get episodes for a season     |
-| GET         | /api/v1/episodes/{id}                    | Get episode by ID             |
-| POST        | /api/v1/seasons/{seasonId}/episodes      | Create a new episode          |
-| PUT         | /api/v1/episodes/{id}                    | Update an episode             |
-| DELETE      | /api/v1/episodes/{id}                    | Delete an episode             |
-
-### GraphQL API
-
-GraphQL endpoint: `/graphql`
-
-Example queries:
-```graphql
-# Get a movie by ID
-query {
-  getMovie(id: 1) {
-    id
-    title
-    description
-    releaseYear
-    genres
-    director
-    averageRating
-  }
-}
-
-# Get paginated list of movies
-query {
-  getMovies(page: 0, size: 10) {
-    content {
-      id
-      title
-      description
-    }
-    totalElements
-    totalPages
-    size
-    number
-  }
-}
-
-# Create a new movie
-mutation {
-  createMovie(movieInput: {
-    title: "The Matrix"
-    description: "A computer hacker learns about the true nature of reality"
-    releaseYear: 1999
-    genres: ["Action", "Sci-Fi"]
-    director: "Wachowski Sisters"
-    duration: 136
-  }) {
-    id
-    title
-    averageRating
-  }
-}
+```sh
+git clone https://github.com/your-username/streaming-catalog-service.git
+cd streaming-catalog-service
 ```
 
-## Running Locally
+### Build the project
 
-### Prerequisites
-- Java 17+
-- Maven 3.6+ or Docker
-
-### Using Maven
-```bash
-git clone https://github.com/adil-faiyaz98/streaming-platform.git
-cd streaming-platorm
+```sh
+./gradlew build
 ```
+
+### Run the application
+
+```sh
+./gradlew bootRun
+```
+
+### Run tests
+
+```sh
+./gradlew test
+```
+
+## Docker
+
+### Build Docker image
+
+```sh
+docker build -t streaming-catalog-service .
+```
+
+### Run Docker container
+
+```sh
+docker run -p 8080:8080 streaming-catalog-service
+```
+
+## Configuration
+
+### Application properties
+
+Configure the application by editing the `src/main/resources/application.properties` file.
+
+### Database
+
+The application uses PostgreSQL as the primary database and H2 for testing. Configure the database settings in the `application.properties` file.
+
+## Endpoints
+
+### Series
+
+- `GET /series` - Get all series
+- `GET /series/{id}` - Get series by ID
+- `POST /series` - Create a new series
+- `PUT /series/{id}` - Update a series
+- `DELETE /series/{id}` - Delete a series
+
+### Seasons
+
+- `GET /seasons` - Get all seasons
+- `GET /seasons/{id}` - Get season by ID
+- `POST /seasons` - Create a new season
+- `PUT /seasons/{id}` - Update a season
+- `DELETE /seasons/{id}` - Delete a season
+
+### Episodes
+
+- `GET /episodes` - Get all episodes
+- `GET /episodes/{id}` - Get episode by ID
+- `POST /episodes` - Create a new episode
+- `PUT /episodes/{id}` - Update an episode
+- `DELETE /episodes/{id}` - Delete an episode
+
+## License
+
+This project is licensed under the MIT License.
+```
+

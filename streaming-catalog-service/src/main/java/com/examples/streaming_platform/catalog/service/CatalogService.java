@@ -16,7 +16,6 @@ import com.examples.streaming_platform.catalog.repository.SeasonRepository;
 import com.examples.streaming_platform.catalog.repository.EpisodeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
@@ -50,7 +49,7 @@ public class CatalogService {
     public Page<MovieDTO> getAllMovies(Pageable pageable) {
         log.debug("Fetching all movies with pagination: {}", pageable);
         return movieRepository.findAll(pageable)
-                .map((java.util.function.Function<? super Movie, ? extends MovieDTO>) catalogMapper::movieToMovieDTO);
+                .map(catalogMapper::movieToMovieDTO);
     }
 
     @Cacheable(value = "movies", key = "'id_' + #id")
@@ -64,27 +63,26 @@ public class CatalogService {
     public Page<MovieDTO> searchMoviesByTitle(String title, Pageable pageable) {
         log.debug("Searching movies with title containing: {}", title);
         return movieRepository.findByTitleContainingIgnoreCase(title, pageable)
-                .map((java.util.function.Function<? super Movie, ? extends MovieDTO>) catalogMapper::movieToMovieDTO);
+                .map(catalogMapper::movieToMovieDTO);
     }
 
     public Page<MovieDTO> getMoviesByGenre(String genre, Pageable pageable) {
         log.debug("Fetching movies with genre: {}", genre);
         return movieRepository.findByGenre(genre, pageable)
-                .map((java.util.function.Function<? super Movie, ? extends MovieDTO>) catalogMapper::movieToMovieDTO);
+                .map(catalogMapper::movieToMovieDTO);
     }
 
     @Cacheable(value = "topRatedMovies")
     public List<MovieDTO> getTopRatedMovies() {
         log.debug("Fetching top rated movies");
         return movieRepository.findTop10ByOrderByAverageRatingDesc().stream()
-                .map(movie -> catalogMapper.movieToMovieDTO(movie))
+                .map(movie -> catalogMapper.movieToMovieDTO((Movie) movie))
                 .collect(Collectors.toList());
     }
 
-    public @NotNull List<Object> getFeaturedMovies() {
+    public List<MovieDTO> getFeaturedMovies() {
         log.debug("Fetching featured movies");
         return movieRepository.findByFeaturedTrue().stream()
-                .map(object -> (Movie) object)
                 .map(catalogMapper::movieToMovieDTO)
                 .collect(Collectors.toList());
     }

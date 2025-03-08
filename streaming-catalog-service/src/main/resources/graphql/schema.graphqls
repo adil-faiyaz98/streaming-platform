@@ -1,4 +1,8 @@
 # resources/graphql/schema.graphqls
+
+"""
+Represents a movie in the catalog.
+"""
 type Movie {
     id: ID!
     title: String!
@@ -17,6 +21,9 @@ type Movie {
     updatedAt: String
 }
 
+"""
+Input type for creating or updating a movie.
+"""
 input MovieInput {
     title: String!
     description: String
@@ -30,6 +37,9 @@ input MovieInput {
     featured: Boolean
 }
 
+"""
+Represents a paginated list of movies.
+"""
 type MoviePage {
     content: [Movie!]!
     totalElements: Int!
@@ -38,6 +48,9 @@ type MoviePage {
     number: Int!
 }
 
+"""
+Represents a series in the catalog.
+"""
 type Series {
     id: ID!
     title: String!
@@ -55,6 +68,9 @@ type Series {
     updatedAt: String
 }
 
+"""
+Input type for creating or updating a series.
+"""
 input SeriesInput {
     title: String!
     description: String
@@ -66,6 +82,9 @@ input SeriesInput {
     featured: Boolean
 }
 
+"""
+Represents a paginated list of series.
+"""
 type SeriesPage {
     content: [Series!]!
     totalElements: Int!
@@ -74,6 +93,9 @@ type SeriesPage {
     number: Int!
 }
 
+"""
+Represents a season in a series.
+"""
 type Season {
     id: ID!
     seriesId: ID!
@@ -86,6 +108,9 @@ type Season {
     updatedAt: String
 }
 
+"""
+Input type for creating or updating a season.
+"""
 input SeasonInput {
     seriesId: ID!
     seasonNumber: Int!
@@ -95,6 +120,9 @@ input SeasonInput {
     imageUrl: String
 }
 
+"""
+Represents an episode in a season.
+"""
 type Episode {
     id: ID!
     seasonId: ID!
@@ -108,6 +136,9 @@ type Episode {
     updatedAt: String
 }
 
+"""
+Input type for creating or updating an episode.
+"""
 input EpisodeInput {
     seasonId: ID!
     episodeNumber: Int!
@@ -118,11 +149,17 @@ input EpisodeInput {
     videoUrl: String
 }
 
+"""
+Represents statistics for a genre.
+"""
 type GenreStat {
     genre: String!
     count: Int!
 }
 
+"""
+Root query type.
+"""
 type Query {
     # Movie queries
     movies(page: Int, size: Int): MoviePage!
@@ -131,7 +168,7 @@ type Query {
     moviesByGenre(genre: String!, page: Int, size: Int): MoviePage!
     topRatedMovies: [Movie!]!
     featuredMovies: [Movie!]!
-    
+
     # Series queries
     series(page: Int, size: Int): SeriesPage!
     seriesById(id: ID!): Series
@@ -139,35 +176,38 @@ type Query {
     seriesByGenre(genre: String!, page: Int, size: Int): SeriesPage!
     topRatedSeries: [Series!]!
     featuredSeries: [Series!]!
-    
+
     # Season queries
     season(id: ID!): Season
     seasonsBySeriesId(seriesId: ID!): [Season!]!
-    
+
     # Episode queries
     episode(id: ID!): Episode
     episodesBySeasonId(seasonId: ID!): [Episode!]!
-    
+
     # Stats queries
     popularGenres: [GenreStat!]!
 }
 
+"""
+Root mutation type.
+"""
 type Mutation {
     # Movie mutations
     createMovie(input: MovieInput!): Movie!
     updateMovie(id: ID!, input: MovieInput!): Movie!
     deleteMovie(id: ID!): Boolean!
-    
+
     # Series mutations
     createSeries(input: SeriesInput!): Series!
     updateSeries(id: ID!, input: SeriesInput!): Series!
     deleteSeries(id: ID!): Boolean!
-    
+
     # Season mutations
     createSeason(input: SeasonInput!): Season!
     updateSeason(id: ID!, input: SeasonInput!): Season!
     deleteSeason(id: ID!): Boolean!
-    
+
     # Episode mutations
     createEpisode(input: EpisodeInput!): Episode!
     updateEpisode(id: ID!, input: EpisodeInput!): Episode!
