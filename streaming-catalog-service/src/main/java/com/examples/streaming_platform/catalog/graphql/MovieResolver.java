@@ -2,8 +2,6 @@ package com.examples.streaming_platform.catalog.graphql;
 
 import com.examples.streaming_platform.catalog.dto.MovieDTO;
 import com.examples.streaming_platform.catalog.service.MovieService;
-import graphql.kickstart.tools.GraphQLQueryResolver;
-import graphql.kickstart.tools.GraphQLMutationResolver;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,7 +13,7 @@ import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
-public class MovieResolver implements GraphQLQueryResolver, GraphQLMutationResolver {
+public class MovieResolver{
 
     private final MovieService movieService;
 
