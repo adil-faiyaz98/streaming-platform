@@ -1,10 +1,9 @@
-package main.java.com.examples.streaming_platform.catalog.controller;
+package com.examples.streaming_platform.catalog.controller;
 
 import com.examples.streaming_platform.catalog.dto.EpisodeDTO;
 import com.examples.streaming_platform.catalog.dto.MovieDTO;
 import com.examples.streaming_platform.catalog.dto.SeasonDTO;
 import com.examples.streaming_platform.catalog.dto.SeriesDTO;
-import com.examples.streaming_platform.catalog.dto.TvShowDTO;
 import com.examples.streaming_platform.catalog.service.CatalogService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -200,51 +199,113 @@ public class CatalogController {
         return ResponseEntity.noContent().build();
     }
 
-    // TV Show endpoints
-    @GetMapping("/tvshows")
-    @Operation(summary = "Get all TV shows", description = "Returns a paginated list of all TV shows")
-    public ResponseEntity<Page<TvShowDTO>> getAllTvShows(@PageableDefault(size = 20) Pageable pageable) {
-        return ResponseEntity.ok(catalogService.getAllTvShows(pageable));
+    @PostMapping("/series/{id}/increment-view")
+    @Operation(summary = "Increment series view count", description = "Increments the view count for a TV series")
+    public ResponseEntity<Void> incrementSeriesViewCount(
+            @Parameter(description = "Series ID", required = true)
+            @PathVariable Long id) {
+        catalogService.incrementSeriesViewCount(id);
+        return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/tvshows/{id}")
-    @Operation(summary = "Get TV show by ID", description = "Returns a single TV show by its ID")
-    public ResponseEntity<TvShowDTO> getTvShowById(@PathVariable Long id) {
-        return ResponseEntity.ok(catalogService.getTvShowById(id));
+    // ----- Season Endpoints -----
+
+    @GetMapping("/series/{seriesId}/seasons")
+    @Operation(summary = "Get seasons by series ID", description = "Returns all seasons for a TV series")
+    public ResponseEntity<List<SeasonDTO>> getSeasonsBySeriesId(
+            @Parameter(description = "Series ID", required = true)
+            @PathVariable Long seriesId) {
+        return ResponseEntity.ok(catalogService.getSeasonsBySeriesId(seriesId));
     }
 
-    @PostMapping("/tvshows")
-    @Operation(summary = "Create a new TV show", description = "Adds a new TV show to the catalog")
-    public ResponseEntity<TvShowDTO> createTvShow(@Valid @RequestBody TvShowDTO tvShowDTO) {
-        return new ResponseEntity<>(catalogService.createTvShow(tvShowDTO), HttpStatus.CREATED);
+    @GetMapping("/seasons/{id}")
+    @Operation(summary = "Get season by ID", description = "Returns a single season by its ID")
+    public ResponseEntity<SeasonDTO> getSeasonById(
+            @Parameter(description = "Season ID", required = true)
+            @PathVariable Long id) {
+        return ResponseEntity.ok(catalogService.getSeasonById(id));
     }
 
-    @PutMapping("/tvshows/{id}")
-    @Operation(summary = "Update a TV show", description = "Updates an existing TV show in the catalog")
-    public ResponseEntity<TvShowDTO> updateTvShow(@PathVariable Long id, @Valid @RequestBody TvShowDTO tvShowDTO) {
-        return ResponseEntity.ok(catalogService.updateTvShow(id, tvShowDTO));
+    @PostMapping("/series/{seriesId}/seasons")
+    @Operation(summary = "Create a new season", description = "Creates a new season for a TV series")
+    @ApiResponse(responseCode = "201", description = "Season created successfully")
+    public ResponseEntity<SeasonDTO> createSeason(
+            @Parameter(description = "Series ID", required = true)
+            @PathVariable Long seriesId,
+            @Parameter(description = "Season details", required = true)
+            @Valid @RequestBody SeasonDTO seasonDTO) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(catalogService.createSeason(seriesId, seasonDTO));
     }
 
-    @DeleteMapping("/tvshows/{id}")
-    @Operation(summary = "Delete a TV show", description = "Removes a TV show from the catalog")
-    public ResponseEntity<Void> deleteTvShow(@PathVariable Long id) {
-        catalogService.deleteTvShow(id);
+    @PutMapping("/seasons/{id}")
+    @Operation(summary = "Update a season", description = "Updates an existing season")
+    public ResponseEntity<SeasonDTO> updateSeason(
+            @Parameter(description = "Season ID", required = true)
+            @PathVariable Long id,
+            @Parameter(description = "Updated season details", required = true)
+            @Valid @RequestBody SeasonDTO seasonDTO) {
+        return ResponseEntity.ok(catalogService.updateSeason(id, seasonDTO));
+    }
+
+    @DeleteMapping("/seasons/{id}")
+    @Operation(summary = "Delete a season", description = "Deletes a season from the catalog")
+    @ApiResponse(responseCode = "204", description = "Season deleted successfully")
+    public ResponseEntity<Void> deleteSeason(
+            @Parameter(description = "Season ID", required = true)
+            @PathVariable Long id) {
+        catalogService.deleteSeason(id);
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/tvshows/search")
-    @Operation(summary = "Search TV shows by title", description = "Returns TV shows matching the search term in their title")
-    public ResponseEntity<Page<TvShowDTO>> searchTvShowsByTitle(
-            @RequestParam String title,
-            @PageableDefault(size = 20) Pageable pageable) {
-        return ResponseEntity.ok(catalogService.searchTvShowsByTitle(title, pageable));
+    // ----- Episode Endpoints -----
+
+    @GetMapping("/seasons/{seasonId}/episodes")
+    @Operation(summary = "Get episodes by season ID", description = "Returns all episodes for a season")
+    public ResponseEntity<List<EpisodeDTO>> getEpisodesBySeasonId(
+            @Parameter(description = "Season ID", required = true)
+            @PathVariable Long seasonId) {
+        return ResponseEntity.ok(catalogService.getEpisodesBySeasonId(seasonId));
     }
 
-    @GetMapping("/tvshows/filter")
-    @Operation(summary = "Filter TV shows by genres", description = "Returns TV shows that match the specified genres")
-    public ResponseEntity<Page<TvShowDTO>> filterTvShowsByGenres(
-            @RequestParam Set<String> genres,
-            @PageableDefault(size = 20) Pageable pageable) {
-        return ResponseEntity.ok(catalogService.searchTvShowsByGenres(genres, pageable));
+    @GetMapping("/episodes/{id}")
+    @Operation(summary = "Get episode by ID", description = "Returns a single episode by its ID")
+    public ResponseEntity<EpisodeDTO> getEpisodeById(
+            @Parameter(description = "Episode ID", required = true)
+            @PathVariable Long id) {
+        return ResponseEntity.ok(catalogService.getEpisodeById(id));
     }
+
+    @PostMapping("/seasons/{seasonId}/episodes")
+    @Operation(summary = "Create a new episode", description = "Creates a new episode for a season")
+    @ApiResponse(responseCode = "201", description = "Episode created successfully")
+    public ResponseEntity<EpisodeDTO> createEpisode(
+            @Parameter(description = "Season ID", required = true)
+            @PathVariable Long seasonId,
+            @Parameter(description = "Episode details", required = true)
+            @Valid @RequestBody EpisodeDTO episodeDTO) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(catalogService.createEpisode(seasonId, episodeDTO));
+    }
+
+    @PutMapping("/episodes/{id}")
+    @Operation(summary = "Update an episode", description = "Updates an existing episode")
+    public ResponseEntity<EpisodeDTO> updateEpisode(
+            @Parameter(description = "Episode ID", required = true)
+            @PathVariable Long id,
+            @Parameter(description = "Updated episode details", required = true)
+            @Valid @RequestBody EpisodeDTO episodeDTO) {
+        return ResponseEntity.ok(catalogService.updateEpisode(id, episodeDTO));
+    }
+
+    @DeleteMapping("/episodes/{id}")
+    @Operation(summary = "Delete an episode", description = "Deletes an episode from the catalog")
+    @ApiResponse(responseCode = "204", description = "Episode deleted successfully")
+    public ResponseEntity<Void> deleteEpisode(
+            @Parameter(description = "Episode ID", required = true)
+            @PathVariable Long id) {
+        catalogService.deleteEpisode(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    // TvShow endpoints have been removed as they're no longer necessary
+    // The Series endpoints above provide the same functionality
 }
