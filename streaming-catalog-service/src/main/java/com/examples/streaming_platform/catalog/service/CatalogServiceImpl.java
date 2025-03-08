@@ -27,6 +27,7 @@ public class CatalogServiceImpl implements CatalogService {
     private final SeriesRepository seriesRepository;
     private final SeasonRepository seasonRepository;
     private final EpisodeRepository episodeRepository;
+    private final TvShowRepository tvShowRepository;
     private final CatalogMapper catalogMapper;
 
     // Movie operations
@@ -319,5 +320,15 @@ public class CatalogServiceImpl implements CatalogService {
             throw new ResourceNotFoundException("Episode", "id", id);
         }
         episodeRepository.deleteById(id);
+    }
+
+    @Override
+    @Transactional
+    @CacheEvict(value = {"tvShows", "topRatedTvShows"}, allEntries = true)
+    public void deleteTvShow(Long id) {
+        if (!tvShowRepository.existsById(id)) {
+            throw new ResourceNotFoundException("TV Show", "id", id);
+        }
+        tvShowRepository.deleteById(id);
     }
 }
