@@ -4,7 +4,6 @@ type Movie {
     title: String!
     description: String
     releaseYear: Int
-    genres: [String!]!
     director: String
     duration: Int
     maturityRating: String
@@ -13,6 +12,7 @@ type Movie {
     averageRating: Float
     viewCount: Int
     featured: Boolean
+    genres: [String!]!
     createdAt: String
     updatedAt: String
 }
@@ -80,7 +80,6 @@ type Season {
     seasonNumber: Int!
     title: String
     description: String
-    releaseYear: Int
     imageUrl: String
     episodes: [Episode!]
     createdAt: String
@@ -126,30 +125,28 @@ type GenreStat {
 
 type Query {
     # Movie queries
+    movies(page: Int, size: Int): MoviePage!
     movie(id: ID!): Movie
-    movies(page: Int, size: Int): [Movie!]!
-    moviesPage(page: Int, size: Int): MoviePage!
-    moviesByTitle(title: String!, page: Int, size: Int): [Movie!]!
-    moviesByGenre(genre: String!, page: Int, size: Int): [Movie!]!
+    searchMovies(title: String!, page: Int, size: Int): MoviePage!
+    moviesByGenre(genre: String!, page: Int, size: Int): MoviePage!
     topRatedMovies: [Movie!]!
+    featuredMovies: [Movie!]!
     
     # Series queries
+    series(page: Int, size: Int): SeriesPage!
     seriesById(id: ID!): Series
-    series(page: Int, size: Int): [Series!]!
-    seriesPage(page: Int, size: Int): SeriesPage!
-    seriesByTitle(title: String!, page: Int, size: Int): [Series!]!
-    seriesByGenre(genre: String!, page: Int, size: Int): [Series!]!
+    searchSeries(title: String!, page: Int, size: Int): SeriesPage!
+    seriesByGenre(genre: String!, page: Int, size: Int): SeriesPage!
     topRatedSeries: [Series!]!
+    featuredSeries: [Series!]!
     
     # Season queries
     season(id: ID!): Season
-    seasons(seriesId: ID!): [Season!]!
-    seasonByNumber(seriesId: ID!, seasonNumber: Int!): Season
+    seasonsBySeriesId(seriesId: ID!): [Season!]!
     
     # Episode queries
     episode(id: ID!): Episode
-    episodes(seasonId: ID!): [Episode!]!
-    episodeByNumber(seasonId: ID!, episodeNumber: Int!): Episode
+    episodesBySeasonId(seasonId: ID!): [Episode!]!
     
     # Stats queries
     popularGenres: [GenreStat!]!

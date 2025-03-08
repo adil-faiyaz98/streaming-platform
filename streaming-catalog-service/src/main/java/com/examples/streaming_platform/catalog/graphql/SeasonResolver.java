@@ -1,44 +1,35 @@
 package com.examples.streaming_platform.catalog.graphql;
 
+import com.examples.streaming_platform.catalog.dto.EpisodeDTO;
 import com.examples.streaming_platform.catalog.dto.SeasonDTO;
-import com.examples.streaming_platform.catalog.service.SeasonService;
-import graphql.kickstart.tools.GraphQLQueryResolver;
-import graphql.kickstart.tools.GraphQLMutationResolver;
+import com.examples.streaming_platform.catalog.service.CatalogService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
+import org.springframework.graphql.data.method.annotation.Argument;
+import org.springframework.graphql.data.method.annotation.QueryMapping;
+import org.springframework.graphql.data.method.annotation.SchemaMapping;
+import org.springframework.stereotype.Controller;
 
 import java.util.List;
 
-@Component
+@Controller
 @RequiredArgsConstructor
-public class SeasonResolver implements GraphQLQueryResolver, GraphQLMutationResolver {
+public class SeasonResolver {
 
-    private final SeasonService seasonService;
+    private final CatalogService catalogService;
 
-    // Queries
-    public SeasonDTO getSeason(Long id) {
-        return seasonService.getSeasonById(id);
+    @QueryMapping
+    public SeasonDTO season(@Argument Long id) {
+        return catalogService.getSeasonById(id);
     }
-
-    public List<SeasonDTO> getSeasonsBySeriesId(Long seriesId) {
-        return seasonService.getSeasonsBySeriesId(seriesId);
+    
+    @QueryMapping
+    public List<SeasonDTO> seasonsBySeriesId(@Argument Long seriesId) {
+        return catalogService.getSeasonsBySeriesId(seriesId);
     }
-
-    // Mutations
-    public SeasonDTO createSeason(SeasonDTO seasonInput) {
-        return seasonService.createSeason(seasonInput.getSeriesId(), seasonInput);
-    }
-
-    public SeasonDTO updateSeason(Long id, SeasonDTO seasonInput) {
-        return seasonService.updateSeason(id, seasonInput);
-    }
-
-    public Boolean deleteSeason(Long id) {
-        try {
-            seasonService.deleteSeason(id);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+    
+    // Field resolver for episodes in Season
+    @SchemaMapping(typeName = "Season", field = "episodes")
+    public List<EpisodeDTO> getEpisodes(SeasonDTO season) {
+        return catalogService.getEpisodesBySeasonId(season.getId());
     }
 }

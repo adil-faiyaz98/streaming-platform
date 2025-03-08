@@ -1,69 +1,74 @@
 package com.examples.streaming_platform.catalog.graphql;
 
 import com.examples.streaming_platform.catalog.dto.SeriesDTO;
-import com.examples.streaming_platform.catalog.service.SeriesService;
-import graphql.kickstart.tools.GraphQLQueryResolver;
-import graphql.kickstart.tools.GraphQLMutationResolver;
+import com.examples.streaming_platform.catalog.dto.SeasonDTO;
+import com.examples.streaming_platform.catalog.service.CatalogService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.stereotype.Component;
+import org.springframework.graphql.data.method.annotation.Argument;
+import org.springframework.graphql.data.method.annotation.MutationMapping;
+import org.springframework.graphql.data.method.annotation.QueryMapping;
+import org.springframework.graphql.data.method.annotation.SchemaMapping;
+import org.springframework.stereotype.Controller;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
-@Component
+@Controller
 @RequiredArgsConstructor
-public class SeriesResolver implements GraphQLQueryResolver, GraphQLMutationResolver {
+public class SeriesResolver {
 
-    private final SeriesService seriesService;
+    private final CatalogService catalogService;
 
-    // Queries
-    public SeriesDTO getSeries(Long id) {
-        return seriesService.getSeriesById(id);
+    @QueryMapping
+    public Page<SeriesDTO> series(@Argument Integer page, @Argument Integer size) {
+        return catalogService.getAllSeries(PageRequest.of(page != null ? page : 0, size != null ? size : 10));
     }
-
-    public Map<String, Object> getAllSeries(Integer page, Integer size, Optional<String> title, Optional<String> genre) {
-        PageRequest pageRequest = PageRequest.of(page != null ? page : 0, size != null ? size : 20);
-        
-        Page<SeriesDTO> seriesPage;
-        if (title.isPresent() && !title.get().isEmpty()) {
-            seriesPage = seriesService.searchSeriesByTitle(title.get(), pageRequest);
-        } else if (genre.isPresent() && !genre.get().isEmpty()) {
-            seriesPage = seriesService.getSeriesByGenre(genre.get(), pageRequest);
-        } else {
-            seriesPage = seriesService.getAllSeries(pageRequest);
-        }
-        
-        return Map.of(
-                "content", seriesPage.getContent(),
-                "totalElements", seriesPage.getTotalElements(),
-                "totalPages", seriesPage.getTotalPages(),
-                "size", seriesPage.getSize(),
-                "number", seriesPage.getNumber()
-        );
+    
+    @QueryMapping
+    public SeriesDTO seriesById(@Argument Long id) {
+        return catalogService.getSeriesById(id);
     }
-
-    public List<SeriesDTO> getTopRatedSeries() {
-        return seriesService.getTopRatedSeries();
+    
+    @QueryMapping
+    public Page<SeriesDTO> searchSeries(@Argument String title, @Argument Integer page, @Argument Integer size) {
+        return catalogService.searchSeriesByTitle(title, PageRequest.of(page != null ? page : 0, size != null ? size : 10));
     }
-
-    // Mutations
-    public SeriesDTO createSeries(SeriesDTO seriesInput) {
-        return seriesService.createSeries(seriesInput);
+    
+    @QueryMapping
+    public Page<SeriesDTO> seriesByGenre(@Argument String genre, @Argument Integer page, @Argument Integer size) {
+        return catalogService.getSeriesByGenre(genre, PageRequest.of(page != null ? page : 0, size != null ? size : 10));
     }
-
-    public SeriesDTO updateSeries(Long id, SeriesDTO seriesInput) {
-        return seriesService.updateSeries(id, seriesInput);
+    
+    @QueryMapping
+    public List<SeriesDTO> topRatedSeries() {
+        return catalogService.getTopRatedSeries();
     }
-
-    public Boolean deleteSeries(Long id) {
-        try {
-            seriesService.deleteSeries(id);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+    
+    @QueryMapping
+    public List<SeriesDTO> featuredSeries() {
+        return catalogService.getFeaturedSeries();
+    }
+    
+    @MutationMapping
+    public SeriesDTO createSeries(@Argument SeriesDTO input) {
+        return catalogService.createSeries(input);
+    }
+    
+    @MutationMapping
+    public SeriesDTO updateSeries(@Argument Long id, @Argument SeriesDTO input) {
+        return catalogService.updateSeries(id, input);
+    }
+    
+    @MutationMapping
+    public Boolean deleteSeries(@Argument Long id) {
+        catalogService.deleteSeries(id);
+        return true;
+    }
+    
+    // Field resolver for seasons in Series
+    @SchemaMapping(typeName = "Series", field = "seasons")
+    public List<SeasonDTO> getSeasons(SeriesDTO series) {
+        return catalogService.getSeasonsBySeriesId(series.getId());
     }
 }

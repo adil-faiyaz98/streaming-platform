@@ -1,44 +1,27 @@
 package com.examples.streaming_platform.catalog.graphql;
 
 import com.examples.streaming_platform.catalog.dto.EpisodeDTO;
-import com.examples.streaming_platform.catalog.service.EpisodeService;
-import graphql.kickstart.tools.GraphQLQueryResolver;
-import graphql.kickstart.tools.GraphQLMutationResolver;
+import com.examples.streaming_platform.catalog.service.CatalogService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
+import org.springframework.graphql.data.method.annotation.Argument;
+import org.springframework.graphql.data.method.annotation.QueryMapping;
+import org.springframework.stereotype.Controller;
 
 import java.util.List;
 
-@Component
+@Controller
 @RequiredArgsConstructor
-public class EpisodeResolver implements GraphQLQueryResolver, GraphQLMutationResolver {
+public class EpisodeResolver {
 
-    private final EpisodeService episodeService;
+    private final CatalogService catalogService;
 
-    // Queries
-    public EpisodeDTO getEpisode(Long id) {
-        return episodeService.getEpisodeById(id);
+    @QueryMapping
+    public EpisodeDTO episode(@Argument Long id) {
+        return catalogService.getEpisodeById(id);
     }
-
-    public List<EpisodeDTO> getEpisodesBySeasonId(Long seasonId) {
-        return episodeService.getEpisodesBySeasonId(seasonId);
-    }
-
-    // Mutations
-    public EpisodeDTO createEpisode(EpisodeDTO episodeInput) {
-        return episodeService.createEpisode(episodeInput.getSeasonId(), episodeInput);
-    }
-
-    public EpisodeDTO updateEpisode(Long id, EpisodeDTO episodeInput) {
-        return episodeService.updateEpisode(id, episodeInput);
-    }
-
-    public Boolean deleteEpisode(Long id) {
-        try {
-            episodeService.deleteEpisode(id);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+    
+    @QueryMapping
+    public List<EpisodeDTO> episodesBySeasonId(@Argument Long seasonId) {
+        return catalogService.getEpisodesBySeasonId(seasonId);
     }
 }
