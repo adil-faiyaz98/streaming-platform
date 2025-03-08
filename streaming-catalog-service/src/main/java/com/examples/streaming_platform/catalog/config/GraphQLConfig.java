@@ -30,7 +30,7 @@ public class GraphQLConfig {
         RuntimeWiring runtimeWiring = RuntimeWiring.newRuntimeWiring().build();
         
         // Create schema
-        GraphQLSchema graphQLSchema = new SchemaGenerator().makeExecutableSchema(typeRegistry, runtimeWiring);
+        new SchemaGenerator().makeExecutableSchema(typeRegistry, runtimeWiring);
         
         // Return GraphQlSource with schema
         return GraphQlSource.schemaResourceBuilder()

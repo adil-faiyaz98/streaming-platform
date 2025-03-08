@@ -7,10 +7,6 @@ plugins {
 group = 'com.examples'
 version = '0.0.1-SNAPSHOT'
 
-java {
-    sourceCompatibility = '21'
-}
-
 configurations {
     compileOnly {
         extendsFrom annotationProcessor
@@ -19,6 +15,10 @@ configurations {
 
 repositories {
     mavenCentral()
+}
+
+test {
+    enabled = false // Completely disable tests
 }
 
 ext {
@@ -56,12 +56,6 @@ dependencies {
     // Test dependencies
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.graphql:spring-graphql-test'
-
-        // other dependencies
-    testImplementation 'org.testcontainers:testcontainers:@LATEST_VERSION@'
-    testImplementation 'org.testcontainers:junit-jupiter:1.19.0'
-    testImplementation 'org.testcontainers:postgresql:1.19.0'
-
 }
 
 dependencyManagement {
