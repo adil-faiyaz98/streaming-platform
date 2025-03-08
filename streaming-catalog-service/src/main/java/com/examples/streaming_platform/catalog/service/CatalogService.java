@@ -42,14 +42,14 @@ public class CatalogService {
     private final CatalogMapper catalogMapper;
 
     // Movie related methods
-
+    
     @Cacheable(value = "movies", key = "'page_' + #pageable.pageNumber + '_' + #pageable.pageSize")
     public Page<MovieDTO> getAllMovies(Pageable pageable) {
         log.debug("Fetching all movies with pagination: {}", pageable);
         return movieRepository.findAll(pageable)
                 .map(catalogMapper::movieToMovieDTO);
     }
-
+    
     @Cacheable(value = "movies", key = "'id_' + #id")
     public MovieDTO getMovieById(Long id) {
         log.debug("Fetching movie with id: {}", id);
@@ -57,19 +57,19 @@ public class CatalogService {
                 .orElseThrow(() -> new ResourceNotFoundException("Movie", "id", id));
         return catalogMapper.movieToMovieDTO(movie);
     }
-
+    
     public Page<MovieDTO> searchMoviesByTitle(String title, Pageable pageable) {
         log.debug("Searching movies with title containing: {}", title);
         return movieRepository.findByTitleContainingIgnoreCase(title, pageable)
                 .map(catalogMapper::movieToMovieDTO);
     }
-
+    
     public Page<MovieDTO> getMoviesByGenre(String genre, Pageable pageable) {
         log.debug("Fetching movies with genre: {}", genre);
         return movieRepository.findByGenre(genre, pageable)
                 .map(catalogMapper::movieToMovieDTO);
     }
-
+    
     @Cacheable(value = "topRatedMovies")
     public List<MovieDTO> getTopRatedMovies() {
         log.debug("Fetching top rated movies");
@@ -77,14 +77,14 @@ public class CatalogService {
                 .map(catalogMapper::movieToMovieDTO)
                 .collect(Collectors.toList());
     }
-
+    
     public List<MovieDTO> getFeaturedMovies() {
         log.debug("Fetching featured movies");
         return movieRepository.findByFeaturedTrue().stream()
                 .map(catalogMapper::movieToMovieDTO)
                 .collect(Collectors.toList());
     }
-
+    
     @Transactional
     @CacheEvict(value = {"movies", "topRatedMovies"}, allEntries = true)
     public MovieDTO createMovie(MovieDTO movieDTO) {
@@ -93,19 +93,19 @@ public class CatalogService {
         Movie savedMovie = movieRepository.save(movie);
         return catalogMapper.movieToMovieDTO(savedMovie);
     }
-
+    
     @Transactional
     @CacheEvict(value = {"movies", "topRatedMovies"}, allEntries = true)
     public MovieDTO updateMovie(Long id, MovieDTO movieDTO) {
         log.debug("Updating movie with id: {}", id);
         Movie existingMovie = movieRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Movie", "id", id));
-
+        
         catalogMapper.updateMovieFromDTO(movieDTO, existingMovie);
         Movie updatedMovie = movieRepository.save(existingMovie);
         return catalogMapper.movieToMovieDTO(updatedMovie);
     }
-
+    
     @Transactional
     @CacheEvict(value = {"movies", "topRatedMovies"}, allEntries = true)
     public void deleteMovie(Long id) {
@@ -115,21 +115,21 @@ public class CatalogService {
         }
         movieRepository.deleteById(id);
     }
-
+    
     public void incrementMovieViewCount(Long id) {
         log.debug("Incrementing view count for movie with id: {}", id);
         movieRepository.incrementViewCount(id);
     }
 
     // Series related methods
-
+    
     @Cacheable(value = "series", key = "'page_' + #pageable.pageNumber + '_' + #pageable.pageSize")
     public Page<SeriesDTO> getAllSeries(Pageable pageable) {
         log.debug("Fetching all series with pagination: {}", pageable);
         return seriesRepository.findAll(pageable)
                 .map(catalogMapper::seriesToSeriesDTO);
     }
-
+    
     @Cacheable(value = "series", key = "'id_' + #id")
     public SeriesDTO getSeriesById(Long id) {
         log.debug("Fetching series with id: {}", id);
@@ -137,19 +137,19 @@ public class CatalogService {
                 .orElseThrow(() -> new ResourceNotFoundException("Series", "id", id));
         return catalogMapper.seriesToSeriesDTO(series);
     }
-
+    
     public Page<SeriesDTO> searchSeriesByTitle(String title, Pageable pageable) {
         log.debug("Searching series with title containing: {}", title);
         return seriesRepository.findByTitleContainingIgnoreCase(title, pageable)
                 .map(catalogMapper::seriesToSeriesDTO);
     }
-
+    
     public Page<SeriesDTO> getSeriesByGenre(String genre, Pageable pageable) {
         log.debug("Fetching series with genre: {}", genre);
         return seriesRepository.findByGenre(genre, pageable)
                 .map(catalogMapper::seriesToSeriesDTO);
     }
-
+    
     @Cacheable(value = "topRatedSeries")
     public List<SeriesDTO> getTopRatedSeries() {
         log.debug("Fetching top rated series");
@@ -157,14 +157,14 @@ public class CatalogService {
                 .map(catalogMapper::seriesToSeriesDTO)
                 .collect(Collectors.toList());
     }
-
+    
     public List<SeriesDTO> getFeaturedSeries() {
         log.debug("Fetching featured series");
         return seriesRepository.findByFeaturedTrue().stream()
                 .map(catalogMapper::seriesToSeriesDTO)
                 .collect(Collectors.toList());
     }
-
+    
     @Transactional
     @CacheEvict(value = {"series", "topRatedSeries"}, allEntries = true)
     public SeriesDTO createSeries(SeriesDTO seriesDTO) {
@@ -173,19 +173,19 @@ public class CatalogService {
         Series savedSeries = seriesRepository.save(series);
         return catalogMapper.seriesToSeriesDTO(savedSeries);
     }
-
+    
     @Transactional
     @CacheEvict(value = {"series", "topRatedSeries"}, allEntries = true)
     public SeriesDTO updateSeries(Long id, SeriesDTO seriesDTO) {
         log.debug("Updating series with id: {}", id);
         Series existingSeries = seriesRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Series", "id", id));
-
+        
         catalogMapper.updateSeriesFromDTO(seriesDTO, existingSeries);
         Series updatedSeries = seriesRepository.save(existingSeries);
         return catalogMapper.seriesToSeriesDTO(updatedSeries);
     }
-
+    
     @Transactional
     @CacheEvict(value = {"series", "topRatedSeries"}, allEntries = true)
     public void deleteSeries(Long id) {
@@ -195,45 +195,45 @@ public class CatalogService {
         }
         seriesRepository.deleteById(id);
     }
-
+    
     public void incrementSeriesViewCount(Long id) {
         log.debug("Incrementing view count for series with id: {}", id);
         seriesRepository.incrementViewCount(id);
     }
 
     // Season related methods
-
+    
     public List<SeasonDTO> getSeasonsBySeriesId(Long seriesId) {
         log.debug("Fetching seasons for series id: {}", seriesId);
         if (!seriesRepository.existsById(seriesId)) {
             throw new ResourceNotFoundException("Series", "id", seriesId);
         }
-
+        
         return seasonRepository.findBySeriesIdOrderBySeasonNumber(seriesId).stream()
                 .map(catalogMapper::seasonToSeasonDTO)
                 .collect(Collectors.toList());
     }
-
+    
     public SeasonDTO getSeasonById(Long id) {
         log.debug("Fetching season with id: {}", id);
         Season season = seasonRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Season", "id", id));
         return catalogMapper.seasonToSeasonDTO(season);
     }
-
+    
     // Episode related methods
-
+    
     public List<EpisodeDTO> getEpisodesBySeasonId(Long seasonId) {
         log.debug("Fetching episodes for season id: {}", seasonId);
         if (!seasonRepository.existsById(seasonId)) {
             throw new ResourceNotFoundException("Season", "id", seasonId);
         }
-
+        
         return episodeRepository.findBySeasonIdOrderByEpisodeNumber(seasonId).stream()
                 .map(catalogMapper::episodeToEpisodeDTO)
                 .collect(Collectors.toList());
     }
-
+    
     public EpisodeDTO getEpisodeById(Long id) {
         log.debug("Fetching episode with id: {}", id);
         Episode episode = episodeRepository.findById(id)
@@ -241,3 +241,4 @@ public class CatalogService {
         return catalogMapper.episodeToEpisodeDTO(episode);
     }
 }
+
