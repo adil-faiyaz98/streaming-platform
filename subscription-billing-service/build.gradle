@@ -1,0 +1,3 @@
+bootJar {
+    mainClass = 'com.examples.streaming_platform.billing.SubscriptionBillingApplication'
+}
