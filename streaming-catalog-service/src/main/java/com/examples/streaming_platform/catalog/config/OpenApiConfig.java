@@ -29,15 +29,15 @@ public class OpenApiConfig {
                         .description("API documentation for the Streaming Platform Catalog Service")
                         .version("1.0.0")
                         .contact(new Contact()
-                                .name("Development Team")
-                                .email("dev@example.com")
-                                .url("https://github.com/your-repo/streaming-platform"))
+                                .name("Adil Faiyaz")
+                                .email("adilmd98@gmail.com")
+                                .url("https://github.com/adil-faiyaz98/streaming-platform.git"))
                         .license(new License()
                                 .name("Apache 2.0")
                                 .url("https://www.apache.org/licenses/LICENSE-2.0")))
                 .servers(List.of(
                         new Server().url("http://localhost:8080").description("Local Development Server"),
-                        new Server().url("https://api.streaming-platform.example.com").description("Production Server")
+                        new Server().url("https://api.streaming-platform.example.com").description("Test Server")
                 ));
     }
 }

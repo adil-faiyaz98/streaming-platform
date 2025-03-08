@@ -7,8 +7,6 @@ import com.examples.streaming_platform.catalog.dto.SeriesDTO;
 import com.examples.streaming_platform.catalog.service.CatalogService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -25,7 +23,7 @@ import java.util.Map;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/catalog")
 @RequiredArgsConstructor
 @Tag(name = "Catalog API", description = "Operations for managing streaming content catalog")
 public class CatalogController {
