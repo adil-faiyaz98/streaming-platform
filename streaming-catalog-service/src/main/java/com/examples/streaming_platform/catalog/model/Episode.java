@@ -2,10 +2,7 @@
 package com.examples.streaming_platform.catalog.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
@@ -44,10 +41,12 @@ public class Episode {
     @Column(name = "video_url")
     private String videoUrl;
     
+    @Setter
+    @Getter
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "season_id")
+    @JoinColumn(name = "seasonId")
     @ToString.Exclude
-    private Season season; // Renamed from seasonId to season
+    private Season season; // Establish relationship with Season entity
 
     @Column(name = "created_at")
     private OffsetDateTime createdAt;
@@ -65,4 +64,5 @@ public class Episode {
     protected void onUpdate() {
         updatedAt = OffsetDateTime.now();
     }
+
 }

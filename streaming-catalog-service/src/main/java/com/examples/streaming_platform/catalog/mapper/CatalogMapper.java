@@ -40,19 +40,19 @@ public interface CatalogMapper {
     void updateSeasonFromDTO(SeasonDTO dto, @MappingTarget Season season);
 
     // Episode mappings
-    @Mapping(source = "season.id", target = "seasonId")
+    @Mapping(source = "seasonId", target = "seasonId")
     EpisodeDTO episodeToEpisodeDTO(Episode episode);
     
-    @Mapping(source = "seasonId", target = "season")
+    @Mapping(source = "seasonId", target = "seasonId")
     Episode episodeDTOToEpisode(EpisodeDTO episodeDTO);
     
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    @Mapping(source = "seasonId", target = "season")
+    @Mapping(source = "seasonId", target = "seasonId")
     void updateEpisodeFromDTO(EpisodeDTO dto, @MappingTarget Episode episode);
     
     // Helper methods for Season <-> Long conversion
     default Long mapSeasonToId(Season season) {
-        return season != null ? season.getId() : null;
+        return season != null ? season.getSeasonId() : null;
     }
     
     default Season mapIdToSeason(Long id) {
@@ -60,7 +60,7 @@ public interface CatalogMapper {
             return null;
         }
         Season season = new Season();
-        season.setId(id);
+        season.setSeasonId(id);
         return season;
     }
 }

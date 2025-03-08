@@ -11,18 +11,12 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 @Repository
 public interface MovieRepository extends JpaRepository<Movie, Long> {
     Page<Movie> findByTitleContainingIgnoreCase(String title, Pageable pageable);
 
 
-    @Query("SELECT m FROM Movie m JOIN m.genres g WHERE g IN :genres GROUP BY m HAVING COUNT(g) >= :minGenres")
-    Page<Movie> findByGenres(@Param("genres") Set<String> genres, @Param("minGenres") long minGenres, Pageable pageable);
-    
-    List<Movie> findByReleaseYear(Integer year);
-    
     @Query("SELECT DISTINCT m.releaseYear FROM Movie m ORDER BY m.releaseYear DESC")
     List<Integer> findAllReleaseYears();
     
@@ -36,8 +30,6 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
     @Modifying
     @Query("UPDATE Movie m SET m.viewCount = m.viewCount + 1 WHERE m.id = :id")
     void incrementViewCount(@Param("id") Long id);
-
-    Page<Movie> findGenresIn(Set<String> genres, Pageable pageable);
 
     Collection<Object> findTop10ByOrderByAverageRatingDesc();
 }
