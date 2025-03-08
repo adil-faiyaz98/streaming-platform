@@ -1,6 +1,7 @@
 package com.examples.streaming_platform.catalog.config;
 
 import graphql.GraphQL;
+import graphql.scalars.ExtendedScalars;
 import graphql.schema.GraphQLSchema;
 import graphql.schema.idl.RuntimeWiring;
 import graphql.schema.idl.SchemaGenerator;
@@ -35,6 +36,8 @@ public class GraphQLConfig {
         // Return GraphQlSource with schema
         return GraphQlSource.schemaResourceBuilder()
                 .schemaResources(new ClassPathResource("graphql/schema.graphqls"))
+                .configureRuntimeWiring(builder -> builder.scalar(ExtendedScalars.DateTime)
+                )
                 .build();
     }
 }
