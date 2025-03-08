@@ -1,12 +1,11 @@
-# src/main/resources/application.yml
 spring:
   application:
     name: streaming-catalog-service
 
   datasource:
-    url: ${POSTGRES_URL:jdbc:postgresql://localhost:5432/streaming_catalog}
-    username: ${POSTGRES_USER:postgres}
-    password: ${POSTGRES_PASSWORD:postgres}
+    url: jdbc:postgresql://localhost:5432/streaming_catalog
+    username: postgres
+    password: postgres
     driver-class-name: org.postgresql.Driver
 
   jpa:
@@ -15,12 +14,8 @@ spring:
     show-sql: true
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
-
-  redis:
-    host: ${REDIS_HOST:localhost}
-    port: ${REDIS_PORT:6379}
+        dialect: org.hibernate.dialect.PostgreSQLDialect
 
   graphql:
     graphiql:
@@ -30,18 +25,18 @@ spring:
         enabled: true
 
 server:
-  port: ${SERVER_PORT:8081}
+  port: 8081
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    preferIpAddress: true
+    instance-id: ${spring.application.name}:${random.uuid}
 
 management:
   endpoints:
     web:
       exposure:
-        include: health,info,metrics,prometheus
-  endpoint:
-    health:
-      show-details: always
-
-logging:
-  level:
-    com.examples.streaming_platform: DEBUG
-    org.springframework: INFO
+        include: health,info,metrics

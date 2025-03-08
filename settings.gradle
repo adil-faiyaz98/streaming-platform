@@ -1,15 +1,23 @@
 pluginManagement {
     repositories {
-        gradlePluginPortal()
         mavenCentral()
+        gradlePluginPortal()
+    }
+    plugins {
+        id 'org.springframework.boot' version '3.2.3' apply false
+        id 'io.spring.dependency-management' version '1.1.4' apply false
+        id 'java'
+        id 'com.netflix.dgs.codegen' version '6.1.2' apply false
     }
 }
 
 rootProject.name = 'streaming-platform'
 
 include ':streaming-catalog-service'
-include ':user-service'
-// Comment out problematic services until they're fixed
-// include ':analytics-service'
-// include ':content-search-service'
-// include ':notification-service'
+include ':user-profile-service'
+include ':analytics-service'
+include ':content-search-service'
+include ':notification-service'
+include ':review-rating-service'
+include ':subscription-billing-service'
+

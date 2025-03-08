@@ -27,12 +27,9 @@ subprojects {
 	apply plugin: 'org.springframework.boot'
 	apply plugin: 'io.spring.dependency-management'
 	apply plugin: 'com.netflix.dgs.codegen'
+	sourceCompatibility='21'
 
-	java {
-		toolchain {
-			languageVersion = JavaLanguageVersion.of(21)
-		}
-	}
+
 
 	dependencies {
 		// Spring Boot
