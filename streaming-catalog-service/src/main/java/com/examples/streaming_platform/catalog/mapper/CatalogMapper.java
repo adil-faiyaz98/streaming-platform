@@ -7,6 +7,14 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface CatalogMapper {
 
+    // TVShow mappings
+    TvShowDTO tvShowToTvShowDTO(TvShow tvShow);
+
+    TvShow tvShowDTOToTvShow(TvShowDTO tvShowDTO);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void updateTvShowFromDTO(TvShowDTO dto, @MappingTarget TvShow tvShow);
+
     // Movie mappings
     MovieDTO movieToMovieDTO(Movie movie);
     

@@ -24,6 +24,7 @@ public class SeasonDTO {
     private String overview;
     private String posterUrl;
     private LocalDate airDate;
+    private String seriesId;
     private Long tvShowId;
     private Integer releaseYear;
     private List<EpisodeDTO> episodes = new ArrayList<>();

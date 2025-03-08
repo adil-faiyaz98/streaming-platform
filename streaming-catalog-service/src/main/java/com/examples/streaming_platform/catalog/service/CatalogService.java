@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -33,7 +34,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class CatalogService {
+public abstract class CatalogService {
 
     private final MovieRepository movieRepository;
     private final SeriesRepository seriesRepository;
@@ -222,7 +223,19 @@ public class CatalogService {
     }
     
     // Episode related methods
-    
+
+    @Transactional
+    @CacheEvict(value = {"seasons", "series"}, allEntries = true)
+    public abstract SeasonDTO createSeason(Long seriesId, SeasonDTO seasonDTO);
+
+    @Transactional
+    @CacheEvict(value = {"seasons", "series"}, allEntries = true)
+    public abstract SeasonDTO updateSeason(Long id, SeasonDTO seasonDTO);
+
+    @Transactional
+    @CacheEvict(value = {"seasons", "series"}, allEntries = true)
+    public abstract void deleteSeason(Long id);
+
     public List<EpisodeDTO> getEpisodesBySeasonId(Long seasonId) {
         log.debug("Fetching episodes for season id: {}", seasonId);
         if (!seasonRepository.existsById(seasonId)) {
@@ -240,5 +253,21 @@ public class CatalogService {
                 .orElseThrow(() -> new ResourceNotFoundException("Episode", "id", id));
         return catalogMapper.episodeToEpisodeDTO(episode);
     }
+
+    @Transactional
+    @CacheEvict(value = {"episodes", "seasons"}, allEntries = true)
+    public abstract EpisodeDTO createEpisode(Long seasonId, EpisodeDTO episodeDTO);
+
+    @Transactional
+    @CacheEvict(value = {"episodes", "seasons"}, allEntries = true)
+    public abstract EpisodeDTO updateEpisode(Long id, EpisodeDTO episodeDTO);
+
+    @Transactional
+    @CacheEvict(value = {"episodes", "seasons"}, allEntries = true)
+    public abstract void deleteEpisode(Long id);
+
+    @Transactional
+    @CacheEvict(value = {"tvShows", "topRatedTvShows"}, allEntries = true)
+    public abstract void deleteTvShow(Long id);
 }
 

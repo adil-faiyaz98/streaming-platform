@@ -2,11 +2,9 @@
 package com.examples.streaming_platform.catalog.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
+import java.time.OffsetDateTime;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +37,25 @@ public class Season {
     @ToString.Exclude
     private TvShow tvShow;
 
+    @Setter
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "series_id", nullable = false)
+    private Series series;
+
     @OneToMany(mappedBy = "season", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Episode> episodes = new ArrayList<>();
+
+    @Column(name = "created_at")
+    private OffsetDateTime createdAt;
+
+    @Column(name = "updated_at")
+    private OffsetDateTime updatedAt;
+
+    public Season(Integer seasonNumber, String title, String overview, String posterUrl, LocalDate airDate) {
+        this.seasonNumber = seasonNumber;
+        this.title = title;
+        this.overview = overview;
+        this.posterUrl = posterUrl;
+        this.airDate = airDate;
+    }
 }

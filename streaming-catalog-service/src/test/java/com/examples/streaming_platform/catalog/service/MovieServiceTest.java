@@ -1,10 +1,11 @@
-package test.java.com.examples.streaming_platform.catalog.service;
+package com.examples.streaming_platform.catalog.service;
 
 import com.examples.streaming_platform.catalog.dto.MovieDTO;
 import com.examples.streaming_platform.catalog.exception.ResourceNotFoundException;
 import com.examples.streaming_platform.catalog.mapper.CatalogMapper;
 import com.examples.streaming_platform.catalog.model.Movie;
 import com.examples.streaming_platform.catalog.repository.MovieRepository;
+import com.examples.streaming_platform.catalog.service.MovieService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

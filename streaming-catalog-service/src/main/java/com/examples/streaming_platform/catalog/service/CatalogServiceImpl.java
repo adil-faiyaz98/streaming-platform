@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.OffsetDateTime;
 import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -62,7 +63,7 @@ public class CatalogServiceImpl implements CatalogService {
     @Override
     @Cacheable(value = "topRatedMovies")
     public List<MovieDTO> getTopRatedMovies() {
-        return movieRepository.findTop10ByOrderByAverageRatingDesc()
+        return movieRepository.findTop10ByOrderByRatingDesc()
                 .stream()
                 .map(catalogMapper::movieToMovieDTO)
                 .collect(Collectors.toList());
@@ -81,8 +82,8 @@ public class CatalogServiceImpl implements CatalogService {
     @CacheEvict(value = {"movies", "moviesByGenre", "topRatedMovies"}, allEntries = true)
     public MovieDTO createMovie(MovieDTO movieDTO) {
         Movie movie = catalogMapper.movieDTOToMovie(movieDTO);
-        movie.setCreatedAt(ZonedDateTime.now());
-        movie.setUpdatedAt(ZonedDateTime.now());
+        movie.setCreatedAt(OffsetDateTime.now());
+        movie.setUpdatedAt(OffsetDateTime.now());
         Movie savedMovie = movieRepository.save(movie);
         return catalogMapper.movieToMovieDTO(savedMovie);
     }
@@ -95,7 +96,7 @@ public class CatalogServiceImpl implements CatalogService {
                 .orElseThrow(() -> new ResourceNotFoundException("Movie", "id", id));
         
         catalogMapper.updateMovieFromDTO(movieDTO, movie);
-        movie.setUpdatedAt(ZonedDateTime.now());
+        movie.setUpdatedAt(OffsetDateTime.now());
         Movie updatedMovie = movieRepository.save(movie);
         return catalogMapper.movieToMovieDTO(updatedMovie);
     }
@@ -158,7 +159,7 @@ public class CatalogServiceImpl implements CatalogService {
 
     @Override
     public List<SeriesDTO> getFeaturedSeries() {
-        return seriesRepository.findAllFeatured()
+        return seriesRepository.findByFeaturedTrue()
                 .stream()
                 .map(catalogMapper::seriesToSeriesDTO)
                 .collect(Collectors.toList());
@@ -169,8 +170,8 @@ public class CatalogServiceImpl implements CatalogService {
     @CacheEvict(value = {"series", "seriesByGenre", "topRatedSeries"}, allEntries = true)
     public SeriesDTO createSeries(SeriesDTO seriesDTO) {
         Series series = catalogMapper.seriesDTOToSeries(seriesDTO);
-        series.setCreatedAt(ZonedDateTime.now());
-        series.setUpdatedAt(ZonedDateTime.now());
+        series.setCreatedAt(OffsetDateTime.now());
+        series.setUpdatedAt(OffsetDateTime.now());
         Series savedSeries = seriesRepository.save(series);
         return catalogMapper.seriesToSeriesDTO(savedSeries);
     }
@@ -183,7 +184,7 @@ public class CatalogServiceImpl implements CatalogService {
                 .orElseThrow(() -> new ResourceNotFoundException("Series", "id", id));
         
         catalogMapper.updateSeriesFromDTO(seriesDTO, series);
-        series.setUpdatedAt(ZonedDateTime.now());
+        series.setUpdatedAt(OffsetDateTime.now());
         Series updatedSeries = seriesRepository.save(series);
         return catalogMapper.seriesToSeriesDTO(updatedSeries);
     }
@@ -226,9 +227,9 @@ public class CatalogServiceImpl implements CatalogService {
                 .orElseThrow(() -> new ResourceNotFoundException("Season", "id", id));
     }
 
-    @Override
     @Transactional
     @CacheEvict(value = {"seasons", "series"}, allEntries = true)
+    @Override
     public SeasonDTO createSeason(Long seriesId, SeasonDTO seasonDTO) {
         Series series = seriesRepository.findById(seriesId)
                 .orElseThrow(() -> new ResourceNotFoundException("Series", "id", seriesId));
@@ -241,9 +242,9 @@ public class CatalogServiceImpl implements CatalogService {
         return catalogMapper.seasonToSeasonDTO(savedSeason);
     }
 
-    @Override
     @Transactional
     @CacheEvict(value = {"seasons", "series"}, allEntries = true)
+    @Override
     public SeasonDTO updateSeason(Long id, SeasonDTO seasonDTO) {
         Season season = seasonRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Season", "id", id));
@@ -254,9 +255,9 @@ public class CatalogServiceImpl implements CatalogService {
         return catalogMapper.seasonToSeasonDTO(updatedSeason);
     }
 
-    @Override
     @Transactional
     @CacheEvict(value = {"seasons", "series"}, allEntries = true)
+    @Override
     public void deleteSeason(Long id) {
         if (!seasonRepository.existsById(id)) {
             throw new ResourceNotFoundException("Season", "id", id);
@@ -284,9 +285,9 @@ public class CatalogServiceImpl implements CatalogService {
                 .orElseThrow(() -> new ResourceNotFoundException("Episode", "id", id));
     }
 
-    @Override
     @Transactional
     @CacheEvict(value = {"episodes", "seasons"}, allEntries = true)
+    @Override
     public EpisodeDTO createEpisode(Long seasonId, EpisodeDTO episodeDTO) {
         Season season = seasonRepository.findById(seasonId)
                 .orElseThrow(() -> new ResourceNotFoundException("Season", "id", seasonId));
@@ -299,9 +300,9 @@ public class CatalogServiceImpl implements CatalogService {
         return catalogMapper.episodeToEpisodeDTO(savedEpisode);
     }
 
-    @Override
     @Transactional
     @CacheEvict(value = {"episodes", "seasons"}, allEntries = true)
+    @Override
     public EpisodeDTO updateEpisode(Long id, EpisodeDTO episodeDTO) {
         Episode episode = episodeRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Episode", "id", id));
@@ -312,9 +313,9 @@ public class CatalogServiceImpl implements CatalogService {
         return catalogMapper.episodeToEpisodeDTO(updatedEpisode);
     }
 
-    @Override
     @Transactional
     @CacheEvict(value = {"episodes", "seasons"}, allEntries = true)
+    @Override
     public void deleteEpisode(Long id) {
         if (!episodeRepository.existsById(id)) {
             throw new ResourceNotFoundException("Episode", "id", id);
@@ -322,9 +323,9 @@ public class CatalogServiceImpl implements CatalogService {
         episodeRepository.deleteById(id);
     }
 
-    @Override
     @Transactional
     @CacheEvict(value = {"tvShows", "topRatedTvShows"}, allEntries = true)
+    @Override
     public void deleteTvShow(Long id) {
         if (!tvShowRepository.existsById(id)) {
             throw new ResourceNotFoundException("TV Show", "id", id);

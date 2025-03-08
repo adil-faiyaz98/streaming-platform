@@ -3,6 +3,8 @@ package com.examples.streaming_platform.catalog.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
+
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -31,6 +33,9 @@ public class Movie {
     @Column(name = "release_year")
     private Integer releaseYear;
 
+    @Column(name = "release_date")
+    private LocalDate releaseDate;
+
     private String director;
 
     private Integer duration; // in minutes
@@ -51,6 +56,9 @@ public class Movie {
     private Long viewCount = 0L;
 
     private Boolean featured = false;
+
+    @Column(name = "rating")
+    private double rating;
 
     @Column(name = "created_at")
     private OffsetDateTime createdAt;

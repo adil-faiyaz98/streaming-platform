@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.time.LocalDate;
+import java.time.OffsetDateTime;
 
 @Entity
 @Table(name = "episodes")
@@ -22,8 +23,6 @@ public class Episode {
     
     @Column(nullable = false)
     private Integer episodeNumber;
-    
-    @Column(nullable = false)
     private String title;
     
     @Column(length = 1000)
@@ -41,4 +40,10 @@ public class Episode {
     @JoinColumn(name = "season_id", nullable = false)
     @ToString.Exclude
     private Season season;
+
+    @Column(name = "created_at")
+    private OffsetDateTime createdAt;
+
+    @Column(name = "updated_at")
+    private OffsetDateTime updatedAt;
 }

@@ -13,12 +13,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class SeasonService {
+
 
     private final SeasonRepository seasonRepository;
     private final TvShowRepository tvShowRepository;
@@ -62,6 +64,8 @@ public class SeasonService {
         
         Season season = catalogMapper.seasonDTOToSeason(seasonDTO);
         season.setTvShow(tvShow);
+        season.setCreatedAt(OffsetDateTime.now());
+        season.setUpdatedAt(OffsetDateTime.now());
         
         Season savedSeason = seasonRepository.save(season);
         return catalogMapper.seasonToSeasonDTO(savedSeason);
@@ -71,12 +75,11 @@ public class SeasonService {
     public SeasonDTO updateSeason(Long id, SeasonDTO seasonDTO) {
         Season existingSeason = seasonRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Season", "id", id));
+
+        catalogMapper.updateSeasonFromDTO(seasonDTO, existingSeason);
+        existingSeason.setUpdatedAt(OffsetDateTime.now());
         
-        Season updatedSeason = catalogMapper.seasonDTOToSeason(seasonDTO);
-        updatedSeason.setId(existingSeason.getId());
-        updatedSeason.setTvShow(existingSeason.getTvShow());
-        
-        Season savedSeason = seasonRepository.save(updatedSeason);
+        Season savedSeason = seasonRepository.save(existingSeason);
         return catalogMapper.seasonToSeasonDTO(savedSeason);
     }
     

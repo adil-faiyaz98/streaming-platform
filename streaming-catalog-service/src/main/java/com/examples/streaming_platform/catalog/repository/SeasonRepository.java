@@ -9,7 +9,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface SeasonRepository extends JpaRepository<Season, Long> {
-    
+
+    List<Season> findBySeriesIdOrderBySeasonNumber(Long seriesId);
+
     List<Season> findByTvShowIdOrderBySeasonNumber(Long tvShowId);
     
     Page<Season> findByTvShowId(Long tvShowId, Pageable pageable);
