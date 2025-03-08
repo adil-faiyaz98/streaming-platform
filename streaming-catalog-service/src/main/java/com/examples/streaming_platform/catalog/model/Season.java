@@ -2,44 +2,43 @@
 package com.examples.streaming_platform.catalog.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import java.time.Instant;
-import java.util.Set;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity
 @Table(name = "seasons")
+@NoArgsConstructor
+@AllArgsConstructor
 public class Season {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "series_id", nullable = false)
-    private Series series;
-
+    @Column(nullable = false)
     private Integer seasonNumber;
     private String title;
-    private String description;
-    private Integer releaseYear;
 
-    @OneToMany(mappedBy = "season", cascade = CascadeType.ALL)
-    private Set<Episode> episodes;
+    @Column(length = 1000)
+    private String overview;
 
-    @Column(name = "created_at")
-    private Instant createdAt;
+    @Column(name = "poster_url")
+    private String posterUrl;
 
-    @Column(name = "updated_at")
-    private Instant updatedAt;
+    @Column(name = "air_date")
+    private LocalDate airDate;
 
-    @PrePersist
-    protected void onCreate() {
-        createdAt = Instant.now();
-        updatedAt = Instant.now();
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "tv_show_id", nullable = false)
+    @ToString.Exclude
+    private TvShow tvShow;
 
-    @PreUpdate
-    protected void onUpdate() {
-        updatedAt = Instant.now();
-    }
+    @OneToMany(mappedBy = "season", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Episode> episodes = new ArrayList<>();
 }

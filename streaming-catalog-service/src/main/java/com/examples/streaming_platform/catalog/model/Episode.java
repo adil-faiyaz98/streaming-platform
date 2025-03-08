@@ -2,49 +2,43 @@
 package com.examples.streaming_platform.catalog.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import java.time.Instant;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
-@Data
+import java.time.LocalDate;
+
 @Entity
 @Table(name = "episodes")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Episode {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @ManyToOne
-    @JoinColumn(name = "season_id", nullable = false)
-    private Season season;
-
+    
+    @Column(nullable = false)
     private Integer episodeNumber;
+    
+    @Column(nullable = false)
     private String title;
-
-    @Column(length = 2000)
-    private String description;
-
+    
+    @Column(length = 1000)
+    private String overview;
+    
     private Integer duration; // in minutes
-    private String videoUrl;
-    private String thumbnailUrl;
-
-    @Column(name = "view_count")
-    private Long viewCount;
-
-    @Column(name = "created_at")
-    private Instant createdAt;
-
-    @Column(name = "updated_at")
-    private Instant updatedAt;
-
-    @PrePersist
-    protected void onCreate() {
-        createdAt = Instant.now();
-        updatedAt = Instant.now();
-        if (viewCount == null) viewCount = 0L;
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        updatedAt = Instant.now();
-    }
+    
+    @Column(name = "air_date")
+    private LocalDate airDate;
+    
+    @Column(name = "image_url")
+    private String imageUrl;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "season_id", nullable = false)
+    @ToString.Exclude
+    private Season season;
 }

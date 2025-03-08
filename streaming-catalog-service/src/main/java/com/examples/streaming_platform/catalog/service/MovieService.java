@@ -1,82 +1,76 @@
-// service/CatalogService.java
-package com.examples.streaming_platform.catalog.service;
+package main.java.com.examples.streaming_platform.catalog.service;
 
 import com.examples.streaming_platform.catalog.dto.MovieDTO;
-import com.examples.streaming_platform.catalog.dto.SeriesDTO;
 import com.examples.streaming_platform.catalog.exception.ResourceNotFoundException;
 import com.examples.streaming_platform.catalog.mapper.CatalogMapper;
 import com.examples.streaming_platform.catalog.model.Movie;
 import com.examples.streaming_platform.catalog.repository.MovieRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
-public class CatalogService {
+public class MovieService {
+
     private final MovieRepository movieRepository;
     private final CatalogMapper catalogMapper;
-
-    @Cacheable(value = "movies", key = "#id")
-    public MovieDTO getMovieById(Long id) {
-        Movie movie = movieRepository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("Movie not found with id: " + id));
-        return catalogMapper.movieToMovieDTO(movie);
-    }
-
+    
     public Page<MovieDTO> getAllMovies(Pageable pageable) {
         return movieRepository.findAll(pageable)
-            .map(catalogMapper::movieToMovieDTO);
+                .map(catalogMapper::movieToMovieDTO);
     }
-
-    public List<MovieDTO> searchMovies(String query) {
-        return movieRepository.findByTitleContainingIgnoreCase(query).stream()
-            .map(catalogMapper::movieToMovieDTO)
-            .toList();
+    
+    public MovieDTO getMovieById(Long id) {
+        Movie movie = movieRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Movie", "id", id));
+        return catalogMapper.movieToMovieDTO(movie);
     }
-
-    public List<MovieDTO> getFeaturedMovies() {
-        return movieRepository.findByFeaturedTrue().stream()
-            .map(catalogMapper::movieToMovieDTO)
-            .toList();
+    
+    public Page<MovieDTO> searchMoviesByTitle(String title, Pageable pageable) {
+        return movieRepository.findByTitleContainingIgnoreCase(title, pageable)
+                .map(catalogMapper::movieToMovieDTO);
     }
-
+    
+    public Page<MovieDTO> getMoviesByGenre(String genre, Pageable pageable) {
+        return movieRepository.findByGenre(genre, pageable)
+                .map(catalogMapper::movieToMovieDTO);
+    }
+    
+    public List<MovieDTO> getTopRatedMovies() {
+        return movieRepository.findTop10ByOrderByRatingDesc()
+                .stream()
+                .map(catalogMapper::movieToMovieDTO)
+                .collect(Collectors.toList());
+    }
+    
     @Transactional
     public MovieDTO createMovie(MovieDTO movieDTO) {
         Movie movie = catalogMapper.movieDTOToMovie(movieDTO);
         Movie savedMovie = movieRepository.save(movie);
         return catalogMapper.movieToMovieDTO(savedMovie);
     }
-
+    
     @Transactional
     public MovieDTO updateMovie(Long id, MovieDTO movieDTO) {
         Movie existingMovie = movieRepository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("Movie not found with id: " + id));
-
+                .orElseThrow(() -> new ResourceNotFoundException("Movie", "id", id));
+        
         catalogMapper.updateMovieFromDTO(movieDTO, existingMovie);
         Movie updatedMovie = movieRepository.save(existingMovie);
         return catalogMapper.movieToMovieDTO(updatedMovie);
     }
-
+    
     @Transactional
     public void deleteMovie(Long id) {
         if (!movieRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Movie not found with id: " + id);
+            throw new ResourceNotFoundException("Movie", "id", id);
         }
         movieRepository.deleteById(id);
-    }
-
-    @Transactional
-    public void incrementViewCount(Long movieId) {
-        Movie movie = movieRepository.findById(movieId)
-            .orElseThrow(() -> new ResourceNotFoundException("Movie not found with id: " + movieId));
-        movie.setViewCount(movie.getViewCount() + 1);
-        movieRepository.save(movie);
     }
 }

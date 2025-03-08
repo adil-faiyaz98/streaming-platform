@@ -3,7 +3,8 @@ package com.examples.streaming_platform.catalog.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
-import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 @Data
@@ -22,54 +23,54 @@ public class Movie {
     private Long id;
 
     @Column(nullable = false)
-    @NotBlank
     private String title;
 
-    @Column(length = 2000)
+    @Column(columnDefinition = "TEXT")
     private String description;
 
-    @Min(1900)
+    @Column(name = "release_year")
     private Integer releaseYear;
-
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "movie_genres", joinColumns = @JoinColumn(name = "movie_id"))
-    private Set<String> genres;
 
     private String director;
 
-    @Min(1)
-    private Integer duration;
+    private Integer duration; // in minutes
 
+    @Column(name = "maturity_rating")
     private String maturityRating;
 
+    @Column(name = "image_url")
     private String imageUrl;
 
+    @Column(name = "video_url")
     private String videoUrl;
 
     @Column(name = "average_rating")
-    @Min(1)
-    @Max(10)
     private Double averageRating = 0.0;
 
     @Column(name = "view_count")
-    private Long viewCount;
+    private Long viewCount = 0L;
 
-    private Boolean featured=false;
+    private Boolean featured = false;
 
-    @Column(name = "created_at", updatable = false)
-    private Instant createdAt;
+    @Column(name = "created_at")
+    private OffsetDateTime createdAt;
 
     @Column(name = "updated_at")
-    private Instant updatedAt;
+    private OffsetDateTime updatedAt;
+
+    @ElementCollection
+    @CollectionTable(name = "movie_genres", joinColumns = @JoinColumn(name = "movie_id"))
+    @Column(name = "genres")
+    private Set<String> genres = new HashSet<>();
 
     @PrePersist
     protected void onCreate() {
-        createdAt = Instant.now();
-        updatedAt = Instant.now();
+        createdAt = OffsetDateTime.now();
+        updatedAt = createdAt;
     }
 
     @PreUpdate
     protected void onUpdate() {
-        updatedAt = Instant.now();
+        updatedAt = OffsetDateTime.now();
     }
 }

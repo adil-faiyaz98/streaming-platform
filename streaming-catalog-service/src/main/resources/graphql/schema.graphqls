@@ -13,6 +13,8 @@ type Movie {
     averageRating: Float
     viewCount: Int
     featured: Boolean
+    createdAt: String
+    updatedAt: String
 }
 
 input MovieInput {
@@ -36,15 +38,138 @@ type MoviePage {
     number: Int!
 }
 
+type Series {
+    id: ID!
+    title: String!
+    description: String
+    startYear: Int
+    endYear: Int
+    genres: [String!]!
+    maturityRating: String
+    imageUrl: String
+    averageRating: Float
+    viewCount: Int
+    featured: Boolean
+    seasons: [Season!]
+    createdAt: String
+    updatedAt: String
+}
+
+input SeriesInput {
+    title: String!
+    description: String
+    startYear: Int
+    endYear: Int
+    genres: [String!]!
+    maturityRating: String
+    imageUrl: String
+    featured: Boolean
+}
+
+type SeriesPage {
+    content: [Series!]!
+    totalElements: Int!
+    totalPages: Int!
+    size: Int!
+    number: Int!
+}
+
+type Season {
+    id: ID!
+    seriesId: ID!
+    seasonNumber: Int!
+    title: String
+    description: String
+    releaseYear: Int
+    imageUrl: String
+    episodes: [Episode!]
+    createdAt: String
+    updatedAt: String
+}
+
+input SeasonInput {
+    seriesId: ID!
+    seasonNumber: Int!
+    title: String
+    description: String
+    releaseYear: Int
+    imageUrl: String
+}
+
+type Episode {
+    id: ID!
+    seasonId: ID!
+    episodeNumber: Int!
+    title: String!
+    description: String
+    duration: Int
+    imageUrl: String
+    videoUrl: String
+    createdAt: String
+    updatedAt: String
+}
+
+input EpisodeInput {
+    seasonId: ID!
+    episodeNumber: Int!
+    title: String!
+    description: String
+    duration: Int
+    imageUrl: String
+    videoUrl: String
+}
+
+type GenreStat {
+    genre: String!
+    count: Int!
+}
+
 type Query {
+    # Movie queries
+    movies(page: Int = 0, size: Int = 20): MoviePage!
     movie(id: ID!): Movie
-    movies(page: Int, size: Int): MoviePage!
-    searchMovies(query: String!): [Movie!]!
+    searchMovies(title: String!, page: Int = 0, size: Int = 20): MoviePage!
+    moviesByGenre(genre: String!, page: Int = 0, size: Int = 20): MoviePage!
+    topRatedMovies: [Movie!]!
     featuredMovies: [Movie!]!
+    movieGenreStats: [GenreStat!]!
+    
+    # Series queries
+    allSeries(page: Int = 0, size: Int = 20): SeriesPage!
+    series(id: ID!): Series
+    searchSeries(title: String!, page: Int = 0, size: Int = 20): SeriesPage!
+    seriesByGenre(genre: String!, page: Int = 0, size: Int = 20): SeriesPage!
+    topRatedSeries: [Series!]!
+    featuredSeries: [Series!]!
+    seriesGenreStats: [GenreStat!]!
+    
+    # Season queries
+    seasonsForSeries(seriesId: ID!): [Season!]!
+    season(id: ID!): Season
+    
+    # Episode queries
+    episodesForSeason(seasonId: ID!): [Episode!]!
+    episode(id: ID!): Episode
 }
 
 type Mutation {
+    # Movie mutations
     createMovie(input: MovieInput!): Movie!
     updateMovie(id: ID!, input: MovieInput!): Movie!
     deleteMovie(id: ID!): Boolean!
+    
+    # Series mutations
+    createSeries(input: SeriesInput!): Series!
+    updateSeries(id: ID!, input: SeriesInput!): Series!
+    deleteSeries(id: ID!): Boolean!
+    
+    # Season mutations
+    createSeason(input: SeasonInput!): Season!
+    updateSeason(id: ID!, input: SeasonInput!): Season!
+    deleteSeason(id: ID!): Boolean!
+    
+    # Episode mutations
+    createEpisode(input: EpisodeInput!): Episode!
+    updateEpisode(id: ID!, input: EpisodeInput!): Episode!
+    deleteEpisode(id: ID!): Boolean!
 }

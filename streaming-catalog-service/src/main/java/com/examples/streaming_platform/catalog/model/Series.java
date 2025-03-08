@@ -2,65 +2,75 @@
 package com.examples.streaming_platform.catalog.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import java.time.Instant;
+import lombok.NoArgsConstructor;
+
+import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
-@Data
 @Entity
 @Table(name = "series")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Series {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    
     @Column(nullable = false)
     private String title;
-
-    @Column(length = 2000)
+    
+    @Column(columnDefinition = "TEXT")
     private String description;
-
+    
+    @Column(name = "start_year")
     private Integer startYear;
+    
+    @Column(name = "end_year")
     private Integer endYear;
-
-    @ElementCollection
-    @CollectionTable(name = "series_genres")
-    private Set<String> genres;
-
-    private String creator;
+    
+    @Column(name = "maturity_rating")
     private String maturityRating;
+    
+    @Column(name = "image_url")
     private String imageUrl;
-
-    @OneToMany(mappedBy = "series", cascade = CascadeType.ALL)
-    private Set<Season> seasons;
-
+    
     @Column(name = "average_rating")
-    private Double averageRating;
-
+    private Double averageRating = 0.0;
+    
     @Column(name = "view_count")
-    private Long viewCount;
-
-    private Boolean featured;
-    private Boolean ongoing;
-
+    private Long viewCount = 0L;
+    
+    private Boolean featured = false;
+    
     @Column(name = "created_at")
-    private Instant createdAt;
-
+    private OffsetDateTime createdAt;
+    
     @Column(name = "updated_at")
-    private Instant updatedAt;
-
+    private OffsetDateTime updatedAt;
+    
+    @ElementCollection
+    @CollectionTable(name = "series_genres", joinColumns = @JoinColumn(name = "series_id"))
+    @Column(name = "genres")
+    private Set<String> genres = new HashSet<>();
+    
+    @OneToMany(mappedBy = "series", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Season> seasons = new ArrayList<>();
+    
     @PrePersist
     protected void onCreate() {
-        createdAt = Instant.now();
-        updatedAt = Instant.now();
-        if (averageRating == null) averageRating = 0.0;
-        if (viewCount == null) viewCount = 0L;
-        if (featured == null) featured = false;
-        if (ongoing == null) ongoing = true;
+        createdAt = OffsetDateTime.now();
+        updatedAt = createdAt;
     }
-
+    
     @PreUpdate
     protected void onUpdate() {
-        updatedAt = Instant.now();
+        updatedAt = OffsetDateTime.now();
     }
 }
