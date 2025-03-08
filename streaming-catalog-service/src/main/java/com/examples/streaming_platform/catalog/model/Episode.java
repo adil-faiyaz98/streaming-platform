@@ -41,16 +41,14 @@ public class Episode {
     @Column(name = "video_url")
     private String videoUrl;
     
-    @Setter
-    @Getter
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "seasonId")
+    @JoinColumn(name = "season_id")
     @ToString.Exclude
-    private Season season; // Establish relationship with Season entity
-
+    private Season season;
+    
     @Column(name = "created_at")
     private OffsetDateTime createdAt;
-
+    
     @Column(name = "updated_at")
     private OffsetDateTime updatedAt;
     
@@ -64,5 +62,4 @@ public class Episode {
     protected void onUpdate() {
         updatedAt = OffsetDateTime.now();
     }
-
 }
