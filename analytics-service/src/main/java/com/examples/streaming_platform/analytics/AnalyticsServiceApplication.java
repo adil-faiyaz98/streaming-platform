@@ -1,4 +1,4 @@
-package main.java.com.examples.streaming_platform.analytics;
+package com.examples.streaming_platform.analytics;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
