@@ -1,5 +1,6 @@
-package test.java.com.examples.streaming_platform.catalog.controller;
+package com.examples.streaming_platform.catalog.controller;
 
+import com.examples.streaming_platform.catalog.controller.MovieController;
 import com.examples.streaming_platform.catalog.dto.MovieDTO;
 import com.examples.streaming_platform.catalog.exception.ResourceNotFoundException;
 import com.examples.streaming_platform.catalog.service.MovieService;

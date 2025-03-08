@@ -47,7 +47,7 @@ public interface CatalogMapper {
     Episode episodeDTOToEpisode(EpisodeDTO episodeDTO);
     
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    @Mapping(source = "seasonId", target = "season")
+    @Mapping(source = "season", target = "season")
     void updateEpisodeFromDTO(EpisodeDTO dto, @MappingTarget Episode episode);
     
     // Helper methods for Season <-> Long conversion

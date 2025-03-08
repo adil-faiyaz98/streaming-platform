@@ -49,6 +49,9 @@ public class Movie {
     @Column(name = "video_url")
     private String videoUrl;
 
+    @Column(name = "poster_url")
+    private String posterUrl;
+
     @Column(name = "average_rating")
     private Float averageRating;
 

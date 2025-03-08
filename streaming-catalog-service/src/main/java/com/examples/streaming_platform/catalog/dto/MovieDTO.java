@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -21,6 +22,10 @@ public class MovieDTO {
     @NotBlank(message = "Title is required")
     @Size(max = 255, message = "Title must be less than 255 characters")
     private String title;
+
+    private LocalDate releaseDate;
+
+    private Double rating;
     
     @Size(max = 2000, message = "Description must be less than 2000 characters")
     private String description;
@@ -37,6 +42,8 @@ public class MovieDTO {
     private String imageUrl;
     
     private String videoUrl;
+
+    private String posterUrl;
     
     private Float averageRating;
     

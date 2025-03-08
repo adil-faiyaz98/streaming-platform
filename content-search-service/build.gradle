@@ -19,8 +19,7 @@ dependencies {
 }
 
 bootJar {
-    enabled = true
-    mainClass.set('com.examples.streaming_platform.search.ContentSearchApplication')
+    mainClass = 'com.examples.streaming_platform.content_search.ContentSearchServiceApplication'
 }
 
 test {
