@@ -1,72 +1,44 @@
-buildscript {
-	repositories {
-		mavenCentral()
-		gradlePluginPortal()
-	}
-}
-
 plugins {
+	id 'java'
 	id 'org.springframework.boot' version '3.2.3' apply false
 	id 'io.spring.dependency-management' version '1.1.4' apply false
-	id 'java'
-	id 'com.netflix.dgs.codegen' version '6.1.2' apply false  // Updated version
-}
-
-allprojects {
-	group = 'com.examples.streaming_platform'
-	version = '0.0.1-SNAPSHOT'
-
-	repositories {
-		mavenCentral()
-		gradlePluginPortal()
-	}
 }
 
 subprojects {
 	apply plugin: 'java'
 	apply plugin: 'org.springframework.boot'
 	apply plugin: 'io.spring.dependency-management'
-	apply plugin: 'com.netflix.dgs.codegen'
-	sourceCompatibility='21'
 
+	group = 'com.examples'
+	version = '0.0.1-SNAPSHOT'
 
+	java {
+		sourceCompatibility = JavaVersion.VERSION_21
+		targetCompatibility = JavaVersion.VERSION_21
+	}
+
+	repositories {
+		mavenCentral()
+	}
 
 	dependencies {
-		// Spring Boot
 		implementation 'org.springframework.boot:spring-boot-starter-web'
-		implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-		implementation 'org.springframework.boot:spring-boot-starter-validation'
 		implementation 'org.springframework.boot:spring-boot-starter-actuator'
-
-		// Netflix DGS
-		implementation(platform('com.netflix.graphql.dgs:graphql-dgs-platform-dependencies:7.5.3'))  // Updated version
-		implementation 'com.netflix.graphql.dgs:graphql-dgs-spring-boot-starter'
-
-		// Spring Cloud
 		implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
 
-		// Database
-		runtimeOnly 'org.postgresql:postgresql'
-
-		// Lombok
 		compileOnly 'org.projectlombok:lombok'
 		annotationProcessor 'org.projectlombok:lombok'
 
-		// Testing
 		testImplementation 'org.springframework.boot:spring-boot-starter-test'
-		testImplementation 'com.netflix.graphql.dgs:graphql-dgs-spring-boot-starter-test'
-		testImplementation 'org.testcontainers:junit-jupiter'
-		testImplementation 'org.testcontainers:postgresql'
 	}
 
 	dependencyManagement {
 		imports {
 			mavenBom "org.springframework.cloud:spring-cloud-dependencies:2023.0.0"
-			mavenBom "com.netflix.graphql.dgs:graphql-dgs-platform-dependencies:7.5.3"  // Updated version
 		}
 	}
 
-	tasks.named('test') {
+	test {
 		useJUnitPlatform()
 	}
 }
