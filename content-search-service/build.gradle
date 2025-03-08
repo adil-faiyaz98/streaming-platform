@@ -1,0 +1,3 @@
+bootJar {
+    mainClassName = 'com.examples.streaming_platform.content_search.ContentSearchServiceApplication'
+}
