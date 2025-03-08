@@ -1,4 +1,4 @@
-package test.java.com.examples.streaming_platform.catalog.repository;
+package com.examples.streaming_platform.catalog.repository;
 
 import com.examples.streaming_platform.catalog.model.Movie;
 import org.junit.jupiter.api.Test;

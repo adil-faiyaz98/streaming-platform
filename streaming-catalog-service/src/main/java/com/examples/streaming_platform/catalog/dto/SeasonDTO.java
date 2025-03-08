@@ -1,4 +1,4 @@
-package main.java.com.examples.streaming_platform.catalog.dto;
+package com.examples.streaming_platform.catalog.dto;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;

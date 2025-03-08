@@ -1,4 +1,4 @@
-package main.java.com.examples.streaming_platform.catalog.repository;
+package com.examples.streaming_platform.catalog.repository;
 
 import com.examples.streaming_platform.catalog.model.TvShow;
 import org.springframework.data.domain.Page;

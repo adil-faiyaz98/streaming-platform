@@ -1,16 +1,16 @@
 buildscript {
 	repositories {
 		mavenCentral()
+		gradlePluginPortal()
 	}
 }
 
 plugins {
 	id 'org.springframework.boot' version '3.2.3' apply false
 	id 'io.spring.dependency-management' version '1.1.4' apply false
-	id 'com.netflix.dgs.codegen' version '7.0.3' apply false
+	id 'java'
+	id 'com.netflix.dgs.codegen' version '6.1.2' apply false  // Updated version
 }
-
-
 
 allprojects {
 	group = 'com.examples.streaming_platform'
@@ -18,6 +18,7 @@ allprojects {
 
 	repositories {
 		mavenCentral()
+		gradlePluginPortal()
 	}
 }
 
@@ -29,7 +30,7 @@ subprojects {
 
 	java {
 		toolchain {
-			languageVersion = JavaLanguageVersion.of(23)
+			languageVersion = JavaLanguageVersion.of(21)
 		}
 	}
 
@@ -41,6 +42,7 @@ subprojects {
 		implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
 		// Netflix DGS
+		implementation(platform('com.netflix.graphql.dgs:graphql-dgs-platform-dependencies:7.5.3'))  // Updated version
 		implementation 'com.netflix.graphql.dgs:graphql-dgs-spring-boot-starter'
 
 		// Spring Cloud
@@ -63,7 +65,7 @@ subprojects {
 	dependencyManagement {
 		imports {
 			mavenBom "org.springframework.cloud:spring-cloud-dependencies:2023.0.0"
-			mavenBom "com.netflix.graphql.dgs:graphql-dgs-platform-dependencies:7.0.3"
+			mavenBom "com.netflix.graphql.dgs:graphql-dgs-platform-dependencies:7.5.3"  // Updated version
 		}
 	}
 

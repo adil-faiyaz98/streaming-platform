@@ -1,4 +1,4 @@
-package main.java.com.examples.streaming_platform.catalog.model;
+package com.examples.streaming_platform.catalog.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

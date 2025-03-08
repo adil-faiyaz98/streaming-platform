@@ -1,4 +1,4 @@
-package main.java.com.examples.streaming_platform.catalog.service;
+package com.examples.streaming_platform.catalog.service;
 
 import com.examples.streaming_platform.catalog.dto.SeriesDTO;
 import com.examples.streaming_platform.catalog.exception.ResourceNotFoundException;

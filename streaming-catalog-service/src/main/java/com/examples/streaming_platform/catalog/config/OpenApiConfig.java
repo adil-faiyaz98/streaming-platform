@@ -16,7 +16,7 @@ import java.util.List;
 public class OpenApiConfig {
 
     @Bean
-    public OpenAPI customOpenAPI() {
+    public OpenAPI streamingCatalogOpenAPI() {
         return new OpenAPI()
                 .components(new Components()
                         .addSecuritySchemes("bearer-key",
@@ -26,17 +26,18 @@ public class OpenApiConfig {
                                         .bearerFormat("JWT")))
                 .info(new Info()
                         .title("Streaming Catalog API")
-                        .description("API for managing streaming content catalog including movies, series, seasons, and episodes")
-                        .version("1.0")
+                        .description("API documentation for the Streaming Platform Catalog Service")
+                        .version("1.0.0")
                         .contact(new Contact()
-                                .name("Streaming Platform Team")
-                                .email("support@streamingplatform.com"))
+                                .name("Development Team")
+                                .email("dev@example.com")
+                                .url("https://github.com/your-repo/streaming-platform"))
                         .license(new License()
                                 .name("Apache 2.0")
                                 .url("https://www.apache.org/licenses/LICENSE-2.0")))
                 .servers(List.of(
                         new Server().url("http://localhost:8080").description("Local Development Server"),
-                        new Server().url("https://api.streamingplatform.com").description("Production Server")
+                        new Server().url("https://api.streaming-platform.example.com").description("Production Server")
                 ));
     }
 }
