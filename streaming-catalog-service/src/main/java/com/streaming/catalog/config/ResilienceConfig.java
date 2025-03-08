@@ -1,4 +1,4 @@
-package main.java.com.streaming.catalog.config;
+package com.streaming.catalog.config;
 
 import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;
 import io.github.resilience4j.timelimiter.TimeLimiterConfig;

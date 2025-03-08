@@ -33,6 +33,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-cache'
     implementation 'com.graphql-java:graphql-java-extended-scalars:21.0'
+    implementation 'org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j'
     
     // Database
     runtimeOnly 'org.postgresql:postgresql:42.7.1'
