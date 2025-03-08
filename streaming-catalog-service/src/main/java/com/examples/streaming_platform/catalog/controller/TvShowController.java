@@ -1,4 +1,4 @@
-package main.java.com.examples.streaming_platform.catalog.controller;
+package com.examples.streaming_platform.catalog.controller;
 
 import com.examples.streaming_platform.catalog.dto.TvShowDTO;
 import com.examples.streaming_platform.catalog.service.TvShowService;

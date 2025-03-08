@@ -1,4 +1,4 @@
-package main.java.com.examples.streaming_platform.catalog.exception;
+package com.examples.streaming_platform.catalog.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package main.java.com.examples.streaming_platform.catalog.graphql;
+package com.examples.streaming_platform.catalog.graphql;
 
 import com.examples.streaming_platform.catalog.dto.EpisodeDTO;
 import com.examples.streaming_platform.catalog.service.EpisodeService;

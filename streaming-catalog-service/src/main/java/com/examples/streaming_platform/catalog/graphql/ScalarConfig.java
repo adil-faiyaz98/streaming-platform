@@ -1,4 +1,4 @@
-package main.java.com.examples.streaming_platform.catalog.graphql;
+package com.examples.streaming_platform.catalog.graphql;
 
 import graphql.language.StringValue;
 import graphql.schema.*;
