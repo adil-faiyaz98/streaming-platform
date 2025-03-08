@@ -1,76 +1,166 @@
+scalar DateTime
+
 type Query {
-    movies(page: Int, size: Int): MovieConnection!
-    movie(id: ID!): Movie
-    tvShows(page: Int, size: Int): TvShowConnection!
-    tvShow(id: ID!): TvShow
+  # Movies
+  movie(id: ID!): Movie
+  movies: [Movie!]!
+  searchMovies(title: String!): [Movie!]!
+  moviesByGenre(genre: String!): [Movie!]!
+  topRatedMovies: [Movie!]!
+  featuredMovies: [Movie!]!
+  moviesPage(page: Int, size: Int): MoviePage!
+  
+  # Series
+  series(id: ID!): Series
+  allSeries: [Series!]!
+  searchSeries(title: String!): [Series!]!
+  seriesByGenre(genre: String!): [Series!]!
+  topRatedSeries: [Series!]!
+  featuredSeries: [Series!]!
+  seriesPage(page: Int, size: Int): SeriesPage!
+  
+  # Seasons
+  season(id: ID!): Season
+  seasons(seriesId: ID!): [Season!]!
+  seasonByNumber(seriesId: ID!, seasonNumber: Int!): Season
+  
+  # Episodes
+  episode(id: ID!): Episode
+  episodes(seasonId: ID!): [Episode!]!
 }
 
 type Mutation {
-    createMovie(input: MovieInput!): Movie!
-    updateMovie(id: ID!, input: MovieInput!): Movie!
-    deleteMovie(id: ID!): Boolean!
-
-    createTvShow(input: TvShowInput!): TvShow!
-    updateTvShow(id: ID!, input: TvShowInput!): TvShow!
-    deleteTvShow(id: ID!): Boolean!
+  # Movies
+  createMovie(input: MovieInput!): Movie!
+  updateMovie(id: ID!, input: MovieInput!): Movie!
+  deleteMovie(id: ID!): Boolean!
+  
+  # Series
+  createSeries(input: SeriesInput!): Series!
+  updateSeries(id: ID!, input: SeriesInput!): Series!
+  deleteSeries(id: ID!): Boolean!
+  
+  # Seasons
+  createSeason(seriesId: ID!, input: SeasonInput!): Season!
+  updateSeason(id: ID!, input: SeasonInput!): Season!
+  deleteSeason(id: ID!): Boolean!
+  
+  # Episodes
+  createEpisode(seasonId: ID!, input: EpisodeInput!): Episode!
+  updateEpisode(id: ID!, input: EpisodeInput!): Episode!
+  deleteEpisode(id: ID!): Boolean!
 }
 
 type Movie {
-    id: ID!
-    title: String!
-    description: String
-    releaseYear: Int
-    director: String
-    genres: [String!]!
-    rating: Float
-    duration: String
-    imageUrl: String
-}
-
-type TvShow {
-    id: ID!
-    title: String!
-    description: String
-    firstAirYear: Int
-    creator: String
-    genres: [String!]!
-    rating: Float
-    numberOfSeasons: Int
-    imageUrl: String
+  id: ID!
+  title: String!
+  description: String
+  releaseYear: Int
+  director: String
+  duration: Int
+  maturityRating: String
+  imageUrl: String
+  videoUrl: String
+  averageRating: Float
+  viewCount: Int
+  featured: Boolean
+  genres: [String!]
+  createdAt: DateTime
+  updatedAt: DateTime
 }
 
 input MovieInput {
-    title: String!
-    description: String
-    releaseYear: Int
-    director: String
-    genres: [String!]!
-    duration: String
-    imageUrl: String
+  title: String!
+  description: String
+  releaseYear: Int
+  director: String
+  duration: Int
+  maturityRating: String
+  imageUrl: String
+  videoUrl: String
+  featured: Boolean
+  genres: [String!]
 }
 
-input TvShowInput {
-    title: String!
-    description: String
-    firstAirYear: Int
-    creator: String
-    genres: [String!]!
-    numberOfSeasons: Int
-    imageUrl: String
+type MoviePage {
+  content: [Movie!]!
+  totalElements: Int!
+  totalPages: Int!
 }
 
-type MovieConnection {
-    content: [Movie!]!
-    totalElements: Int!
-    totalPages: Int!
-    size: Int!
-    number: Int!
+type Series {
+  id: ID!
+  title: String!
+  description: String
+  startYear: Int
+  endYear: Int
+  maturityRating: String
+  imageUrl: String
+  averageRating: Float
+  viewCount: Int
+  featured: Boolean
+  genres: [String!]
+  seasons: [Season!]
+  createdAt: DateTime
+  updatedAt: DateTime
 }
 
-type TvShowConnection {
-    content: [TvShow!]!
-    totalElements: Int!
-    totalPages: Int!
-    size: Int!
-    number: Int!
+input SeriesInput {
+  title: String!
+  description: String
+  startYear: Int
+  endYear: Int
+  maturityRating: String
+  imageUrl: String
+  featured: Boolean
+  genres: [String!]
+}
+
+type SeriesPage {
+  content: [Series!]!
+  totalElements: Int!
+  totalPages: Int!
+}
+
+type Season {
+  id: ID!
+  series: Series
+  seasonNumber: Int!
+  title: String
+  description: String
+  imageUrl: String
+  episodes: [Episode!]
+  releaseYear: Int
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input SeasonInput {
+  seasonNumber: Int!
+  title: String
+  description: String
+  imageUrl: String
+  releaseYear: Int
+}
+
+type Episode {
+  id: ID!
+  season: Season
+  episodeNumber: Int!
+  title: String!
+  description: String
+  duration: Int
+  imageUrl: String
+  videoUrl: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input EpisodeInput {
+  episodeNumber: Int!
+  title: String!
+  description: String
+  duration: Int
+  imageUrl: String
+  videoUrl: String
 }

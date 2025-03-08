@@ -20,9 +20,12 @@ spring:
   graphql:
     graphiql:
       enabled: true
+      path: /graphiql
+    path: /graphql
     schema:
       printer:
         enabled: true
+      locations: classpath:graphql/
 
 server:
   port: 8081
