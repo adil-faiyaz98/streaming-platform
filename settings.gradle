@@ -12,11 +12,13 @@ pluginManagement {
 rootProject.name = 'streaming-platform'
 
 include 'streaming-catalog-service'
-include 'user-profile-service'
-include 'subscription-billing-service'
-include 'watchlist-recommendation-service'
-include 'analytics-service'
-include 'notification-service'
-include 'review-rating-service'
-include 'content-search-service'
+// include 'user-profile-service'
+// include 'subscription-billing-service'
+
+// Temporarily exclude services that need more work
+// include 'watchlist-recommendation-service'
+// include 'review-rating-service'
+// include 'notification-service'
+// include 'analytics-service'
+// include 'content-search-service'
 
