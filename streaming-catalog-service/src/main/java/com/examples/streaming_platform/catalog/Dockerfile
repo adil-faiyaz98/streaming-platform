@@ -1,7 +1,7 @@
 # 1) Build stage: JDK to compile
 FROM eclipse-temurin:17-jdk-alpine AS builder
 WORKDIR /app
-COPY . .               # Copies the microservice folder: gradlew, build.gradle, src
+COPY . .
 RUN chmod +x gradlew && ./gradlew clean build -x test
 
 # 2) Runtime stage: JRE

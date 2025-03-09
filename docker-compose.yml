@@ -20,8 +20,8 @@ services:
 
   catalog-service:
     build:
-      context: ./streaming-catalog-service     # Build context is the microservice folder
-      dockerfile: Dockerfile                  # The Dockerfile inside that folder
+      context: ./streaming-catalog-service
+      dockerfile: Dockerfile
     ports:
       - "8080:8080"
     environment:
