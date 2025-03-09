@@ -1,12 +1,12 @@
-# 1) Build stage: JDK to compile
 FROM eclipse-temurin:17-jdk-alpine AS builder
 WORKDIR /app
-COPY . .               # Copies the microservice folder: gradlew, build.gradle, src
-RUN chmod +x gradlew && ./gradlew clean build -x test
+COPY . .
+# Build with the full path to the JAR
+RUN ./gradlew bootJar -x test
 
-# 2) Runtime stage: JRE
 FROM eclipse-temurin:17-jre-alpine
 WORKDIR /app
+# Copy the JAR with the exact path
 COPY --from=builder /app/build/libs/*.jar app.jar
-EXPOSE 8080
+EXPOSE 8082
 ENTRYPOINT ["java", "-jar", "app.jar"]
