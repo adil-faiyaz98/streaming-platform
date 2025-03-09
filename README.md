@@ -7,20 +7,7 @@ This project `streaming-platform` consists of multiple microservices designed an
 
 ## Overview
 
-The backend is structured as modular microservices, each responsible for specific functionality:
-
-- **streaming-catalog-service** --> This is the only implemented service as of now.
-
-The following microservices can be practiced later
-- **user-profile-service**
-- **subscription-billing-service**
-- **watchlist-recommendation-service**
-- **analytics-service**
-- **notification-service**
-- **content-search-service**
-- **review-rating-service**
-
-Each microservice exposes GraphQL APIs, ensuring efficient querying and manipulation of data.
+- **streaming-catalog-service** 
 
 ---
 
@@ -61,91 +48,6 @@ Each microservice exposes GraphQL APIs, ensuring efficient querying and manipula
 - Mutation: updateEpisodeDetails(id: ID!, input: EpisodeInput!): Episode
 
 ### --- BELOW IS NOT DONE AND CAN BE IMPLEMENTED LATER BY ANYONE FOR PRACTICE ---
-### 2. User Profile & Authentication Service
-
-**Functionality:** Manages user authentication, registration, profiles, and preferences.
-
-**GraphQL Endpoints:**
-
-- Mutation: login(credentials: AuthInput!): AuthPayload
-- Mutation: registerUser(details: UserRegistrationInput!): User
-- Mutation: updateProfile(userId: ID!, input: ProfileInput!): Profile
-- Query: getUserSettings(userId: ID!): UserSettings
-- Mutation: changePassword(userId: ID!, newPassword: String!): Status
-
-### 3. Subscription & Billing Service
-
-**Functionality:** Handles subscription plans, billing, and payment processing.
-
-**GraphQL Endpoints:**
-
-- Query: getSubscriptionDetails(userId: ID!): Subscription
-- Mutation: updatePaymentMethod(userId: ID!, paymentInput: PaymentInput!): PaymentMethod
-- Mutation: subscribeToPlan(userId: ID!, planId: ID!): Subscription
-- Mutation: cancelSubscription(userId: ID!): Status
-- Query: billingHistory(userId: ID!, limit: Int): [BillingRecord]
-
-### 4. Watchlist & Recommendations Service
-
-**Functionality:** Manages user watchlists and personalized recommendations.
-
-**GraphQL Endpoints:**
-
-- Query: getWatchlist(userId: ID!): [ContentItem]
-- Mutation: addToWatchlist(userId: ID!, contentId: ID!): Watchlist
-- Mutation: removeFromWatchlist(userId: ID!, contentId: ID!): Status
-- Query: getPersonalizedSuggestions(userId: ID!): [ContentItem]
-
-### 5. Analytics & Metrics Service
-
-**Functionality:** Provides analytics on content viewership, user engagement, and global trends.
-
-**GraphQL Endpoints:**
-
-- Query: getContentStats(contentId: ID!): ContentStats
-- Query: getUserEngagementStats(userId: ID!): UserEngagement
-- Mutation: trackContentPlay(userId: ID!, contentId: ID!): PlayEvent
-- Query: getGlobalTrending(limit: Int): [ContentItem]
-
-### 6. Notification Service
-
-**Functionality:** Delivers notifications for content updates, billing, and personalized alerts.
-
-**GraphQL Endpoints:**
-
-- Query: getNotifications(userId: ID!): [Notification]
-- Mutation: sendNotification(input: NotificationInput!): NotificationStatus
-- Mutation: markNotificationAsRead(notificationId: ID!): Status
-- Mutation: updateNotificationPreferences(userId: ID!, input: PreferencesInput!): Preferences
-
-### 7. Content Review & Rating Service
-
-**Functionality:** Enables users to review and rate content.
-
-**GraphQL Endpoints:**
-
-- Mutation: submitReview(userId: ID!, contentId: ID!, review: ReviewInput!): Review
-- Mutation: updateReview(reviewId: ID!, input: ReviewUpdateInput!): Review
-- Query: getReviews(contentId: ID!, filter: ReviewFilter!): [Review]
-- Query: getAverageRating(contentId: ID!): Float
-
-### 8. Content Search Service
-
-**Functionality:** Facilitates advanced content search with various filters and sorting options.
-
-**GraphQL Endpoints:**
-
-- Query: searchContent(query: String!, filter: SearchFilter): [SearchResult]
-- Query: getRecentSearches(userId: ID!): [SearchHistory]
-- Mutation: deleteSearchHistory(userId: ID!): Status
-
----
-
-## Testing Approach
-
-### API Testing (REST Assured)
-
-All GraphQL endpoints can be tested thoroughly through REST Assured, verifying responses, schema correctness, error handling, and boundary conditions.
 
 ---
 
