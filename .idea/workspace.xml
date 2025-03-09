@@ -4,7 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="def53c2c-2ec8-44b8-bdcb-a22ab4e249b3" name="Changes" comment="Delete unnecessary files" />
+    <list default="true" id="def53c2c-2ec8-44b8-bdcb-a22ab4e249b3" name="Changes" comment="feat: add Testcontainers dependencies for integration testing">
+      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.jar" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradlew" beforeDir="false" afterPath="$PROJECT_DIR$/gradlew" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradlew.bat" beforeDir="false" afterPath="$PROJECT_DIR$/gradlew.bat" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -54,6 +59,7 @@
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Application.Unnamed.executor": "Run",
     "git-widget-placeholder": "main",
     "node.js.selected.package.tslint": "(autodetect)",
     "project.structure.last.edited": "Project",
@@ -82,11 +88,20 @@
       <option name="project" value="LOCAL" />
       <updated>1741484969150</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="feat: add Testcontainers dependencies for integration testing">
+      <option name="closed" value="true" />
+      <created>1741485684692</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1741485684692</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Delete unnecessary files" />
-    <option name="LAST_COMMIT_MESSAGE" value="Delete unnecessary files" />
+    <MESSAGE value="feat: add Testcontainers dependencies for integration testing" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: add Testcontainers dependencies for integration testing" />
   </component>
 </project>
