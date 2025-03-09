@@ -12,12 +12,24 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    networks:
-      - streaming-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
-networks:
-  streaming-network:
-    driver: bridge
+  catalog-service:
+    build:
+      context: ./streaming-catalog-service     # Build context is the microservice folder
+      dockerfile: Dockerfile                  # The Dockerfile inside that folder
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/streaming_platform_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+    depends_on:
+      - postgres
 
 volumes:
   postgres_data:

@@ -4,7 +4,7 @@
 
 ## Overview
 
-The Streaming Catalog Service is a Spring Boot application that provides a catalog of series, seasons, and episodes. It includes features such as caching, circuit breaker, and database interactions.
+The Streaming Catalog Service is a Spring Boot application that provides a catalog of series, seasons, and episodes.
 
 ## Prerequisites
 
@@ -17,23 +17,23 @@ The Streaming Catalog Service is a Spring Boot application that provides a catal
 ### Clone the repository
 
 ```sh
-git clone https://github.com/your-username/streaming-catalog-service.git
+git clone https://github.com/adil-faiyaz98/streaming-platform.git
 cd streaming-catalog-service
 ```
 
 ### Build the project
 
 ```sh
-./gradlew build
+./gradlew :streaming-catalog-service:clean :streaming-catalog-service:build
 ```
 
 ### Run the application
 
 ```sh
-./gradlew bootRun
+./gradlew :streaming-catalog-service:bootRun
 ```
 
-### Run tests
+### Run tests ( NOT )
 
 ```sh
 ./gradlew test
@@ -55,13 +55,12 @@ docker run -p 8080:8080 streaming-catalog-service
 
 ## Configuration
 
-### Application properties
+### Application.yml file
 
-Configure the application by editing the `src/main/resources/application.properties` file.
 
 ### Database
 
-The application uses PostgreSQL as the primary database and H2 for testing. Configure the database settings in the `application.properties` file.
+The application uses PostgreSQL as the primary database
 
 ## Endpoints
 

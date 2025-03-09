@@ -1,7 +1,7 @@
-# Netflix-Inspired Microservices Backend
+## GraphQL Microservices Backend
 ### Java | Spring Boot | GraphQL (Netflix DGS Framework)
 
-This project `streaming-platform` consists of multiple microservices designed and developed using Java, Spring Boot, and Netflix's Domain Graph Service (DGS) GraphQL framework. It provides backend APIs to handle streaming content management, user profiles, billing, recommendations, analytics, notifications, reviews, and content search functionalities.
+This project `streaming-platform` consists of multiple microservices designed and developed using Java, Spring Boot, and Netflix's Domain Graph Service (DGS) GraphQL framework. 
 
 ---
 
@@ -9,7 +9,9 @@ This project `streaming-platform` consists of multiple microservices designed an
 
 The backend is structured as modular microservices, each responsible for specific functionality:
 
-- **streaming-catalog-service**
+- **streaming-catalog-service** --> This is the only implemented service as of now.
+
+The following microservices can be practiced later
 - **user-profile-service**
 - **subscription-billing-service**
 - **watchlist-recommendation-service**
@@ -26,7 +28,7 @@ Each microservice exposes GraphQL APIs, ensuring efficient querying and manipula
 
 ### Backend
 
-- Java (JDK 17)
+- Java (JDK 21)
 - Spring Boot (v3.x)
 - Netflix DGS Framework (GraphQL)
 - Spring Data JPA/Hibernate
@@ -42,8 +44,6 @@ Each microservice exposes GraphQL APIs, ensuring efficient querying and manipula
 
 - GitHub Actions
 - Docker
-- Kubernetes (optional for deployment)
-
 ---
 
 ## Microservices and API Endpoints
@@ -60,6 +60,7 @@ Each microservice exposes GraphQL APIs, ensuring efficient querying and manipula
 - Mutation: addContent(input: ContentInput!): Content
 - Mutation: updateEpisodeDetails(id: ID!, input: EpisodeInput!): Episode
 
+### --- BELOW IS NOT DONE AND CAN BE IMPLEMENTED LATER BY ANYONE FOR PRACTICE ---
 ### 2. User Profile & Authentication Service
 
 **Functionality:** Manages user authentication, registration, profiles, and preferences.
@@ -144,29 +145,7 @@ Each microservice exposes GraphQL APIs, ensuring efficient querying and manipula
 
 ### API Testing (REST Assured)
 
-All GraphQL endpoints are tested thoroughly using REST Assured, verifying responses, schema correctness, error handling, and boundary conditions.
-
-### UI Automation Testing (Playwright)
-
-Front-end interactions and integration with GraphQL APIs are validated using Playwright, covering critical user flows:
-
-- User authentication (login/logout)
-- Subscription and billing management
-- Content browsing, filtering, and pagination
-- Watchlist operations
-- Review submissions and updates
-
-**Example UI Test (Playwright/JavaScript):**
-
-```javascript
-test('User login validation', async ({ page }) => {
-  await page.goto('http://localhost:3000/login');
-  await page.fill('#username', 'testuser');
-  await page.fill('#password', 'password');
-  await page.click('button[type=submit]');
-  await expect(page.getByText('Welcome back, testuser')).toBeVisible();
-});
-```
+All GraphQL endpoints can be tested thoroughly through REST Assured, verifying responses, schema correctness, error handling, and boundary conditions.
 
 ---
 

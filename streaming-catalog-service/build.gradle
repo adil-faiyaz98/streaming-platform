@@ -71,6 +71,7 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
+// Add main class for the Spring Boot application
 bootJar {
     mainClass = 'com.examples.streaming_platform.catalog.StreamingCatalogApplication'
 }
