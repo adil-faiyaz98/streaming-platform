@@ -2,8 +2,8 @@ version: '3.8'
 
 services:
   postgres:
-    image: pgvector/pgvector:pg16
-    container_name: streaming-platform-pgvector-1
+    image: postgres:15-alpine
+    container_name: streaming-postgres
     environment:
       POSTGRES_DB: streaming_platform_db
       POSTGRES_USER: postgres
@@ -22,14 +22,17 @@ services:
     build:
       context: ./streaming-catalog-service
       dockerfile: Dockerfile
+    container_name: streaming-catalog
     ports:
-      - "8080:8080"
+      - "8082:8082"
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/streaming_platform_db
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: postgres
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
 
 volumes:
   postgres_data:

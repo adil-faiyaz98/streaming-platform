@@ -1,50 +1,14 @@
 plugins {
-	id 'java'
-	id 'org.springframework.boot' version '3.2.3' apply false
-	id 'io.spring.dependency-management' version '1.1.4' apply false
+    id 'java'
+    id 'org.springframework.boot' version '3.2.3' apply false
+    id 'io.spring.dependency-management' version '1.1.4' apply false
 }
 
-subprojects {
-	apply plugin: 'java'
-	apply plugin: 'org.springframework.boot'
-	apply plugin: 'io.spring.dependency-management'
-
-	group = 'com.examples'
-	version = '0.0.1-SNAPSHOT'
-
-
-	repositories {
-		mavenCentral()
-	}
-
-	dependencies {
-		implementation 'org.springframework.boot:spring-boot-starter-web'
-		implementation 'org.springframework.boot:spring-boot-starter-actuator'
-		implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
-		implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0'
-		implementation 'io.swagger.core.v3:swagger-annotations:2.2.20'
-
-		
-    	// GraphQL
-    	implementation 'org.springframework.boot:spring-boot-starter-graphql'
-    	implementation 'com.graphql-java:graphql-java-extended-scalars:20.2'
-
-		compileOnly 'org.projectlombok:lombok'
-		annotationProcessor 'org.projectlombok:lombok'
-
-		runtimeOnly 'org.postgresql:postgresql'
-
-		testImplementation 'org.springframework.boot:spring-boot-starter-test'
-
-	}
-
-	dependencyManagement {
-		imports {
-			mavenBom "org.springframework.cloud:spring-cloud-dependencies:2023.0.0"
-		}
-	}
-
-	test {
-		useJUnitPlatform()
-	}
+allprojects {
+    group = 'com.examples'
+    version = '0.0.1-SNAPSHOT'
+    
+    repositories {
+        mavenCentral()
+    }
 }
