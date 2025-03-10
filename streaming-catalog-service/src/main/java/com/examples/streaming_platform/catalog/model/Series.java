@@ -1,79 +1,99 @@
-// model/Series.java
 package com.examples.streaming_platform.catalog.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
+/**
+ * Represents a Series entity within the streaming platform.
+ * Typically can have multiple Seasons, each with multiple Episodes.
+ */
 @Entity
-@Table(name = "series", indexes = {
-        @Index(name = "idx_series_title", columnList = "title"),
-        @Index(name = "idx_series_featured", columnList = "featured")
-})
-@Data
+@Table(name = "series")
+@Getter
+@Setter
 @NoArgsConstructor
-@AllArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@ToString(onlyExplicitlyIncluded = true)
 public class Series {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
     private Long id;
-    
-    @Column(nullable = false)
+
+    @Column(nullable = false, length = 255)
+    @ToString.Include
     private String title;
-    
-    @Column(columnDefinition = "TEXT")
+
+    @Column(length = 2000)
     private String description;
-    
+
     @Column(name = "start_year")
     private Integer startYear;
-    
+
     @Column(name = "end_year")
     private Integer endYear;
-    
+
     @Column(name = "maturity_rating")
     private String maturityRating;
-    
+
     @Column(name = "image_url")
     private String imageUrl;
-    
+
     @Column(name = "average_rating")
     private Double averageRating = 0.0;
-    
+
     @Column(name = "view_count")
     private Long viewCount = 0L;
-    
+
+    @Column
     private Boolean featured = false;
-    
-    @Column(name = "created_at")
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "series_genres", joinColumns = @JoinColumn(name = "series_id"))
+    @Column(name = "genre")
+    private Set<String> genres = new HashSet<>();
+
+    @OneToMany(mappedBy = "series", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Season> seasons = new HashSet<>();
+
+    @Column(name = "created_at", updatable = false)
     private OffsetDateTime createdAt;
-    
+
     @Column(name = "updated_at")
     private OffsetDateTime updatedAt;
-    
-    @ElementCollection
-    @CollectionTable(name = "series_genres", joinColumns = @JoinColumn(name = "series_id"))
-    @Column(name = "genres")
-    private Set<String> genres = new HashSet<>();
-    
-    @OneToMany(mappedBy = "series", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Season> seasons = new ArrayList<>();
-    
+
     @PrePersist
     protected void onCreate() {
-        createdAt = OffsetDateTime.now();
-        updatedAt = createdAt;
+        OffsetDateTime now = OffsetDateTime.now();
+        this.createdAt = now;
+        this.updatedAt = now;
     }
-    
+
     @PreUpdate
     protected void onUpdate() {
-        updatedAt = OffsetDateTime.now();
+        this.updatedAt = OffsetDateTime.now();
+    }
+
+    public Series(Long id, String title, String description, Integer startYear, Integer endYear,
+                  String maturityRating, String imageUrl, Double averageRating, Long viewCount,
+                  Boolean featured, Set<String> genres, OffsetDateTime createdAt, OffsetDateTime updatedAt) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.startYear = startYear;
+        this.endYear = endYear;
+        this.maturityRating = maturityRating;
+        this.imageUrl = imageUrl;
+        this.averageRating = (averageRating != null) ? averageRating : 0.0;
+        this.viewCount = (viewCount != null) ? viewCount : 0L;
+        this.featured = (featured != null) ? featured : false;
+        this.genres = (genres != null) ? genres : new HashSet<>();
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 }

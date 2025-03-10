@@ -10,7 +10,7 @@ type Query {
   featuredMovies: [Movie!]!
   moviesPage(page: Int, size: Int): MoviePage!
   
-  # Series
+  # SeriesController
   series(id: ID!): Series
   allSeries: [Series!]!
   searchSeries(title: String!): [Series!]!
@@ -35,7 +35,7 @@ type Mutation {
   updateMovie(id: ID!, input: MovieInput!): Movie!
   deleteMovie(id: ID!): Boolean!
   
-  # Series
+  # SeriesController
   createSeries(input: SeriesInput!): Series!
   updateSeries(id: ID!, input: SeriesInput!): Series!
   deleteSeries(id: ID!): Boolean!
