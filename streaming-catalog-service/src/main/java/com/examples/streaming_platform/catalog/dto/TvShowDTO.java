@@ -33,6 +33,9 @@ public class TvShowDTO {
     private String posterUrl;
 
     @Builder.Default
+    private boolean featured = false;
+
+    @Builder.Default
     private Set<String> genres = new HashSet<>();
     private Double rating;
 }

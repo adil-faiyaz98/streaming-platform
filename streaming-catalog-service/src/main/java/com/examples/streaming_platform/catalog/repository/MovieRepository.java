@@ -9,26 +9,31 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-/**
- * Repository for CRUD and specialized queries on Movie entities.
- */
 @Repository
-public interface MovieRepository extends JpaRepository<Movie, Long> {
+public interface MovieRepository extends JpaRepository<Movie, Long>, JpaSpecificationExecutor<Movie> {
 
-    /**
-     * Search movies by title (case-insensitive).
-     */
+    // Searching by title
     Page<Movie> findByTitleContainingIgnoreCase(String title, Pageable pageable);
 
-    /**
-     * Example for searching movies by a single genre.
-     * If using an enum field, you might do: findByGenresIn(Set<Genre> genres, Pageable p).
-     */
-    @Query("SELECT m FROM Movie m JOIN m.genres g WHERE lower(g) = lower(:genre)")
-    Page<Movie> findByGenre(@Param("genre") String genre, Pageable pageable);
+    // Searching by featured
+    List<Movie> findByFeaturedTrue();
 
-    /**
-     * Retrieve top 10 movies by highest rating (descending).
-     */
+    // Top 10 by average rating
+    List<Movie> findTop10ByOrderByAverageRatingDesc();
+
+    // Or top 10 by rating if you prefer
     List<Movie> findTop10ByOrderByRatingDesc();
+
+    @Modifying
+    @Query("UPDATE Movie m SET m.viewCount = m.viewCount + 1 WHERE m.id = :id")
+    void incrementViewCount(@Param("id") Long id);
+
+    Page<Movie> findMoviesByGenre(String genre, Pageable pageable);
+
+    Page<Movie> findByGenresContainingIgnoreCase(String genre, Pageable pageable);
+
+    @Query("SELECT m FROM Movie m ORDER BY m.rating DESC")
+    List<Movie> getTopRatedMovies();
+
+
 }

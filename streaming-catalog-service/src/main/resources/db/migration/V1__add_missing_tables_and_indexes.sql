@@ -7,6 +7,7 @@ CREATE TABLE tv_shows (
                           description VARCHAR(2000),
                           first_air_date DATE,
                           rating DOUBLE PRECISION DEFAULT 0.0,
+                          featured BOOLEAN DEFAULT FALSE,
                           poster_url VARCHAR(512),
                           created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
                           updated_at TIMESTAMP WITH TIME ZONE

@@ -13,12 +13,12 @@ import java.util.Set;
  * Represents a high-level TV Show entity, which can contain multiple Seasons.
  */
 @Entity
-@Table(name = "tv_shows")
 @Getter
 @Setter
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString(onlyExplicitlyIncluded = true)
+@Table(name = "tv_shows")
 public class TvShow {
 
     @Id
@@ -36,13 +36,17 @@ public class TvShow {
     @Column(name = "first_air_date")
     private LocalDate firstAirDate;
 
-    private Double rating;
+    private Double rating = 0.0;
+
+    @Column(nullable = false)
+    private Boolean featured = false;
 
     @Column(name = "view_count", nullable = false)
     private Long viewCount = 0L;
 
-    @ElementCollection
-    @CollectionTable(name = "tv_show_genres", joinColumns = @JoinColumn(name = "tv_show_id"))
+    @ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
+    @CollectionTable(name = "tv_genres", joinColumns = @JoinColumn(name = "tv_show_id"))
+    @ToString.Include
     @Column(name = "genre")
     private Set<String> genres = new HashSet<>();
 
@@ -50,7 +54,7 @@ public class TvShow {
     private List<Season> seasons = new ArrayList<>();
 
     public TvShow(Long id, String title, String description, LocalDate firstAirDate,
-                  Double rating, Long viewCount, Set<String> genres, List<Season> seasons) {
+                  Double rating, Long viewCount, Set<String> genres, List<Season> seasons, Boolean featured) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -59,5 +63,6 @@ public class TvShow {
         this.viewCount = (viewCount != null) ? viewCount : 0L;
         this.genres = (genres != null) ? genres : new HashSet<>();
         this.seasons = (seasons != null) ? seasons : new ArrayList<>();
+        this.featured = (featured != null) ? featured : false;
     }
 }

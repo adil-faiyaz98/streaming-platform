@@ -133,11 +133,13 @@ public class Movie {
     @Column(name = "updated_at")
     private OffsetDateTime updatedAt;
 
+    @Column(name = "genre_unique")
+    private Genre genre;
+
     @ElementCollection(targetClass = Genre.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "movie_genres", joinColumns = @JoinColumn(name = "movie_id"))
-    @Enumerated(EnumType.STRING)
     @Column(name = "genres")
-    private Set<String> genres = new HashSet<>();
+    private Set<Genre> genres = new HashSet<>();
 
     @PrePersist
     protected void onCreate() {
@@ -155,7 +157,7 @@ public class Movie {
                  String posterUrl, Float averageRating, Integer viewCount, Boolean featured, double rating,
                  String language, String countryOfOrigin, String subtitleUrl, String awards,
                  BigDecimal budget, BigDecimal boxOffice, Set<String> cast, Set<String> crew,
-                 OffsetDateTime createdAt, OffsetDateTime updatedAt, Set<String> genres) {
+                 OffsetDateTime createdAt, OffsetDateTime updatedAt, Set<Genre> genres) {
         this.id = id;
         this.title = title;
         this.description = description;

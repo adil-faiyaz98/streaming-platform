@@ -1,5 +1,5 @@
 package com.examples.streaming_platform.catalog.repository;
-
+import com.examples.streaming_platform.catalog.model.Movie;
 import com.examples.streaming_platform.catalog.model.Series;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,4 +28,7 @@ public interface SeriesRepository extends JpaRepository<Series, Long> {
 
     @Query("SELECT DISTINCT s.startYear FROM Series s ORDER BY s.startYear")
     List<Integer> findDistinctStartYears();
+
+    @Query("SELECT m FROM Movie m JOIN m.genres g WHERE g = :genre")
+    Page<Movie> findByGenre(@Param("genre") String genre, Pageable pageable);
 }

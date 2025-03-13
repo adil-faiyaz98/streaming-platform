@@ -18,8 +18,8 @@ public class TvShowBatchLoader implements BatchLoader<Long, TvShow> {
     private final TvShowRepository tvShowRepository;
 
     @Override
-    public java.util.concurrent.CompletionStage<List<TvShow>> load(List<Long> ids) {
-        log.debug("Loading TvShows with IDs: {}", ids);
+    public CompletableFuture<List<TvShow>> load(List<Long> ids) {
+        log.debug("Loading TV Shows with IDs: {}", ids);
         return CompletableFuture.supplyAsync(() -> tvShowRepository.findAllById(ids));
     }
 }

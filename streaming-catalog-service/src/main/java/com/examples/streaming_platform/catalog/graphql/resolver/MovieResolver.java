@@ -1,6 +1,6 @@
 package com.examples.streaming_platform.catalog.graphql.resolver;
 
-import com.examples.streaming_platform.catalog.dto.MovieDTO;
+import com.examples.streaming_platform.catalog.model.Genre;
 import com.examples.streaming_platform.catalog.model.Movie;
 import com.examples.streaming_platform.catalog.service.MovieService;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,6 @@ import java.util.Optional;
 public class MovieResolver {
 
     private final MovieService movieService;
-    private final Movie movie;
 
     // Queries
 
@@ -35,19 +34,19 @@ public class MovieResolver {
      * Returns a pageable result of movies, optionally filtered by title or genre.
      * Could be used in a GraphQL field like: movies(page: Int, size: Int, title: String, genre: String).
      */
-    public Map<String, Object> getMovies(Integer page, Integer size, Optional<String> title, Optional<String> genre) {
+    public Map<String, Object> getMovies(Integer page, Integer size, Optional<String> title, Optional<Genre> genre) {
         int pageNumber = (page != null) ? page : 0;
         int pageSize = (size != null) ? size : 20;
         PageRequest pageRequest = PageRequest.of(pageNumber, pageSize);
 
-        Page<MovieDTO> moviePage;
+        Page<Movie> moviePage;
 
         if (title.isPresent() && !title.get().isBlank()) {
             log.debug("Resolving movies by title: '{}'", title.get());
             moviePage = movieService.searchMoviesByTitle(title.get(), pageRequest);
-        } else if (genre.isPresent() && !genre.get().isBlank()) {
+        } else if (genre.isPresent()) {
             log.debug("Resolving movies by genre: '{}'", genre.get());
-            moviePage = movieService.getMoviesByGenre(genre.get(), pageRequest);
+            moviePage = movieService.getMoviesByGenre(genre.toString(), pageRequest);
         } else {
             log.debug("Resolving all movies. Page: {}, Size: {}", pageNumber, pageSize);
             moviePage = movieService.getAllMovies(pageRequest);
@@ -62,19 +61,18 @@ public class MovieResolver {
         );
     }
 
-    public List<MovieDTO> getTopRatedMovies() {
+    public List<Movie> getTopRatedMovies() {
         log.debug("Resolving top-rated movies");
         return movieService.getTopRatedMovies();
     }
 
     // Mutations
-
-    public Movie createMovie(MovieDTO movieInput) {
+    public Movie createMovie(Movie movieInput) {
         log.debug("Creating movie: {}", movieInput);
         return movieService.createMovie(movieInput);
     }
 
-    public Movie updateMovie(Long id, MovieDTO movieInput) {
+    public Movie updateMovie(Long id, Movie movieInput) {
         log.debug("Updating movie ID: {}, data: {}", id, movieInput);
         return movieService.updateMovie(id, movieInput);
     }

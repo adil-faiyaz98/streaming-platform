@@ -1,6 +1,5 @@
 package com.examples.streaming_platform.catalog.service;
 
-import com.examples.streaming_platform.catalog.controller.SeriesController;
 import com.examples.streaming_platform.catalog.dto.*;
 import com.examples.streaming_platform.catalog.graphql.exception.ResourceNotFoundException;
 import com.examples.streaming_platform.catalog.mapper.CatalogMapper;
@@ -42,13 +41,14 @@ public class CatalogService {
         return catalogMapper.movieToMovieDTO(movie);
     }
 
-    public Page<MovieDTO> searchMoviesByTitle(String title, Pageable pageable) {
-        return movieRepository.findByTitleContainingIgnoreCase(title, pageable)
-                .map(catalogMapper::movieToMovieDTO);
+    public Page<MovieDTO> searchMoviesByTitle(String title, Pageable page) {
+        Page<Movie> results = movieRepository.findByTitleContainingIgnoreCase(title, page);
+        return results.map(catalogMapper::movieToMovieDTO);
     }
 
+
     public Page<MovieDTO> getMoviesByGenre(String genre, Pageable pageable) {
-        return movieRepository.findByGenre(genre, pageable)
+        return movieRepository.findMoviesByGenre(genre, pageable)
                 .map(catalogMapper::movieToMovieDTO);
     }
 
@@ -93,7 +93,8 @@ public class CatalogService {
         Map<String, Long> stats = new HashMap<>();
         movieRepository.findAll().forEach(movie -> {
             movie.getGenres().forEach(genre ->
-                    stats.put(genre, stats.getOrDefault(genre, 0L) + 1));
+                    stats.put(genre.toString(), stats.getOrDefault(genre.toString(), 0L) + 1));
+
         });
         return stats;
     }
@@ -117,7 +118,7 @@ public class CatalogService {
     }
 
     public Page<SeriesDTO> getSeriesByGenre(String genre, Pageable pageable) {
-        return seriesRepository.findByGenre(genre, pageable)
+        return seriesRepository.findByGenresContainingIgnoreCase(genre, pageable)
                 .map(catalogMapper::seriesToSeriesDTO);
     }
 

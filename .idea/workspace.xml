@@ -5,10 +5,96 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="def53c2c-2ec8-44b8-bdcb-a22ab4e249b3" name="Changes" comment="feat: add Testcontainers dependencies for integration testing">
-      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.jar" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradlew" beforeDir="false" afterPath="$PROJECT_DIR$/gradlew" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradlew.bat" beforeDir="false" afterPath="$PROJECT_DIR$/gradlew.bat" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/streaming-catalog-service/src/main/java/com/examples/streaming_platform/catalog/annotations/DgsScalar.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/streaming-catalog-service/src/main/java/com/examples/streaming_platform/catalog/scalar/DateTimeScalar.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.13/checksums/checksums.lock" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.13/executionHistory/executionHistory.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.13/executionHistory/executionHistory.lock" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.13/fileChanges/last-build.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.13/fileHashes/fileHashes.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.13/fileHashes/fileHashes.lock" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.13/fileHashes/resourceHashesCache.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/cache.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/vcs-1/gc.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/streaming-catalog-service/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/streaming-catalog-service/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/build/classes/java/main/com/examples/streaming_platform/catalog/StreamingCatalogApplication.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/build/classes/java/main/com/examples/streaming_platform/catalog/config/CacheConfig.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/build/classes/java/main/com/examples/streaming_platform/catalog/config/GraphQLConfig.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/build/classes/java/main/com/examples/streaming_platform/catalog/config/OpenApiConfig.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/build/classes/java/main/com/examples/streaming_platform/catalog/controller/CatalogController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/build/classes/java/main/com/examples/streaming_platform/catalog/controller/EpisodeController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/build/classes/java/main/com/examples/streaming_platform/catalog/controller/MovieController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/build/classes/java/main/com/examples/streaming_platform/catalog/controller/SeasonController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/build/classes/java/main/com/examples/streaming_platform/catalog/controller/TvShowController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/build/classes/java/main/com/examples/streaming_platform/catalog/dto/EpisodeDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/build/classes/java/main/com/examples/streaming_platform/catalog/dto/MovieDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/build/classes/java/main/com/examples/streaming_platform/catalog/dto/SeasonDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/build/classes/java/main/com/examples/streaming_platform/catalog/dto/SeriesDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/build/classes/java/main/com/examples/streaming_platform/catalog/dto/TvShowDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/build/classes/java/main/com/examples/streaming_platform/catalog/exception/ErrorResponse.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/build/classes/java/main/com/examples/streaming_platform/catalog/exception/GlobalExceptionHandler.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/build/classes/java/main/com/examples/streaming_platform/catalog/exception/ResourceNotFoundException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/build/classes/java/main/com/examples/streaming_platform/catalog/exception/ValidationErrorResponse.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/build/classes/java/main/com/examples/streaming_platform/catalog/graphql/EpisodeGraphQLController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/build/classes/java/main/com/examples/streaming_platform/catalog/graphql/EpisodeResolver.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/build/classes/java/main/com/examples/streaming_platform/catalog/graphql/MovieGraphQLController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/build/classes/java/main/com/examples/streaming_platform/catalog/graphql/MovieResolver.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/build/classes/java/main/com/examples/streaming_platform/catalog/graphql/ScalarConfig.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/build/classes/java/main/com/examples/streaming_platform/catalog/graphql/SeasonGraphQLController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/build/classes/java/main/com/examples/streaming_platform/catalog/graphql/SeasonResolver.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/build/classes/java/main/com/examples/streaming_platform/catalog/graphql/SeriesGraphQLController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/build/classes/java/main/com/examples/streaming_platform/catalog/graphql/SeriesResolver.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/build/classes/java/main/com/examples/streaming_platform/catalog/mapper/CatalogMapper.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/build/classes/java/main/com/examples/streaming_platform/catalog/model/Episode.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/build/classes/java/main/com/examples/streaming_platform/catalog/model/Movie.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/build/classes/java/main/com/examples/streaming_platform/catalog/model/Season.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/build/classes/java/main/com/examples/streaming_platform/catalog/model/Series.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/build/classes/java/main/com/examples/streaming_platform/catalog/model/TvShow.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/build/classes/java/main/com/examples/streaming_platform/catalog/repository/EpisodeRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/build/classes/java/main/com/examples/streaming_platform/catalog/repository/MovieRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/build/classes/java/main/com/examples/streaming_platform/catalog/repository/SeasonRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/build/classes/java/main/com/examples/streaming_platform/catalog/repository/SeriesRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/build/classes/java/main/com/examples/streaming_platform/catalog/repository/TvShowRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/build/classes/java/main/com/examples/streaming_platform/catalog/service/CatalogService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/build/classes/java/main/com/examples/streaming_platform/catalog/service/EpisodeService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/build/classes/java/main/com/examples/streaming_platform/catalog/service/MovieService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/build/classes/java/main/com/examples/streaming_platform/catalog/service/SeasonService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/build/classes/java/main/com/examples/streaming_platform/catalog/service/SeriesService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/build/classes/java/main/com/examples/streaming_platform/catalog/service/TvShowService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/build/generated/sources/annotationProcessor/java/main/com/examples/streaming_platform/catalog/mapper/CatalogMapperImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/build/resources/main/application.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/build/resources/main/db/migration/V1__init_schema.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/build/resources/main/graphql/schema.graphqls" beforeDir="false" afterPath="$PROJECT_DIR$/streaming-catalog-service/src/main/resources/schema/graphql.graphqls" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/src/main/java/com/examples/streaming_platform/catalog/config/CacheConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/streaming-catalog-service/src/main/java/com/examples/streaming_platform/catalog/config/CacheConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/src/main/java/com/examples/streaming_platform/catalog/config/GraphQLConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/streaming-catalog-service/src/main/java/com/examples/streaming_platform/catalog/config/GraphQLConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/src/main/java/com/examples/streaming_platform/catalog/dto/MovieDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/streaming-catalog-service/src/main/java/com/examples/streaming_platform/catalog/dto/MovieDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/src/main/java/com/examples/streaming_platform/catalog/dto/SeriesDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/streaming-catalog-service/src/main/java/com/examples/streaming_platform/catalog/dto/SeriesDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/src/main/java/com/examples/streaming_platform/catalog/dto/TvShowDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/streaming-catalog-service/src/main/java/com/examples/streaming_platform/catalog/dto/TvShowDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/src/main/java/com/examples/streaming_platform/catalog/graphql/loader/SeriesBatchLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/streaming-catalog-service/src/main/java/com/examples/streaming_platform/catalog/graphql/loader/SeriesBatchLoader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/src/main/java/com/examples/streaming_platform/catalog/graphql/loader/TvShowBatchLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/streaming-catalog-service/src/main/java/com/examples/streaming_platform/catalog/graphql/loader/TvShowBatchLoader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/src/main/java/com/examples/streaming_platform/catalog/graphql/resolver/MovieResolver.java" beforeDir="false" afterPath="$PROJECT_DIR$/streaming-catalog-service/src/main/java/com/examples/streaming_platform/catalog/graphql/resolver/MovieResolver.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/src/main/java/com/examples/streaming_platform/catalog/model/Movie.java" beforeDir="false" afterPath="$PROJECT_DIR$/streaming-catalog-service/src/main/java/com/examples/streaming_platform/catalog/model/Movie.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/src/main/java/com/examples/streaming_platform/catalog/model/Season.java" beforeDir="false" afterPath="$PROJECT_DIR$/streaming-catalog-service/src/main/java/com/examples/streaming_platform/catalog/model/Season.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/src/main/java/com/examples/streaming_platform/catalog/model/TvShow.java" beforeDir="false" afterPath="$PROJECT_DIR$/streaming-catalog-service/src/main/java/com/examples/streaming_platform/catalog/model/TvShow.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/src/main/java/com/examples/streaming_platform/catalog/repository/MovieRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/streaming-catalog-service/src/main/java/com/examples/streaming_platform/catalog/repository/MovieRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/src/main/java/com/examples/streaming_platform/catalog/repository/SeriesRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/streaming-catalog-service/src/main/java/com/examples/streaming_platform/catalog/repository/SeriesRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/src/main/java/com/examples/streaming_platform/catalog/repository/TvShowRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/streaming-catalog-service/src/main/java/com/examples/streaming_platform/catalog/repository/TvShowRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/src/main/java/com/examples/streaming_platform/catalog/service/CatalogService.java" beforeDir="false" afterPath="$PROJECT_DIR$/streaming-catalog-service/src/main/java/com/examples/streaming_platform/catalog/service/CatalogService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/src/main/java/com/examples/streaming_platform/catalog/service/MovieService.java" beforeDir="false" afterPath="$PROJECT_DIR$/streaming-catalog-service/src/main/java/com/examples/streaming_platform/catalog/service/MovieService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/streaming-catalog-service/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/src/main/resources/db/migration/V1__add_missing_tables_and_indexes.sql" beforeDir="false" afterPath="$PROJECT_DIR$/streaming-catalog-service/src/main/resources/db/migration/V1__add_missing_tables_and_indexes.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/src/main/resources/graphql/schema.graphqls" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/src/test/java/com/examples/streaming_platform/catalog/controller/MovieControllerTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/src/test/java/com/examples/streaming_platform/catalog/service/CatalogServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/streaming-catalog-service/src/test/java/com/examples/streaming_platform/catalog/service/CatalogServiceTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/src/test/java/com/examples/streaming_platform/catalog/service/MovieServiceTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/src/test/java/com/examples/streaming_platform/catalog/service/TvShowServiceTest.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,21 +139,35 @@
       </state>
     </system>
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+        <option value="AnnotationType" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.Unnamed.executor": "Run",
-    "git-widget-placeholder": "main",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.31494254",
-    "settings.editor.selected.configurable": "advanced.settings"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.Unnamed.executor&quot;: &quot;Run&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/adilm/repositories/Java/Playwright/streaming-platform&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.31494254&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
   }
-}]]></component>
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\adilm\repositories\Java\Playwright\streaming-platform" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration name="Unnamed" type="Application" factoryName="Application" nameIsGenerated="true">
       <option name="ALTERNATIVE_JRE_PATH" value="21" />
@@ -77,6 +177,17 @@
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
+    </configuration>
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="streaming-platform.streaming-catalog-service.main" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="streaming-platform.streaming-catalog-service.main" />
+      <option name="filePath" />
+      <method v="2" />
     </configuration>
   </component>
   <component name="TaskManager">
@@ -103,5 +214,16 @@
     <MESSAGE value="Delete unnecessary files" />
     <MESSAGE value="feat: add Testcontainers dependencies for integration testing" />
     <option name="LAST_COMMIT_MESSAGE" value="feat: add Testcontainers dependencies for integration testing" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/streaming-catalog-service/src/main/java/com/examples/streaming_platform/catalog/model/Movie.java</url>
+          <line>29</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

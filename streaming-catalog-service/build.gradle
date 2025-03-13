@@ -4,63 +4,76 @@ plugins {
     id 'io.spring.dependency-management' version '1.1.4'
 }
 
-group = 'com.examples'
+group = 'com.examples.streaming_platform'
 version = '0.0.1-SNAPSHOT'
+java.sourceCompatibility = JavaVersion.VERSION_17
+
+tasks.processResources {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from("src/main/resources") {
+        include("schema/**")
+
+    }
+}
+
+
+bootJar {
+    mainClass = 'com.examples.streaming_platform.catalog.StreamingCatalogApplication'
+}
 
 repositories {
     mavenCentral()
+    maven { url = uri("https://oss.sonatype.org/content/repositories/snapshots/") }
 }
 
 dependencies {
+    // Spring Boot Core Dependencies
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'org.springframework.boot:spring-boot-starter-graphql'
-    implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
-    // Netflix DGS (corrected versions)
-    implementation platform('com.netflix.graphql.dgs:graphql-dgs-platform-dependencies:8.5.2')
-    implementation 'com.netflix.graphql.dgs:graphql-dgs-spring-boot-starter'
+    // Netflix DGS (GraphQL)
+    implementation("org.springframework.boot:spring-boot-starter-graphql")
 
-    // SpringDoc OpenAPI (Correct and latest)
+    // SpringDoc OpenAPI
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0'
 
-    // GraphQL Extended Scalars
-    implementation 'com.graphql-java:graphql-java-extended-scalars:20.2'
 
-    // Redis
+    // GraphQL Java (Schema Scalars & DataLoader)
+    implementation("com.graphql-java:graphql-java-extended-scalars:20.2")
+    implementation("com.graphql-java:java-dataloader:3.2.0")
+
+    // Redis Cache
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'io.lettuce:lettuce-core'
 
-
-
-    // Jakarta Validation
+    // Jakarta Validation API
     implementation 'jakarta.validation:jakarta.validation-api:3.0.2'
 
-    // PostgreSQL
+    // PostgreSQL & Hibernate
     runtimeOnly 'org.postgresql:postgresql'
+    implementation 'org.hibernate:hibernate-core:6.4.4.Final'
 
-    // Lombok
+    // Ensure JPA compatibility with Jakarta EE
+    implementation 'jakarta.persistence:jakarta.persistence-api:3.1.0'
+
+    // Lombok (Reduce Boilerplate code)
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 
-    // MapStruct
+    // MapStruct (Object Mapping)
     implementation 'org.mapstruct:mapstruct:1.5.5.Final'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
 
     // Test Dependencies
+    testImplementation("org.springframework.security:spring-security-test")
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.springframework.security:spring-security-test'
-    testImplementation 'org.testcontainers:junit-jupiter:1.19.0'
-    testImplementation 'org.testcontainers:postgresql:1.19.0'
-
-    testImplementation 'io.rest-assured:rest-assured:5.3.2'
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.3'
+    testImplementation 'org.springframework.graphql:spring-graphql-test'
 
 }
 
-test {
-    useJUnitPlatform()
+// Disable tests by default (optional)
+tasks.withType(Test) {
     enabled = false
 }

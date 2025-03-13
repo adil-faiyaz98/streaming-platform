@@ -6,28 +6,26 @@ spring:
     url: jdbc:postgresql://127.0.0.1:5432/streaming_platform_db
     username: postgres
     password: postgres
-    hikari:
-      maximum-pool-size: 20
-      minimum-idle: 5
-      connection-timeout: 30000
+    driver-class-name: org.postgresql.Driver
 
   jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     show-sql: true
     hibernate:
       ddl-auto: update
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
 
   graphql:
     graphiql:
       enabled: true
-      path: /graphiql
-    path: /graphql
-    schema:
-      printer:
-        enabled: true
+      path: /schema
+    path: /schema
+  docker:
+    compose:
+          enabled: false
+
 
 server:
   port: 8082
@@ -38,15 +36,6 @@ springdoc:
   api-docs:
     path: /api-docs
 
-
-logging:
-  level:
-    root: INFO
-    com.examples.streaming_platform: INFO
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: "*"
-
+dgs:
+  graphql:
+    schema-locations: classpath:/schema/**

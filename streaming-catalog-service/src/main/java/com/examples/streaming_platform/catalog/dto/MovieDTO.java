@@ -1,5 +1,6 @@
 package com.examples.streaming_platform.catalog.dto;
 
+import com.examples.streaming_platform.catalog.model.Genre;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -47,6 +48,8 @@ public class MovieDTO {
     private Float averageRating;
     private Integer viewCount;
     private Boolean featured;
+
+    private Genre genre;
 
     @Builder.Default
     private Set<String> genres = new HashSet<>();

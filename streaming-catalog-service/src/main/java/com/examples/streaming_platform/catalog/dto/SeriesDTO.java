@@ -9,9 +9,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * DTO representing a TV SeriesController entity.
@@ -32,14 +30,16 @@ public class SeriesDTO {
     private Integer startYear;
     private Integer endYear;
 
-    private Set<String> genres = new HashSet<>();
     private String maturityRating;
     private String imageUrl;
 
+    @Builder.Default
     private Double averageRating = 0.0;
 
+    @Builder.Default
     private Long viewCount = 0L;
 
+    @Builder.Default
     private Boolean featured = false;
 
     @Builder.Default

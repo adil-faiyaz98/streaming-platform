@@ -2,7 +2,7 @@
 package com.examples.streaming_platform.catalog.service;
 
 import com.examples.streaming_platform.catalog.dto.MovieDTO;
-import com.examples.streaming_platform.catalog.exception.ResourceNotFoundException;
+import com.examples.streaming_platform.catalog.graphql.exception.ResourceNotFoundException;
 import com.examples.streaming_platform.catalog.mapper.CatalogMapper;
 import com.examples.streaming_platform.catalog.model.Movie;
 import com.examples.streaming_platform.catalog.repository.MovieRepository;

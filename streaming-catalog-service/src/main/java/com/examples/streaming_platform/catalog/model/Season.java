@@ -56,7 +56,6 @@ public class Season {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tv_show_id")
-    @ToString.Exclude
     private TvShow tvShow;
 
     @PrePersist

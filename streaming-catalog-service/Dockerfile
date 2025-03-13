@@ -2,27 +2,35 @@
 FROM eclipse-temurin:17-jdk-alpine AS builder
 WORKDIR /app
 
-# Copy Gradle files for caching dependencies
+# Copy Gradle Wrapper and Build Files
 COPY gradlew .
-COPY gradle gradle
-COPY build.gradle settings.gradle ./
+COPY gradle gradle/
+COPY settings.gradle .
+COPY build.gradle .
+COPY streaming-catalog-service/build.gradle streaming-catalog-service/
+
+RUN chmod +x gradlew
 RUN ./gradlew dependencies --no-daemon
 
-# Copy application source
-COPY src ./src
+# Copy the microservice source code
+COPY streaming-catalog-service ./streaming-catalog-service
 
-# Build the executable JAR without running tests
-RUN ./gradlew clean bootJar -x test --no-daemon
+# Copy the GraphQL schema directory before building the JAR
+COPY streaming-catalog-service/src/main/resources/schema ./streaming-catalog-service/src/main/resources/schema
+
+# Build the JAR (without running tests)
+RUN ./gradlew :streaming-catalog-service:bootJar -x test
 
 # --- Stage 2: Run Application ---
-FROM eclipse-temurin:17-jre-alpine
+FROM eclipse-temurin:17-jdk-alpine
 WORKDIR /app
 
-# Copy built JAR file
-COPY --from=builder /app/build/libs/*.jar app.jar
+# Copy the built JAR from the builder stage
+COPY --from=builder /app/streaming-catalog-service/build/libs/*.jar app.jar
 
-# Expose application port
+# Copy the GraphQL schema into the runtime container
+COPY --from=builder /app/streaming-catalog-service/src/main/resources/schema /app/resources/schema
+
 EXPOSE 8082
 
-# Start application
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]

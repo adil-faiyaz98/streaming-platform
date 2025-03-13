@@ -1,21 +1,27 @@
 package com.examples.streaming_platform.catalog.service;
 
 import com.examples.streaming_platform.catalog.graphql.exception.DgsEntityNotFoundException;
+import com.examples.streaming_platform.catalog.mapper.CatalogMapper;
 import com.examples.streaming_platform.catalog.model.Genre;
 import com.examples.streaming_platform.catalog.model.Movie;
 import com.examples.streaming_platform.catalog.repository.MovieRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
 public class MovieService {
 
+    @Autowired
     private final MovieRepository movieRepository;
+    @Autowired
+    private CatalogMapper catalogMapper;
 
     public Page<Movie> getAllMovies(Pageable pageable) {
         return movieRepository.findAll(pageable);
@@ -28,13 +34,11 @@ public class MovieService {
 
     public Movie createMovie(Movie movie) {
         validateGenres(movie.getGenres());
-        // e.g., ensure it has at least one genre from your enum if needed
         return movieRepository.save(movie);
     }
 
     public Movie updateMovie(Long id, Movie updatedMovie) {
         Movie existing = getMovieById(id);
-        // Update fields
         existing.setTitle(updatedMovie.getTitle());
         existing.setDescription(updatedMovie.getDescription());
         existing.setDuration(updatedMovie.getDuration());
@@ -70,6 +74,18 @@ public class MovieService {
                 minDuration, maxDuration, genres);
 
         return movieRepository.findAll(spec, pageable);
+    }
+
+    public List<Movie> getTopRatedMovies() {
+        return movieRepository.findTop10ByOrderByAverageRatingDesc();
+    }
+
+    public Page<Movie> getMoviesByGenre(String genre, Pageable pageable) {
+        return movieRepository.findByGenresContainingIgnoreCase(genre, pageable);
+    }
+
+    public Page<Movie> searchMoviesByTitle(String title, Pageable pageable) {
+        return movieRepository.findByTitleContainingIgnoreCase(title, pageable);
     }
 
     /**

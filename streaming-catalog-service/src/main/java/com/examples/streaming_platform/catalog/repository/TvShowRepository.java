@@ -45,6 +45,12 @@ public interface TvShowRepository extends JpaRepository<TvShow, Long> {
     List<TvShow> findByFeaturedTrue();
 
     /**
+     * Find featured TV shows with rating greater than 8.5.
+     */
+    @Query("SELECT t FROM TvShow t WHERE t.rating > 8.5")
+    List<TvShow> findFeaturedShows();
+
+    /**
      * Find TV shows by multiple genres with minimum genre match count.
      */
     @Query("SELECT t FROM TvShow t JOIN t.genres g WHERE g IN :genres GROUP BY t HAVING COUNT(g) >= :minGenres")
