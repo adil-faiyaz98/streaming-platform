@@ -109,5 +109,12 @@ If someone wants to experiment to build or just simply gain AI skills, they coul
 - Content Recommendation Service - AI-based Content Recommendation Service through AutoEncoders / Transformers / RL
 - AI-based Churn Prediction Service - AI-based Churn Prediction through Gradient Boosting ( XGBoost / LightGBM )
 
+## Images
+![image1](images/1.png)
+![image2](images/2.png)
+![image3](images/3.png)
+![image4](images/4.png)
+
+
 ## License
 This project is licensed under the MIT License.
