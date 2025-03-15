@@ -16,7 +16,6 @@ import org.springframework.stereotype.Controller;
 
 import java.util.List;
 
-@Controller
 @RequiredArgsConstructor
 @Slf4j
 public class SeriesResolver {

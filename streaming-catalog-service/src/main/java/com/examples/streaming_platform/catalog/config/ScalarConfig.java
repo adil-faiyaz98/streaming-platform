@@ -19,8 +19,7 @@ public class ScalarConfig {
      * @return a RuntimeWiringConfigurer bean
      */
     @Bean
-    public RuntimeWiringConfigurer runtimeWiringConfigurer() {
-        log.info("Configuring RuntimeWiring with DateTime scalar.");
-        return wiringBuilder -> wiringBuilder.scalar(ExtendedScalars.DateTime);
+    public RuntimeWiringConfigurer dateTimeScalarConfigurer() {  // Renamed method
+        return builder -> builder.scalar(ExtendedScalars.DateTime);
     }
 }

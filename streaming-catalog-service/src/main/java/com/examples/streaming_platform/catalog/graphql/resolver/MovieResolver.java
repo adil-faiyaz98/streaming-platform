@@ -16,10 +16,9 @@ import java.util.Optional;
 /**
  * A GraphQL resolver for Movie queries & mutations.
  */
-@Component
 @RequiredArgsConstructor
 @Slf4j
-public class MovieResolver {
+public class MovieResolver{
 
     private final MovieService movieService;
 

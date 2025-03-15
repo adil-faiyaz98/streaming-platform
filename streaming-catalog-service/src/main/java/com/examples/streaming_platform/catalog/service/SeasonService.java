@@ -87,4 +87,18 @@ public class SeasonService {
             throw new ResourceNotFoundException("TvShow", "id", tvShowId);
         }
     }
+
+    /**
+     * Alias for getSeasonsByTvShowId to match GraphQL schema naming
+     */
+    public List<SeasonDTO> getSeasonsBySeries(Long seriesId) {
+        return getSeasonsByTvShowId(seriesId);
+    }
+
+    /**
+     * Alias for getSeasonByTvShowIdAndSeasonNumber to match GraphQL schema naming
+     */
+    public SeasonDTO getSeasonBySeriesAndNumber(Long seriesId, Integer seasonNumber) {
+        return getSeasonByTvShowIdAndSeasonNumber(seriesId, seasonNumber);
+    }
 }

@@ -1,6 +1,5 @@
 package com.examples.streaming_platform.catalog.dto;
 
-import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
@@ -29,6 +28,10 @@ public class SeasonDTO {
 
     @NotNull(message = "Season ID is required.")
     private Long seasonId;
+
+    private String imageUrl;
+
+    private String description;
 
     private String title;
     private String overview;

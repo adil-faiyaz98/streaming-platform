@@ -1,6 +1,9 @@
 scalar DateTime
 
 type Query {
+  # Hello query
+  hello: String!
+
   # Movies
   movie(id: ID!): Movie
   movies: [Movie!]!
@@ -9,24 +12,24 @@ type Query {
   topRatedMovies: [Movie!]!
   featuredMovies: [Movie!]!
   moviesPage(page: Int, size: Int): MoviePage!
-  
+
   # SeriesController
-  series(id: ID!): Series
-  allSeries: [Series!]!
-  searchSeries(title: String!): [Series!]!
-  seriesByGenre(genre: String!): [Series!]!
-  topRatedSeries: [Series!]!
-  featuredSeries: [Series!]!
+  series(id: ID!): SeriesDTO
+  allSeries: [SeriesDTO!]!
+  searchSeries(title: String!): [SeriesDTO!]!
+  seriesByGenre(genre: String!): [SeriesDTO!]!
+  topRatedSeries: [SeriesDTO!]!
+  featuredSeries: [SeriesDTO!]!
   seriesPage(page: Int, size: Int): SeriesPage!
-  
+
   # Seasons
-  season(id: ID!): Season
-  seasons(seriesId: ID!): [Season!]!
-  seasonByNumber(seriesId: ID!, seasonNumber: Int!): Season
-  
+  season(id: ID!): SeasonDTO
+  seasons(seriesId: ID!): [SeasonDTO!]!
+  seasonByNumber(seriesId: ID!, seasonNumber: Int!): SeasonDTO
+
   # Episodes
-  episode(id: ID!): Episode
-  episodes(seasonId: ID!): [Episode!]!
+  episode(id: ID!): EpisodeDTO
+  episodes(seasonId: ID!): [EpisodeDTO!]!
 }
 
 type Mutation {
@@ -34,20 +37,20 @@ type Mutation {
   createMovie(input: MovieInput!): Movie!
   updateMovie(id: ID!, input: MovieInput!): Movie!
   deleteMovie(id: ID!): Boolean!
-  
+
   # SeriesController
-  createSeries(input: SeriesInput!): Series!
-  updateSeries(id: ID!, input: SeriesInput!): Series!
+  createSeries(input: SeriesInput!): SeriesDTO!
+  updateSeries(id: ID!, input: SeriesInput!): SeriesDTO!
   deleteSeries(id: ID!): Boolean!
-  
+
   # Seasons
-  createSeason(seriesId: ID!, input: SeasonInput!): Season!
-  updateSeason(id: ID!, input: SeasonInput!): Season!
+  createSeason(seriesId: ID!, input: SeasonInput!): SeasonDTO!
+  updateSeason(id: ID!, input: SeasonInput!): SeasonDTO!
   deleteSeason(id: ID!): Boolean!
-  
+
   # Episodes
-  createEpisode(seasonId: ID!, input: EpisodeInput!): Episode!
-  updateEpisode(id: ID!, input: EpisodeInput!): Episode!
+  createEpisode(seasonId: ID!, input: EpisodeInput!): EpisodeDTO!
+  updateEpisode(id: ID!, input: EpisodeInput!): EpisodeDTO!
   deleteEpisode(id: ID!): Boolean!
 }
 
@@ -88,7 +91,8 @@ type MoviePage {
   totalPages: Int!
 }
 
-type Series {
+# Changed from Series to SeriesDTO to match implementation
+type SeriesDTO {
   id: ID!
   title: String!
   description: String
@@ -100,7 +104,7 @@ type Series {
   viewCount: Int
   featured: Boolean
   genres: [String!]
-  seasons: [Season!]
+  seasons: [SeasonDTO!]
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -117,19 +121,20 @@ input SeriesInput {
 }
 
 type SeriesPage {
-  content: [Series!]!
+  content: [SeriesDTO!]!
   totalElements: Int!
   totalPages: Int!
 }
 
-type Season {
+# Changed from Season to SeasonDTO
+type SeasonDTO {
   id: ID!
-  series: Series
+  series: SeriesDTO
   seasonNumber: Int!
   title: String
   description: String
   imageUrl: String
-  episodes: [Episode!]
+  episodes: [EpisodeDTO!]
   releaseYear: Int
   createdAt: DateTime
   updatedAt: DateTime
@@ -143,9 +148,10 @@ input SeasonInput {
   releaseYear: Int
 }
 
-type Episode {
+# Changed from Episode to EpisodeDTO
+type EpisodeDTO {
   id: ID!
-  season: Season
+  season: SeasonDTO
   episodeNumber: Int!
   title: String!
   description: String

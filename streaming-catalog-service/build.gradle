@@ -12,10 +12,8 @@ tasks.processResources {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     from("src/main/resources") {
         include("schema/**")
-
     }
 }
-
 
 bootJar {
     mainClass = 'com.examples.streaming_platform.catalog.StreamingCatalogApplication'
@@ -27,36 +25,39 @@ repositories {
 }
 
 dependencies {
+
+    implementation 'com.graphql-java-kickstart:graphiql-spring-boot-starter:11.0.0'
+    implementation 'com.graphql-java-kickstart:graphql-spring-boot-starter:14.0.0'
+    implementation 'com.graphql-java-kickstart:graphql-java-tools:13.0.0'
+
     // Spring Boot Core Dependencies
+    implementation 'com.graphql-java-kickstart:graphql-spring-boot-starter:14.0.0'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-security'
-
-    // Netflix DGS (GraphQL)
-    implementation("org.springframework.boot:spring-boot-starter-graphql")
-
-    // SpringDoc OpenAPI
-    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0'
-
-
-    // GraphQL Java (Schema Scalars & DataLoader)
-    implementation("com.graphql-java:graphql-java-extended-scalars:20.2")
-    implementation("com.graphql-java:java-dataloader:3.2.0")
-
-    // Redis Cache
+    implementation 'org.springframework.boot:spring-boot-starter-graphql'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-    implementation 'io.lettuce:lettuce-core'
+
+    // PostgreSQL & Hibernate
+    implementation 'org.hibernate:hibernate-core:6.4.4.Final'
+    runtimeOnly 'org.postgresql:postgresql'
 
     // Jakarta Validation API
     implementation 'jakarta.validation:jakarta.validation-api:3.0.2'
-
-    // PostgreSQL & Hibernate
-    runtimeOnly 'org.postgresql:postgresql'
-    implementation 'org.hibernate:hibernate-core:6.4.4.Final'
-
-    // Ensure JPA compatibility with Jakarta EE
     implementation 'jakarta.persistence:jakarta.persistence-api:3.1.0'
+
+    // SpringDoc OpenAPI
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0'
+    implementation 'com.graphql-java-kickstart:graphql-spring-boot-starter:14.0.0'
+    implementation 'com.graphql-java-kickstart:graphql-java-tools:14.0.0'
+
+    // GraphQL Java (Schema Scalars & DataLoader)
+    implementation 'com.graphql-java:graphql-java-extended-scalars:20.2'
+    implementation 'com.graphql-java:java-dataloader:3.2.0'
+
+    // Redis Cache
+    implementation 'io.lettuce:lettuce-core'
 
     // Lombok (Reduce Boilerplate code)
     compileOnly 'org.projectlombok:lombok'
@@ -67,10 +68,9 @@ dependencies {
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
 
     // Test Dependencies
-    testImplementation("org.springframework.security:spring-security-test")
+    testImplementation 'org.springframework.security:spring-security-test'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.graphql:spring-graphql-test'
-
 }
 
 // Disable tests by default (optional)

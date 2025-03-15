@@ -88,6 +88,10 @@ public class MovieService {
         return movieRepository.findByTitleContainingIgnoreCase(title, pageable);
     }
 
+    public List<Movie> getFeaturedMovies() {
+        return movieRepository.findByFeaturedTrue();
+    }
+
     /**
      * Example: Ensure at least one genre is present or throw an exception.
      */

@@ -31,6 +31,11 @@ COPY --from=builder /app/streaming-catalog-service/build/libs/*.jar app.jar
 # Copy the GraphQL schema into the runtime container
 COPY --from=builder /app/streaming-catalog-service/src/main/resources/schema /app/resources/schema
 
+# Set active profile to 'docker' (ensures application-docker.yml is used)
+ENV SPRING_PROFILES_ACTIVE=docker
+
+# Expose application port
 EXPOSE 8082
 
+# Run the application
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]

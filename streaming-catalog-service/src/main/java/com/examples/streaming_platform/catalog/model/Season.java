@@ -36,6 +36,7 @@ public class Season {
     @ToString.Include
     private String title;
 
+    @Column(name = "description", length = 2000)
     private String description;
 
     @Column(name = "image_url")

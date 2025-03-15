@@ -1,12 +1,9 @@
 name: CI - Build and Test
 
 on:
-  push:
-    branches:
-      - main
   pull_request:
     branches:
-      - main
+      - "*"
 
 jobs:
   build-and-test:
@@ -30,4 +27,3 @@ jobs:
 
       - name: Run Tests
         run: ./gradlew test --no-daemon
-

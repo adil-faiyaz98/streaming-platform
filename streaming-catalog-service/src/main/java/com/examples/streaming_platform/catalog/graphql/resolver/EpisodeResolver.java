@@ -11,16 +11,15 @@ import org.springframework.stereotype.Controller;
 
 import java.util.List;
 
-@Controller
 @RequiredArgsConstructor
 @Slf4j
 public class EpisodeResolver {
 
     private final CatalogService catalogService;
 
-    @QueryMapping
-    @PreAuthorize("hasAuthority('SCOPE_read:episodes')")
-    public EpisodeDTO episode(@Argument Long id) {
+    @QueryMapping("episodeById")
+    @PreAuthorize("hasAuthority('SCOPE_read:episodesById')")
+    public EpisodeDTO episode(Long id) {
         log.debug("Resolving GraphQL query for episode ID: {}", id);
         return catalogService.getEpisodeById(id);
     }

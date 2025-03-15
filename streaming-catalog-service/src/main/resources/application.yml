@@ -1,41 +1,54 @@
 spring:
   application:
     name: streaming-catalog-service
-
   datasource:
-    url: jdbc:postgresql://127.0.0.1:5432/streaming_platform_db
+    url: jdbc:postgresql://localhost:5433/streaming_platform_db
     username: postgres
     password: postgres
     driver-class-name: org.postgresql.Driver
 
+
   jpa:
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
-    show-sql: true
     hibernate:
       ddl-auto: update
+    show-sql: true
     properties:
       hibernate:
-        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
 
   graphql:
+    path: /graphql
     graphiql:
       enabled: true
-      path: /schema
-    path: /schema
+      path: /graphiql
+    schema:
+      locations: classpath:/schema/**
+      printer:
+        enabled: true
+    cors:
+      allowed-origins: "*"
+      allowed-methods: GET,POST
+
   docker:
     compose:
-          enabled: false
-
+      enabled: false
+  main:
+    allow-bean-definition-overriding: true
+  security:
+    user:
+          name: admin
+          password: admin
 
 server:
   port: 8082
 
 springdoc:
-  swagger-ui:
-    path: /swagger-ui.html
   api-docs:
     path: /api-docs
+  swagger-ui:
+    path: /swagger-ui
 
-dgs:
-  graphql:
-    schema-locations: classpath:/schema/**
+
+# In application.yml
+app:
+  use-resolvers: false  # Set to true if you want to use resolver classes instead of controllers

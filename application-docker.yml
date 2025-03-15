@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: streaming-catalog-service
+
+  datasource:
+    url: jdbc:postgresql://postgres:5432/streaming_platform_db
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
