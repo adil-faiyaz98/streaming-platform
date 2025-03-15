@@ -1,201 +1,113 @@
-# Streaming Catalog Service ( )
+# Streaming Catalog Microservice
 
 ## Overview
 
-The backend is structured as modular microservices, each responsible for specific functionality:
+The `streaming-catalog-microservice` is responsible for managing and serving metadata about movies, TV shows, and other streaming content. It provides a microservice containing endpoints and optionally supports GraphQL for flexible querying.
 
-- **streaming-catalog-service** --> This is the only implemented service as of now.
+## Features
 
-The following microservices can be practiced later
-- **user-profile-service**
-- **subscription-billing-service**
-- **watchlist-recommendation-service**
-- **analytics-service**
-- **notification-service**
-- **content-search-service**
-- **review-rating-service**
+- RESTful API for retrieving catalog information
+- Optional GraphQL support for flexible querying
+- Integration with PostGreSQL or MongoDB for data storage
+- Caching with Redis for performance optimization ( Actually, Cache doesn't implement good on GraphQL due to queries in GraphQL are dynamic and can't be cached)
 
-Each microservice exposes GraphQL APIs, ensuring efficient querying and manipulation of data.
+## Prerequisites
 
----
+Ensure you have the following installed:
 
-## Technology Stack
+- Java 17+
+- Gradle
+- Docker & Docker Compose
+- PostgreSQL or MongoDB
 
-### Backend
+## Setup
 
-- Java (JDK 21)
-- Spring Boot (v3.x)
-- Netflix DGS Framework (GraphQL)
-- Spring Data JPA/Hibernate
-- PostgreSQL (database)
-- Gradle (build management)
+### Clone the Repository
 
-### Testing
-
-- REST Assured (API endpoint testing)
-- JUnit 5 (unit and integration tests)
-
-### Continuous Integration & Deployment (CI/CD)
-
-- GitHub Actions
-- Docker
----
-
-## Microservices and API Endpoints
-
-### 1. Streaming Catalog Service
-
-**Functionality:** Manages the catalog of movies, series, and episodes.
-
-**GraphQL Endpoints:**
-
-- Query: getMovies(filter: MovieFilter): [Movie]
-- Query: getSeries(id: ID!): Series
-- Query: getRecommendations(userId: ID!): [Content]
-- Mutation: addContent(input: ContentInput!): Content
-- Mutation: updateEpisodeDetails(id: ID!, input: EpisodeInput!): Episode
-
-### --- BELOW IS NOT DONE AND CAN BE IMPLEMENTED LATER BY ANYONE FOR PRACTICE ---
-### 2. User Profile & Authentication Service
-
-**Functionality:** Manages user authentication, registration, profiles, and preferences.
-
-**GraphQL Endpoints:**
-
-- Mutation: login(credentials: AuthInput!): AuthPayload
-- Mutation: registerUser(details: UserRegistrationInput!): User
-- Mutation: updateProfile(userId: ID!, input: ProfileInput!): Profile
-- Query: getUserSettings(userId: ID!): UserSettings
-- Mutation: changePassword(userId: ID!, newPassword: String!): Status
-
-### 3. Subscription & Billing Service
-
-**Functionality:** Handles subscription plans, billing, and payment processing.
-
-**GraphQL Endpoints:**
-
-- Query: getSubscriptionDetails(userId: ID!): Subscription
-- Mutation: updatePaymentMethod(userId: ID!, paymentInput: PaymentInput!): PaymentMethod
-- Mutation: subscribeToPlan(userId: ID!, planId: ID!): Subscription
-- Mutation: cancelSubscription(userId: ID!): Status
-- Query: billingHistory(userId: ID!, limit: Int): [BillingRecord]
-
-### 4. Watchlist & Recommendations Service
-
-**Functionality:** Manages user watchlists and personalized recommendations.
-
-**GraphQL Endpoints:**
-
-- Query: getWatchlist(userId: ID!): [ContentItem]
-- Mutation: addToWatchlist(userId: ID!, contentId: ID!): Watchlist
-- Mutation: removeFromWatchlist(userId: ID!, contentId: ID!): Status
-- Query: getPersonalizedSuggestions(userId: ID!): [ContentItem]
-
-### 5. Analytics & Metrics Service
-
-**Functionality:** Provides analytics on content viewership, user engagement, and global trends.
-
-**GraphQL Endpoints:**
-
-- Query: getContentStats(contentId: ID!): ContentStats
-- Query: getUserEngagementStats(userId: ID!): UserEngagement
-- Mutation: trackContentPlay(userId: ID!, contentId: ID!): PlayEvent
-- Query: getGlobalTrending(limit: Int): [ContentItem]
-
-### 6. Notification Service
-
-**Functionality:** Delivers notifications for content updates, billing, and personalized alerts.
-
-**GraphQL Endpoints:**
-
-- Query: getNotifications(userId: ID!): [Notification]
-- Mutation: sendNotification(input: NotificationInput!): NotificationStatus
-- Mutation: markNotificationAsRead(notificationId: ID!): Status
-- Mutation: updateNotificationPreferences(userId: ID!, input: PreferencesInput!): Preferences
-
-### 7. Content Review & Rating Service
-
-**Functionality:** Enables users to review and rate content.
-
-**GraphQL Endpoints:**
-
-- Mutation: submitReview(userId: ID!, contentId: ID!, review: ReviewInput!): Review
-- Mutation: updateReview(reviewId: ID!, input: ReviewUpdateInput!): Review
-- Query: getReviews(contentId: ID!, filter: ReviewFilter!): [Review]
-- Query: getAverageRating(contentId: ID!): Float
-
-### 8. Content Search Service
-
-**Functionality:** Facilitates advanced content search with various filters and sorting options.
-
-**GraphQL Endpoints:**
-
-- Query: searchContent(query: String!, filter: SearchFilter): [SearchResult]
-- Query: getRecentSearches(userId: ID!): [SearchHistory]
-- Mutation: deleteSearchHistory(userId: ID!): Status
-
----
-
-## Testing Approach
-
-### API Testing (REST Assured)
-
-All GraphQL endpoints can be tested thoroughly through REST Assured, verifying responses, schema correctness, error handling, and boundary conditions.
-
----
-
-## Project Setup & Execution
-
-### Clone Repository
-```
+```bash
 git clone https://github.com/adil-faiyaz98/streaming-platform.git
+cd streaming-platform
 ```
 
-### Compile & Package the application
-#### Using Gradle Wrapper (Recommended) to ensure consistency across environments
-```
-cd project-directory
-./gradlew clean build
-```
+### Build the Application
 
-### Run Spring Boot Application locally
-```
-./gradlew bootRun
+```bash
+./gradlew :streaming-catalog-service:clean :streaming-catalog-service:build :streaming-catalog-service:bootRun
 ```
 
-### Execute Tests using Gradle
-```
-./gradlew test
-```
+### Run with Docker
 
----
-
-### Additional Gradle Commands 
-#### Generate Executable JAR
-```
-./gradlew bootJar
+```bash
+docker-compose up -d
 ```
 
-#### Clean the build directory 
+```bash
+curl -X GET http://localhost:8080/api/movies
 ```
-./gradlew clean
+
+#### Get a Movie by ID
+
+```bash
+curl -X GET http://localhost:8080/api/movies/{id}
 ```
 
+### GraphQL API
 
-## Continuous Integration & Deployment
-This project supports containerization (Docker) and can be integrated into CI/CD pipelines using GitHub Actions or Jenkins. Kubernetes manifests may be included for scalable deployments.
----
+If GraphQL is enabled, access it via:
 
-## Documentation & Support
-Detailed documentation and further assistance are available in the project wiki or through contacting maintainers directly.
----
+```bash
+http://localhost:8082/api-docs
+http://localhost:8082/swagger-ui.html
+```
 
-## Contributors
+Example Query:
 
-- Adil Faiyaz - https://www.linkedin.com/in/adil-faiyaz/
+```graphql
+query {
+  movie(id: "123") {
+    title
+    director
+    releaseYear
+  }
+}
+```
 
----
+## PS
+I initially planned an AI-powered test generation by training on the repository and thought of implementing a microservice through GraphQL. The models required for the training I wanted would need high computational GPU servers (A100/H100) and significant time, making local training infeasible.
+
+So, just putting this as an example as a reference for GraphQL-based API implementation. Negatives are more than the positives.
+- Clients can send nested queries which can lead to performance issues
+- Clients can send multiple queries in a single request which overload the server
+- GraphQL queries are not cached easily due to their dynamic nature and custom caching logic is required
+- Each query could lead to multiple database calls, in addition to resolvers, which can lead to performance issues
+
+- Unlike REST, they can take a large amount of data in one go which can expose the system to DDOS attacks / harder to have rate limiting
+- They introduce resolvers which can lead high latency,
+- Architecture complexity which is unnecessary. 
+- Since each field needs a resolver, a single request can hit multiple resolvers which adds alot of overhead. 
+- RBA (Role Based Access) is harder to implement in GraphQL
+
+- Overkill for simple APIs
+- Has higher latency than REST due to the need for resolvers and likelyhood of multiple database calls
+- Lower throughput than REST
+
+## ------------------------------------------------
+
+- There are benefits to using GraphQL, such as:
+    - Clients can request only the data they need ( preventing over-fetching and under-fetching )
+    - Clients can request multiple resources in a single query ( preventing multiple round trips )
+    - Clients can request nested resources
+    - Clients can request related resources in a single query 
+    - Clients can request multiple resources in a single query 
+
+
+
+If someone wants to experiment to build or just simply gain AI skills, they could build microservices on top 
+- User Management Service
+- Payment Service
+- Subscription Service
+- Content Recommendation Service - AI-based Content Recommendation Service through AutoEncoders / Transformers / RL
+- AI-based Churn Prediction Service - AI-based Churn Prediction through Gradient Boosting ( XGBoost / LightGBM )
 
 ## License
-This project is licensed under the MIT License. See `LICENSE` for details.
----
+This project is licensed under the MIT License.
