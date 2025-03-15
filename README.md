@@ -92,3 +92,18 @@ docker run -p 8082:8082 streaming-catalog
 Initially, I considered fine-tuning this project using **LLaMA** to introduce meaningful AI, but this project does not seem like the right fit. Instead, I would likely explore another project better suited for AI integration.
 
 However, if extending this system to train a **UI-driven recommendation service**, a **neural network model like an Autoencoder** could enhance personalized recommendations. Additionally, for **user churn prediction**, leveraging **gradient boosting models like XGBoost** would be effective.
+
+
+## Images
+
+### Image 1
+![Image 1](images/1.png)
+
+### Image 2
+![Image 2](images/2.png)
+
+### Image 3
+![Image 3](images/3.png)
+
+### Image 4
+![Image 4](images/4.png)
