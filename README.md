@@ -84,6 +84,11 @@ docker build -t streaming-catalog .
 ## Run the container
 ```sh
 docker run -p 8082:8082 streaming-catalog
+```
 
-## License
-The project is licensed under the MIT license 
+
+## Future Considerations
+
+Initially, I considered fine-tuning this project using **LLaMA** to introduce meaningful AI, but this project does not seem like the right fit. Instead, I would likely explore another project better suited for AI integration.
+
+However, if extending this system to train a **UI-driven recommendation service**, a **neural network model like an Autoencoder** could enhance personalized recommendations. Additionally, for **user churn prediction**, leveraging **gradient boosting models like XGBoost** would be effective.
