@@ -32,3 +32,53 @@ The **Streaming Platform Catalog Service** is a microservice responsible for man
 ```sh
 git clone https://github.com/your-repo/streaming-platform.git
 cd streaming-platform
+```
+
+
+## Start Database with Docker 
+```sh
+docker-compose up -d
+```
+
+## Build and run the application 
+```sh
+./gradlew bootRun
+```
+
+
+## Access the APIs
+### GraphQL Playground: 
+```sh
+http://localhost:8082/graphql
+```
+
+
+### REST API Base URL: 
+```sh
+http://localhost:8082/api/v1
+```
+
+
+### Swagger API Docs: 
+```sh
+http://localhost:8082/swagger-ui
+```
+
+### Configuration
+Modify _application.yml_ for environment-specific configurations, including:
+
+Database connection settings
+Security credentials
+API rate limits
+
+## Build a Docker Image 
+```sh
+docker build -t streaming-catalog .
+```
+
+## Run the container
+```sh
+docker run -p 8082:8082 streaming-catalog
+
+## License
+The project is licensed under the MIT license 
