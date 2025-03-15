@@ -3,6 +3,10 @@
 ## Overview
 The **Streaming Platform Catalog Service** is a microservice responsible for managing movies, series, seasons, and episodes. It provides both **GraphQL and REST APIs**, allowing flexible data retrieval for different clients.
 
+## Available APIs
+- **[GraphQL API Documentation](GRAPHQL.md)**
+- **[REST API Documentation](RESTAPI.md)**
+
 ## Features
 - **GraphQL API** for efficient, flexible queries.
 - **REST API** for standard HTTP-based integrations.
@@ -11,6 +15,7 @@ The **Streaming Platform Catalog Service** is a microservice responsible for man
 - **Dockerized Deployment** with multi-stage builds.
 - **Authentication & Authorization** using Spring Security.
 - **Batch Loading with DataLoader** to optimize GraphQL queries.
+
 
 ## Tech Stack
 - **Backend:** Java 17, Spring Boot, Spring GraphQL, Spring Security
