@@ -98,6 +98,7 @@ Authorization: Bearer YOUR_ACCESS_TOKEN
 ## API Documentation
 
 Swagger UI: `http://localhost:8082/swagger-ui`
+
 OpenAPI JSON Spec: `http://localhost:8082/api-docs`
 
 
