@@ -1,8 +1,4 @@
 
----
-
-### **`restapi.md`**
-```markdown
 # REST API Documentation
 
 ## Overview
@@ -12,15 +8,17 @@ The **REST API** provides standard HTTP-based access to the Streaming Platform C
 - `http://localhost:8082/api/v1`
 
 ## Endpoints
+- Upon running the application locally, all endpoints would be visible on SwaggerAPI with sample requests and responses
+  `http://localhost:8082/swagger-api/index.html`
 
 ### Movies
 
 #### Get All Movies
-```sh
+```bash
 GET /api/v1/movies
 ```
 
-```json
+```bash
 [
   {
     "id": 1,
@@ -28,28 +26,30 @@ GET /api/v1/movies
     "releaseYear": 2010
   }
 ]
-
 ```
 #### Get Movie By ID 
-```sh
+
+```bash
 GET /api/v1/movies/{id}
 ```
 
-```json
+```bash
 {
   "id": 1,
   "title": "Inception",
   "releaseYear": 2010
 }
+```
 
 
 #### Create a Movie
-```sh 
+
+```bash 
 POST /api/v1/movies
 Content-Type: application/json
 ```
 
-```sh 
+```bash
 {
   "id": 2,
   "title": "New Movie",
@@ -58,23 +58,23 @@ Content-Type: application/json
 ```
 
 ## Update a movie 
-```sh 
+```bash
 PUT /api/v1/movies/{id}
 Content-Type: application/json
 ```
 
-```json
-
+```bash
 {
   "title": "Updated Movie Title"
 }
 ```
 
-## Delete a movie 
-```sh
+## Delete a movie
+
+```bash
 DELETE /api/v1/movies/{id}
 ```
-```json
+```bash
 {
   "message": "Movie deleted successfully"
 }
@@ -82,42 +82,22 @@ DELETE /api/v1/movies/{id}
 
 ## Authentication & Security
 #### OAuth2 Authentication: Required for all API endpoints.
+
 Scopes:
 SCOPE_read → Read operations
 SCOPE_write → Create/update operations
 SCOPE_delete → Deletion operations
+
 Example Header:
-```sh
+
+```bash
 Authorization: Bearer YOUR_ACCESS_TOKEN
 ```
-
-## Pagination & Filtering
-Pagination: Supports size and page parameters.
-Sorting: Use sort=field,asc or sort=field,desc.
-Example:
-
-```sh 
-
-GET /api/v1/movies?page=1&size=10&sort=releaseYear,desc
-Error Handling
-Standard error format:
-```
-
-```json
-{
-  "timestamp": "2024-03-15T10:00:00",
-  "status": 403,
-  "error": "Forbidden",
-  "message": "Access Denied"
-}
-```
-
-
 
 
 ## API Documentation
 ### Swagger UI: http://localhost:8082/swagger-ui
-### OpenAPI JSON Spec: http://localhost:8082/v3/api-docs
+### OpenAPI JSON Spec: http://localhost:8082/api-docs
 
 
 ## Further Reading
