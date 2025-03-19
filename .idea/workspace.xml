@@ -4,9 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="def53c2c-2ec8-44b8-bdcb-a22ab4e249b3" name="Changes" comment="feat: add Testcontainers dependencies for integration testing">
-      <change afterPath="$PROJECT_DIR$/streaming-catalog-service/src/main/java/com/examples/streaming_platform/catalog/annotations/DgsScalar.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/streaming-catalog-service/src/main/java/com/examples/streaming_platform/catalog/scalar/DateTimeScalar.java" afterDir="false" />
+    <list default="true" id="def53c2c-2ec8-44b8-bdcb-a22ab4e249b3" name="Changes" comment="docs: update README to reflect microservice architecture and GraphQL capabilities">
+      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/sqlDataSources.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/sqldialects.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/8.13/checksums/checksums.lock" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/8.13/executionHistory/executionHistory.bin" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/8.13/executionHistory/executionHistory.lock" beforeDir="false" />
@@ -15,15 +18,11 @@
       <change beforePath="$PROJECT_DIR$/.gradle/8.13/fileHashes/fileHashes.lock" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/8.13/fileHashes/resourceHashesCache.bin" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/cache.properties" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/vcs-1/gc.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/streaming-catalog-service/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/streaming-catalog-service/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GRAPHQL.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/RESTAPI.md" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/streaming-catalog-service/build/classes/java/main/com/examples/streaming_platform/catalog/StreamingCatalogApplication.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/streaming-catalog-service/build/classes/java/main/com/examples/streaming_platform/catalog/config/CacheConfig.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/streaming-catalog-service/build/classes/java/main/com/examples/streaming_platform/catalog/config/GraphQLConfig.class" beforeDir="false" />
@@ -44,7 +43,6 @@
       <change beforePath="$PROJECT_DIR$/streaming-catalog-service/build/classes/java/main/com/examples/streaming_platform/catalog/exception/ValidationErrorResponse.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/streaming-catalog-service/build/classes/java/main/com/examples/streaming_platform/catalog/graphql/EpisodeGraphQLController.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/streaming-catalog-service/build/classes/java/main/com/examples/streaming_platform/catalog/graphql/EpisodeResolver.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/build/classes/java/main/com/examples/streaming_platform/catalog/graphql/MovieGraphQLController.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/streaming-catalog-service/build/classes/java/main/com/examples/streaming_platform/catalog/graphql/MovieResolver.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/streaming-catalog-service/build/classes/java/main/com/examples/streaming_platform/catalog/graphql/ScalarConfig.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/streaming-catalog-service/build/classes/java/main/com/examples/streaming_platform/catalog/graphql/SeasonGraphQLController.class" beforeDir="false" />
@@ -61,7 +59,6 @@
       <change beforePath="$PROJECT_DIR$/streaming-catalog-service/build/classes/java/main/com/examples/streaming_platform/catalog/repository/MovieRepository.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/streaming-catalog-service/build/classes/java/main/com/examples/streaming_platform/catalog/repository/SeasonRepository.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/streaming-catalog-service/build/classes/java/main/com/examples/streaming_platform/catalog/repository/SeriesRepository.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/build/classes/java/main/com/examples/streaming_platform/catalog/repository/TvShowRepository.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/streaming-catalog-service/build/classes/java/main/com/examples/streaming_platform/catalog/service/CatalogService.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/streaming-catalog-service/build/classes/java/main/com/examples/streaming_platform/catalog/service/EpisodeService.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/streaming-catalog-service/build/classes/java/main/com/examples/streaming_platform/catalog/service/MovieService.class" beforeDir="false" />
@@ -70,36 +67,22 @@
       <change beforePath="$PROJECT_DIR$/streaming-catalog-service/build/classes/java/main/com/examples/streaming_platform/catalog/service/TvShowService.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/streaming-catalog-service/build/generated/sources/annotationProcessor/java/main/com/examples/streaming_platform/catalog/mapper/CatalogMapperImpl.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/streaming-catalog-service/build/resources/main/application.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/build/resources/main/db/migration/V1__init_schema.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/build/resources/main/graphql/schema.graphqls" beforeDir="false" afterPath="$PROJECT_DIR$/streaming-catalog-service/src/main/resources/schema/graphql.graphqls" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/src/main/java/com/examples/streaming_platform/catalog/config/CacheConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/streaming-catalog-service/src/main/java/com/examples/streaming_platform/catalog/config/CacheConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/src/main/java/com/examples/streaming_platform/catalog/config/GraphQLConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/streaming-catalog-service/src/main/java/com/examples/streaming_platform/catalog/config/GraphQLConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/src/main/java/com/examples/streaming_platform/catalog/dto/MovieDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/streaming-catalog-service/src/main/java/com/examples/streaming_platform/catalog/dto/MovieDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/src/main/java/com/examples/streaming_platform/catalog/dto/SeriesDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/streaming-catalog-service/src/main/java/com/examples/streaming_platform/catalog/dto/SeriesDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/src/main/java/com/examples/streaming_platform/catalog/dto/TvShowDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/streaming-catalog-service/src/main/java/com/examples/streaming_platform/catalog/dto/TvShowDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/src/main/java/com/examples/streaming_platform/catalog/graphql/loader/SeriesBatchLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/streaming-catalog-service/src/main/java/com/examples/streaming_platform/catalog/graphql/loader/SeriesBatchLoader.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/src/main/java/com/examples/streaming_platform/catalog/graphql/loader/TvShowBatchLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/streaming-catalog-service/src/main/java/com/examples/streaming_platform/catalog/graphql/loader/TvShowBatchLoader.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/src/main/java/com/examples/streaming_platform/catalog/graphql/resolver/MovieResolver.java" beforeDir="false" afterPath="$PROJECT_DIR$/streaming-catalog-service/src/main/java/com/examples/streaming_platform/catalog/graphql/resolver/MovieResolver.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/src/main/java/com/examples/streaming_platform/catalog/model/Movie.java" beforeDir="false" afterPath="$PROJECT_DIR$/streaming-catalog-service/src/main/java/com/examples/streaming_platform/catalog/model/Movie.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/src/main/java/com/examples/streaming_platform/catalog/model/Season.java" beforeDir="false" afterPath="$PROJECT_DIR$/streaming-catalog-service/src/main/java/com/examples/streaming_platform/catalog/model/Season.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/src/main/java/com/examples/streaming_platform/catalog/model/TvShow.java" beforeDir="false" afterPath="$PROJECT_DIR$/streaming-catalog-service/src/main/java/com/examples/streaming_platform/catalog/model/TvShow.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/src/main/java/com/examples/streaming_platform/catalog/repository/MovieRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/streaming-catalog-service/src/main/java/com/examples/streaming_platform/catalog/repository/MovieRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/src/main/java/com/examples/streaming_platform/catalog/repository/SeriesRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/streaming-catalog-service/src/main/java/com/examples/streaming_platform/catalog/repository/SeriesRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/src/main/java/com/examples/streaming_platform/catalog/repository/TvShowRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/streaming-catalog-service/src/main/java/com/examples/streaming_platform/catalog/repository/TvShowRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/src/main/java/com/examples/streaming_platform/catalog/service/CatalogService.java" beforeDir="false" afterPath="$PROJECT_DIR$/streaming-catalog-service/src/main/java/com/examples/streaming_platform/catalog/service/CatalogService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/src/main/java/com/examples/streaming_platform/catalog/service/MovieService.java" beforeDir="false" afterPath="$PROJECT_DIR$/streaming-catalog-service/src/main/java/com/examples/streaming_platform/catalog/service/MovieService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/streaming-catalog-service/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/src/main/resources/db/migration/V1__add_missing_tables_and_indexes.sql" beforeDir="false" afterPath="$PROJECT_DIR$/streaming-catalog-service/src/main/resources/db/migration/V1__add_missing_tables_and_indexes.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/src/main/resources/graphql/schema.graphqls" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/src/test/java/com/examples/streaming_platform/catalog/controller/MovieControllerTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/src/test/java/com/examples/streaming_platform/catalog/service/CatalogServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/streaming-catalog-service/src/test/java/com/examples/streaming_platform/catalog/service/CatalogServiceTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/src/test/java/com/examples/streaming_platform/catalog/service/MovieServiceTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/src/test/java/com/examples/streaming_platform/catalog/service/TvShowServiceTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming-catalog-service/src/main/java/com/examples/streaming_platform/catalog/security/config/SecurityConfig.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DatabaseLocalColorSettings">
+    <colors>
+      <entry key="d0fd8876-162c-41e1-a603-2d84bcddbc47" value="Blue" />
+    </colors>
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
   </component>
   <component name="ExternalProjectsManager">
     <system id="GRADLE">
@@ -114,24 +97,6 @@
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
                 <item name="streaming-platform" type="f1a62948:ProjectNode" />
               </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="streaming-platform" type="f1a62948:ProjectNode" />
-                <item name="streaming-catalog-service" type="2d1252cf:ModuleNode" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="streaming-platform" type="f1a62948:ProjectNode" />
-                <item name="streaming-catalog-service" type="2d1252cf:ModuleNode" />
-                <item name="Dependencies" type="6de06a37:ExternalSystemViewDefaultContributor$MyDependenciesNode" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="streaming-platform" type="f1a62948:ProjectNode" />
-                <item name="streaming-catalog-service" type="2d1252cf:ModuleNode" />
-                <item name="Dependencies" type="6de06a37:ExternalSystemViewDefaultContributor$MyDependenciesNode" />
-                <item name="testCompileClasspath" type="62daadca:ExternalSystemViewDefaultContributor$DependencyScopeExternalSystemNode" />
-              </path>
             </expand>
             <select />
           </tree_state>
@@ -142,33 +107,78 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Class" />
         <option value="AnnotationType" />
+        <option value="Class" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="PUSH_TAGS">
+      <GitPushTagMode>
+        <option name="argument" value="--follow-tags" />
+        <option name="title" value="Current Branch" />
+      </GitPushTagMode>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.Unnamed.executor&quot;: &quot;Run&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/adilm/repositories/Java/Playwright/streaming-platform&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.31494254&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;adil-faiyaz98&quot;
   }
 }</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/adil-faiyaz98/streaming-platform.git&quot;,
+    &quot;accountId&quot;: &quot;fdb520ab-9369-4b14-9afa-8b6e16227c95&quot;
+  }
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 0
+}</component>
+  <component name="ProjectId" id="2uJ5Mi7apYok0TZB2qnr67FjuPY" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.Unnamed.executor": "Run",
+    "Gradle.C:/Users/adilm/repositories/Java/Playwright/streaming-platform [bootJar].executor": "Run",
+    "Gradle.C:/Users/adilm/repositories/Java/Playwright/streaming-platform [dependencies].executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "main",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/adilm/repositories/Java/Playwright/streaming-platform/streaming-catalog-service/src/main/resources/db/migration/V1__init_schema.sql",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.31494254",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "vue.rearranger.settings.migration": "true"
+  },
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "postgresql"
+    ]
+  }
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\adilm\repositories\Java\Playwright\streaming-platform" />
     </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\adilm\repositories\Java\Playwright\streaming-platform\images" />
+    </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Gradle.C:/Users/adilm/repositories/Java/Playwright/streaming-platform [dependencies]">
     <configuration name="Unnamed" type="Application" factoryName="Application" nameIsGenerated="true">
       <option name="ALTERNATIVE_JRE_PATH" value="21" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
@@ -178,18 +188,73 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="JetRunConfigurationType">
+    <configuration name="C:/Users/adilm/repositories/Java/Playwright/streaming-platform [bootJar]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="bootJar" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="C:/Users/adilm/repositories/Java/Playwright/streaming-platform [dependencies]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="dependencies" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="StreamingCatalogApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="streaming-platform.streaming-catalog-service.main" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.examples.streaming_platform.catalog.StreamingCatalogApplication" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
-      <module name="streaming-platform.streaming-catalog-service.main" />
-      <option name="filePath" />
-      <method v="2" />
-    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Gradle.C:/Users/adilm/repositories/Java/Playwright/streaming-platform [dependencies]" />
+        <item itemvalue="Gradle.C:/Users/adilm/repositories/Java/Playwright/streaming-platform [bootJar]" />
+      </list>
+    </recent_temporary>
   </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-a94e463ab2e7-intellij.indexing.shared.core-IU-243.25659.39" />
+        <option value="bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-IU-243.25659.39" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task id="LOCAL-00001" summary="Delete unnecessary files">
       <option name="closed" value="true" />
@@ -207,13 +272,69 @@
       <option name="project" value="LOCAL" />
       <updated>1741485684692</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="feat: enhance application configuration and GraphQL schema support">
+      <option name="closed" value="true" />
+      <created>1741888865948</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1741888865948</updated>
+    </task>
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="def53c2c-2ec8-44b8-bdcb-a22ab4e249b3" name="Changes" comment="feat: enhance application configuration and GraphQL schema support" />
+      <created>1741953793856</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1741953793856</updated>
+      <workItem from="1741953795382" duration="36478000" />
+      <workItem from="1742410483748" duration="56000" />
+    </task>
+    <task id="LOCAL-00004" summary="feat: add GraphQL support for Movies, Series, Seasons, and Episodes with input types and resolvers">
+      <option name="closed" value="true" />
+      <created>1741998207671</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1741998207671</updated>
+    </task>
+    <task id="LOCAL-00005" summary="feat: add CORS configuration for GraphQL and GraphiQL endpoints">
+      <option name="closed" value="true" />
+      <created>1741998258092</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1741998258092</updated>
+    </task>
+    <task id="LOCAL-00006" summary="docs: update README to reflect microservice architecture and GraphQL capabilities">
+      <option name="closed" value="true" />
+      <created>1742001575626</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1742001575626</updated>
+    </task>
+    <task id="LOCAL-00007" summary="docs: update README to reflect microservice architecture and GraphQL capabilities">
+      <option name="closed" value="true" />
+      <created>1742002246999</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1742002246999</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Delete unnecessary files" />
     <MESSAGE value="feat: add Testcontainers dependencies for integration testing" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat: add Testcontainers dependencies for integration testing" />
+    <MESSAGE value="feat: enhance application configuration and GraphQL schema support" />
+    <MESSAGE value="feat: add GraphQL support for Movies, Series, Seasons, and Episodes with input types and resolvers" />
+    <MESSAGE value="feat: add CORS configuration for GraphQL and GraphiQL endpoints" />
+    <MESSAGE value="docs: update README to reflect microservice architecture and GraphQL capabilities" />
+    <option name="LAST_COMMIT_MESSAGE" value="docs: update README to reflect microservice architecture and GraphQL capabilities" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

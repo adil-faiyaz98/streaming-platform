@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DdlMappings">
+    <mapping uuid="d557284b-a876-461f-93ba-b1c9f7451c5d" name="streaming_platform_db">
+      <data-sources db="d0fd8876-162c-41e1-a603-2d84bcddbc47" ddl="c246bbdb-5088-4408-b9fb-0bc463d9b35a" />
+      <scope>
+        <node kind="database" negative="1">
+          <node kind="schema" negative="1" />
+        </node>
+      </scope>
+    </mapping>
+    <mapping uuid="2c35ba73-4d57-4610-bcb4-082230286200" name="postgres@localhost [2] Mapping">
+      <data-sources db="c8adbf3d-0a08-43cb-bc4d-3e2ddd68ba9b" ddl="a701721e-f5d5-4532-8f58-f0036b3b8621" />
+      <scope>
+        <node negative="1">
+          <node kind="database" negative="1" />
+          <node kind="database" qname="@">
+            <node kind="schema" negative="1" />
+          </node>
+        </node>
+      </scope>
+    </mapping>
+  </component>
+  <component name="SqlDataSourceStorage">
+    <option name="dataSources">
+      <list>
+        <State>
+          <option name="id" value="c246bbdb-5088-4408-b9fb-0bc463d9b35a" />
+          <option name="name" value="streaming_platform_db (DDL)" />
+          <option name="dbmsName" value="POSTGRES" />
+          <option name="urls">
+            <array>
+              <option value="file://$PROJECT_DIR$/streaming-catalog-service/src/main/resources/db/migration/V1__add_missing_tables_and_indexes.sql" />
+            </array>
+          </option>
+          <option name="outLayout" value="File per object by schema.groovy" />
+        </State>
+        <State>
+          <option name="id" value="a701721e-f5d5-4532-8f58-f0036b3b8621" />
+          <option name="name" value="postgres@localhost [2] (DDL)" />
+          <option name="dbmsName" value="POSTGRES" />
+          <option name="urls">
+            <array>
+              <option value="file://$PROJECT_DIR$/streaming-catalog-service/src/main/resources/db/migration/V1__init_schema.sql" />
+            </array>
+          </option>
+          <option name="outLayout" value="File per object by schema.groovy" />
+        </State>
+      </list>
+    </option>
+  </component>
+</project>
