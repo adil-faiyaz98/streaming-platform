@@ -1,7 +1,9 @@
 package com.examples.streaming_platform.catalog.controller.v2;
 
+import com.examples.streaming_platform.catalog.client.RecommendationClient;
 import com.examples.streaming_platform.catalog.dto.MovieDTO;
 import com.examples.streaming_platform.catalog.dto.MovieDetailedDTO;
+import com.examples.streaming_platform.catalog.dto.RecommendationDTO;
 import com.examples.streaming_platform.catalog.service.CatalogService;
 import com.examples.streaming_platform.catalog.service.ExternalApiService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,6 +35,7 @@ public class MovieControllerV2 {
 
     private final CatalogService catalogService;
     private final ExternalApiService externalApiService;
+    private final RecommendationClient recommendationClient;
 
     /**
      * Get all movies with pagination and filtering.
@@ -51,9 +54,9 @@ public class MovieControllerV2 {
             @RequestParam(required = false) String genre,
             @RequestParam(required = false) Integer releaseYear,
             @RequestParam(required = false) Double minRating) {
-        log.debug("V2 - Fetching all movies with filters: genre={}, releaseYear={}, minRating={}", 
+        log.debug("V2 - Fetching all movies with filters: genre={}, releaseYear={}, minRating={}",
                 genre, releaseYear, minRating);
-        
+
         // In a real implementation, we would add these filters to the service
         // For now, we'll just call the existing method
         return ResponseEntity.ok(catalogService.getAllMovies(pageable));
@@ -68,20 +71,20 @@ public class MovieControllerV2 {
      */
     @GetMapping("/{id}/detailed")
     @PreAuthorize("hasAuthority('SCOPE_read:movies')")
-    @Operation(summary = "Get detailed movie information", 
+    @Operation(summary = "Get detailed movie information",
             description = "Returns detailed movie information including data from external sources")
     public CompletableFuture<ResponseEntity<MovieDetailedDTO>> getDetailedMovieById(@PathVariable Long id) {
         log.debug("V2 - Fetching detailed movie by ID: {}", id);
-        
+
         // Get basic movie information
         MovieDTO movie = catalogService.getMovieById(id);
-        
+
         // Get additional information from external API
         return externalApiService.getMovieInfo(id.toString())
                 .thenApply(externalInfo -> {
                     // Create detailed DTO by combining internal and external data
                     MovieDetailedDTO detailedDTO = new MovieDetailedDTO(movie);
-                    
+
                     // Add external information if available
                     if (externalInfo != null) {
                         detailedDTO.setCast(externalInfo.getCast());
@@ -92,7 +95,7 @@ public class MovieControllerV2 {
                             detailedDTO.setPosterUrl(externalInfo.getPosterUrl());
                         }
                     }
-                    
+
                     return ResponseEntity.ok(detailedDTO);
                 });
     }
@@ -108,16 +111,16 @@ public class MovieControllerV2 {
      */
     @GetMapping("/search")
     @PreAuthorize("hasAuthority('SCOPE_read:movies')")
-    @Operation(summary = "Advanced movie search", 
+    @Operation(summary = "Advanced movie search",
             description = "Search movies with advanced filtering options")
     public ResponseEntity<Page<MovieDTO>> searchMovies(
             @RequestParam String query,
             @PageableDefault(size = 10) Pageable pageable,
             @RequestParam(defaultValue = "false") boolean includeAdult,
             @RequestParam(defaultValue = "relevance") String sortBy) {
-        log.debug("V2 - Advanced search: query={}, includeAdult={}, sortBy={}", 
+        log.debug("V2 - Advanced search: query={}, includeAdult={}, sortBy={}",
                 query, includeAdult, sortBy);
-        
+
         // In a real implementation, we would add these filters to the service
         // For now, we'll just call the existing method
         return ResponseEntity.ok(catalogService.searchMoviesByTitle(query, pageable));
@@ -131,7 +134,7 @@ public class MovieControllerV2 {
      */
     @PostMapping
     @PreAuthorize("hasAuthority('SCOPE_write:movies')")
-    @Operation(summary = "Create a new movie", 
+    @Operation(summary = "Create a new movie",
             description = "Creates a new movie with enhanced validation")
     public ResponseEntity<MovieDTO> createMovie(@Valid @RequestBody MovieDTO movieDTO) {
         log.debug("V2 - Creating movie: {}", movieDTO);
@@ -144,19 +147,46 @@ public class MovieControllerV2 {
      *
      * @param id the movie ID
      * @param limit the maximum number of recommendations
+     * @param userId optional user ID for personalized recommendations
      * @return a list of recommended movies
      */
     @GetMapping("/{id}/recommendations")
     @PreAuthorize("hasAuthority('SCOPE_read:movies')")
-    @Operation(summary = "Get movie recommendations", 
-            description = "Returns movie recommendations based on the given movie")
-    public ResponseEntity<List<MovieDTO>> getRecommendations(
+    @Operation(summary = "Get AI-powered movie recommendations",
+            description = "Returns AI-powered movie recommendations based on the given movie and user preferences")
+    public CompletableFuture<ResponseEntity<List<MovieDTO>>> getRecommendations(
             @PathVariable Long id,
-            @RequestParam(defaultValue = "5") int limit) {
-        log.debug("V2 - Getting recommendations for movie ID: {}, limit: {}", id, limit);
-        
-        // In a real implementation, we would implement a recommendation algorithm
-        // For now, we'll just return top rated movies
-        return ResponseEntity.ok(catalogService.getTopRatedMovies());
+            @RequestParam(defaultValue = "5") int limit,
+            @RequestParam(required = false) String userId) {
+
+        log.debug("V2 - Getting AI recommendations for movie ID: {}, user: {}, limit: {}",
+                id, userId, limit);
+
+        // Get recommendations from AI service
+        CompletableFuture<List<RecommendationDTO>> recommendationsFuture;
+
+        if (userId != null) {
+            // Personalized recommendations if user is logged in
+            recommendationsFuture = recommendationClient.getRecommendationsForUser(userId, limit);
+        } else {
+            // Content-based recommendations if no user context
+            recommendationsFuture = recommendationClient.getSimilarContent(id.toString(), limit);
+        }
+
+        // Convert recommendation DTOs to MovieDTOs
+        return recommendationsFuture.thenApply(recommendations -> {
+            // Extract item IDs from recommendations
+            List<String> itemIds = recommendations.stream()
+                    .map(RecommendationDTO::getItemId)
+                    .toList();
+
+            // If we got recommendations, fetch the full movie details
+            if (!itemIds.isEmpty()) {
+                return ResponseEntity.ok(catalogService.getMoviesByIds(itemIds));
+            } else {
+                // Fallback to top rated movies if no recommendations
+                return ResponseEntity.ok(catalogService.getTopRatedMovies());
+            }
+        });
     }
 }

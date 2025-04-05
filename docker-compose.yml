@@ -3,7 +3,6 @@ services:
     image: postgres:15-alpine
     container_name: streaming-postgres
     environment:
-      POSTGRES_DB: streaming_platform_db
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     ports:
@@ -17,6 +16,10 @@ services:
       interval: 10s
       retries: 5
       timeout: 5s
+    command: |
+      postgres -c max_connections=200 -c shared_buffers=256MB
+      -c 'create database streaming_platform_db;'
+      -c 'create database recommendation_db;'
 
   catalog-service:
     build:
@@ -38,9 +41,42 @@ services:
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
       SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.PostgreSQLDialect
 
+  recommendation-service:
+    build:
+      context: ./recommendation-service
+      dockerfile: Dockerfile
+    container_name: streaming-recommendation-service
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8083:8083"
+    networks:
+      - app-network
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/recommendation_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      SPRING_JPA_HIBERNATE_DDL_AUTO: validate
+      SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.PostgreSQLDialect
+      EXTERNAL_SERVICES_CATALOG_SERVICE_URL: http://catalog-service:8082/api/v1
+
+  redis:
+    image: redis:7-alpine
+    container_name: streaming-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - app-network
+    volumes:
+      - redis-data:/data
+    command: redis-server --appendonly yes
+
 networks:
   app-network:
     driver: bridge
 
 volumes:
   postgres-data:
+  redis-data:

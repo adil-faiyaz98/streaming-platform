@@ -89,10 +89,58 @@ public class CatalogService {
                 .map(catalogMapper::movieToMovieDTO);
     }
 
+    /**
+     * Get top rated movies.
+     *
+     * @return a list of top rated movies
+     */
+    @Cacheable(value = "movies", key = "'top-rated'")
     public List<MovieDTO> getTopRatedMovies() {
-        return movieRepository.findTop10ByOrderByAverageRatingDesc().stream()
-                .map(catalogMapper::movieToMovieDTO)
-                .toList();
+        log.debug("Fetching top-rated movies");
+        long startTime = System.currentTimeMillis();
+
+        try {
+            List<Movie> topRatedMovies = movieRepository.findTop10ByOrderByAverageRatingDesc();
+            return topRatedMovies.stream()
+                    .map(catalogMapper::movieToMovieDTO)
+                    .toList();
+        } finally {
+            long executionTime = System.currentTimeMillis() - startTime;
+            metricService.recordDatabaseOperation("select", "movie", executionTime);
+        }
+    }
+
+    /**
+     * Get movies by IDs.
+     *
+     * @param ids the movie IDs
+     * @return a list of movies
+     */
+    public List<MovieDTO> getMoviesByIds(List<String> ids) {
+        log.debug("Fetching movies by IDs: {}", ids);
+        long startTime = System.currentTimeMillis();
+
+        try {
+            List<Long> longIds = ids.stream()
+                    .map(id -> {
+                        try {
+                            return Long.parseLong(id);
+                        } catch (NumberFormatException e) {
+                            log.warn("Invalid movie ID: {}", id);
+                            return null;
+                        }
+                    })
+                    .filter(id -> id != null)
+                    .toList();
+
+            List<Movie> movies = movieRepository.findAllById(longIds);
+            return movies.stream()
+                    .map(catalogMapper::movieToMovieDTO)
+                    .toList();
+        } finally {
+            long executionTime = System.currentTimeMillis() - startTime;
+            metricService.recordDatabaseOperation("select", "movie", executionTime);
+        }
     }
 
     public List<MovieDTO> getFeaturedMovies() {

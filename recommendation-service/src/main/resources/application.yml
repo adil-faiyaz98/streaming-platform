@@ -1,0 +1,130 @@
+server:
+  port: 8083
+  servlet:
+    context-path: /
+
+spring:
+  application:
+    name: recommendation-service
+  
+  datasource:
+    url: jdbc:postgresql://localhost:5432/recommendation_db
+    username: postgres
+    password: postgres
+    hikari:
+      connection-timeout: 20000
+      maximum-pool-size: 10
+  
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    show-sql: false
+  
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+  
+  zipkin:
+    base-url: http://localhost:9411
+    enabled: true
+  
+  sleuth:
+    sampler:
+      probability: 1.0
+
+# Recommendation service specific configuration
+recommendation:
+  # Model configuration
+  model:
+    # Path to model files
+    path: models/
+    # Model update schedule (cron expression)
+    update-schedule: "0 0 2 * * ?" # 2 AM every day
+    # Minimum data points required for training
+    min-data-points: 1000
+    # Default recommendation strategy when not enough data
+    default-strategy: popularity
+  
+  # Feature configuration
+  features:
+    # Enable/disable collaborative filtering
+    collaborative-filtering: true
+    # Enable/disable content-based filtering
+    content-based: true
+    # Enable/disable hybrid recommendations
+    hybrid: true
+    # Enable/disable trending recommendations
+    trending: true
+  
+  # Algorithm parameters
+  algorithm:
+    # Number of neighbors for collaborative filtering
+    neighborhood-size: 50
+    # Similarity threshold
+    similarity-threshold: 0.1
+    # Minimum rating for positive interaction
+    min-positive-rating: 3.5
+    # Decay factor for time-based popularity
+    time-decay-factor: 0.95
+
+# Actuator configuration for monitoring
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus,loggers
+  endpoint:
+    health:
+      show-details: when-authorized
+      probes:
+        enabled: true
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+  info:
+    git:
+      mode: full
+
+# Resilience4j configuration
+resilience4j:
+  circuitbreaker:
+    instances:
+      catalogService:
+        registerHealthIndicator: true
+        slidingWindowSize: 10
+        minimumNumberOfCalls: 5
+        permittedNumberOfCallsInHalfOpenState: 3
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        waitDurationInOpenState: 10s
+        failureRateThreshold: 50
+  retry:
+    instances:
+      catalogService:
+        maxAttempts: 3
+        waitDuration: 500ms
+        enableExponentialBackoff: true
+        exponentialBackoffMultiplier: 2
+  timelimiter:
+    instances:
+      catalogService:
+        timeoutDuration: 5s
+        cancelRunningFuture: true
+
+# External service configuration
+external-services:
+  catalog-service:
+    url: http://localhost:8082/api/v1
+    timeout: 5000
+
+# Logging configuration
+logging:
+  level:
+    root: INFO
+    com.examples.streaming_platform: DEBUG
+    org.springframework.web: INFO
+    org.hibernate: INFO
