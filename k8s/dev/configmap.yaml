@@ -1,0 +1,52 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: streaming-catalog-config
+  namespace: streaming-platform
+data:
+  application-dev.yml: |
+    spring:
+      datasource:
+        hikari:
+          maximum-pool-size: 10
+          minimum-idle: 5
+          idle-timeout: 30000
+          connection-timeout: 20000
+      jpa:
+        hibernate:
+          ddl-auto: validate
+        properties:
+          hibernate:
+            dialect: org.hibernate.dialect.PostgreSQLDialect
+      zipkin:
+        base-url: http://zipkin.monitoring.svc.cluster.local:9411
+      sleuth:
+        sampler:
+          probability: 1.0
+    
+    management:
+      endpoints:
+        web:
+          exposure:
+            include: health,info,metrics,prometheus,loggers
+      endpoint:
+        health:
+          show-details: always
+          probes:
+            enabled: true
+      metrics:
+        export:
+          prometheus:
+            enabled: true
+    
+    logging:
+      level:
+        root: INFO
+        com.examples.streaming_platform: DEBUG
+        org.springframework.web: INFO
+        org.hibernate: INFO
+    
+    app:
+      external-api:
+        movie-info-url: https://api.example.com/movies
+        timeout: 3000

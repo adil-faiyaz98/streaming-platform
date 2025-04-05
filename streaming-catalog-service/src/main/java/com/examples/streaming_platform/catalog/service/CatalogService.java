@@ -4,12 +4,16 @@ import com.examples.streaming_platform.catalog.dto.*;
 import com.examples.streaming_platform.catalog.graphql.exception.ResourceNotFoundException;
 import com.examples.streaming_platform.catalog.mapper.CatalogMapper;
 import com.examples.streaming_platform.catalog.model.*;
+import com.examples.streaming_platform.catalog.monitoring.MetricService;
 import com.examples.streaming_platform.catalog.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -19,6 +23,7 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional(readOnly = true)
 public class CatalogService {
 
     private final MovieRepository movieRepository;
@@ -26,19 +31,51 @@ public class CatalogService {
     private final SeasonRepository seasonRepository;
     private final EpisodeRepository episodeRepository;
     private final CatalogMapper catalogMapper;
+    private final MetricService metricService;
 
     // ----- Movie Methods -----
 
+    /**
+     * Get all movies with pagination.
+     *
+     * @param pageable pagination information
+     * @return a page of movies
+     */
+    @Cacheable(value = "movies", key = "'page_' + #pageable.pageNumber + '_' + #pageable.pageSize")
     public Page<MovieDTO> getAllMovies(Pageable pageable) {
         log.debug("Fetching all movies with pagination: {}", pageable);
-        return movieRepository.findAll(pageable)
-                .map(catalogMapper::movieToMovieDTO);
+        long startTime = System.currentTimeMillis();
+
+        try {
+            Page<MovieDTO> result = movieRepository.findAll(pageable)
+                    .map(catalogMapper::movieToMovieDTO);
+            return result;
+        } finally {
+            long executionTime = System.currentTimeMillis() - startTime;
+            metricService.recordDatabaseOperation("select", "movie", executionTime);
+        }
     }
 
+    /**
+     * Get a movie by ID.
+     *
+     * @param id the movie ID
+     * @return the movie DTO
+     * @throws ResourceNotFoundException if the movie is not found
+     */
+    @Cacheable(value = "movies", key = "#id")
     public MovieDTO getMovieById(Long id) {
-        Movie movie = movieRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Movie", "id", id));
-        return catalogMapper.movieToMovieDTO(movie);
+        log.debug("Fetching movie by ID: {}", id);
+        long startTime = System.currentTimeMillis();
+
+        try {
+            Movie movie = movieRepository.findById(id)
+                    .orElseThrow(() -> new ResourceNotFoundException("Movie", "id", id));
+            return catalogMapper.movieToMovieDTO(movie);
+        } finally {
+            long executionTime = System.currentTimeMillis() - startTime;
+            metricService.recordDatabaseOperation("select", "movie", executionTime);
+        }
     }
 
     public Page<MovieDTO> searchMoviesByTitle(String title, Pageable page) {
@@ -64,25 +101,78 @@ public class CatalogService {
                 .toList();
     }
 
+    /**
+     * Create a new movie.
+     *
+     * @param movieDTO the movie DTO
+     * @return the created movie DTO
+     */
+    @Transactional
+    @CacheEvict(value = {"movies", "featured"}, allEntries = true)
     public MovieDTO createMovie(MovieDTO movieDTO) {
-        Movie movie = catalogMapper.movieDTOToMovie(movieDTO);
-        Movie saved = movieRepository.save(movie);
-        return catalogMapper.movieToMovieDTO(saved);
-    }
+        log.debug("Creating new movie: {}", movieDTO.getTitle());
+        long startTime = System.currentTimeMillis();
 
-    public MovieDTO updateMovie(Long id, MovieDTO movieDTO) {
-        Movie existing = movieRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Movie", "id", id));
-        catalogMapper.updateMovieFromDTO(movieDTO, existing);
-        Movie updated = movieRepository.save(existing);
-        return catalogMapper.movieToMovieDTO(updated);
-    }
-
-    public void deleteMovie(Long id) {
-        if (!movieRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Movie", "id", id);
+        try {
+            Movie movie = catalogMapper.movieDTOToMovie(movieDTO);
+            Movie saved = movieRepository.save(movie);
+            metricService.incrementCounter("movie.created");
+            return catalogMapper.movieToMovieDTO(saved);
+        } finally {
+            long executionTime = System.currentTimeMillis() - startTime;
+            metricService.recordDatabaseOperation("insert", "movie", executionTime);
         }
-        movieRepository.deleteById(id);
+    }
+
+    /**
+     * Update a movie.
+     *
+     * @param id the movie ID
+     * @param movieDTO the movie DTO
+     * @return the updated movie DTO
+     * @throws ResourceNotFoundException if the movie is not found
+     */
+    @Transactional
+    @CacheEvict(value = {"movies", "featured"}, key = "#id")
+    public MovieDTO updateMovie(Long id, MovieDTO movieDTO) {
+        log.debug("Updating movie with ID: {}", id);
+        long startTime = System.currentTimeMillis();
+
+        try {
+            Movie existing = movieRepository.findById(id)
+                    .orElseThrow(() -> new ResourceNotFoundException("Movie", "id", id));
+            catalogMapper.updateMovieFromDTO(movieDTO, existing);
+            Movie updated = movieRepository.save(existing);
+            metricService.incrementCounter("movie.updated");
+            return catalogMapper.movieToMovieDTO(updated);
+        } finally {
+            long executionTime = System.currentTimeMillis() - startTime;
+            metricService.recordDatabaseOperation("update", "movie", executionTime);
+        }
+    }
+
+    /**
+     * Delete a movie.
+     *
+     * @param id the movie ID
+     * @throws ResourceNotFoundException if the movie is not found
+     */
+    @Transactional
+    @CacheEvict(value = {"movies", "featured"}, allEntries = true)
+    public void deleteMovie(Long id) {
+        log.debug("Deleting movie with ID: {}", id);
+        long startTime = System.currentTimeMillis();
+
+        try {
+            if (!movieRepository.existsById(id)) {
+                throw new ResourceNotFoundException("Movie", "id", id);
+            }
+            movieRepository.deleteById(id);
+            metricService.incrementCounter("movie.deleted");
+        } finally {
+            long executionTime = System.currentTimeMillis() - startTime;
+            metricService.recordDatabaseOperation("delete", "movie", executionTime);
+        }
     }
 
     public void incrementMovieViewCount(Long id) {

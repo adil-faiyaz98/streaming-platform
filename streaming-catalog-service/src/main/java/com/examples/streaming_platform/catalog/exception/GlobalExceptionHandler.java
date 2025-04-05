@@ -68,6 +68,60 @@ public class GlobalExceptionHandler {
     }
 
     /**
+     * Handle security-related exceptions.
+     *
+     * @param ex the thrown exception
+     * @return a standardized ErrorResponse with status 401 or 403
+     */
+    @ExceptionHandler({
+            org.springframework.security.access.AccessDeniedException.class,
+            org.springframework.security.authentication.BadCredentialsException.class,
+            org.springframework.security.authentication.InsufficientAuthenticationException.class
+    })
+    public ResponseEntity<ErrorResponse> handleSecurityExceptions(Exception ex) {
+        log.warn("Security exception: {}", ex.getMessage());
+
+        HttpStatus status = ex instanceof org.springframework.security.access.AccessDeniedException ?
+                HttpStatus.FORBIDDEN : HttpStatus.UNAUTHORIZED;
+
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .status(status.value())
+                .message(ex.getMessage())
+                .timestamp(LocalDateTime.now())
+                .build();
+
+        return ResponseEntity
+                .status(status)
+                .body(errorResponse);
+    }
+
+    /**
+     * Handle data integrity violations (e.g., unique constraint violations).
+     *
+     * @param ex the thrown exception
+     * @return a standardized ErrorResponse with status 409
+     */
+    @ExceptionHandler(org.springframework.dao.DataIntegrityViolationException.class)
+    public ResponseEntity<ErrorResponse> handleDataIntegrityViolation(org.springframework.dao.DataIntegrityViolationException ex) {
+        log.warn("Data integrity violation: {}", ex.getMessage());
+
+        String message = "Data integrity violation";
+        if (ex.getCause() instanceof org.hibernate.exception.ConstraintViolationException) {
+            message = "A record with the same unique identifier already exists";
+        }
+
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .status(HttpStatus.CONFLICT.value())
+                .message(message)
+                .timestamp(LocalDateTime.now())
+                .build();
+
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(errorResponse);
+    }
+
+    /**
      * Fallback for any other unhandled exception types.
      *
      * @param ex the thrown exception
@@ -81,6 +135,7 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
                 .message("An unexpected error occurred. Please contact support.")
                 .timestamp(LocalDateTime.now())
+                .traceId(java.util.UUID.randomUUID().toString()) // Add trace ID for debugging
                 .build();
 
         return ResponseEntity

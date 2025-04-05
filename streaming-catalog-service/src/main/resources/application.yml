@@ -49,6 +49,74 @@ springdoc:
     path: /swagger-ui
 
 
-# In application.yml
+# Application specific configuration
 app:
   use-resolvers: false  # Set to true if you want to use resolver classes instead of controllers
+  jwt:
+    secret: ${JWT_SECRET:verySecureSecretKeyThatShouldBeChangedInProduction}
+    expiration: 86400000  # 24 hours in milliseconds
+  external-api:
+    movie-info-url: ${MOVIE_INFO_API_URL:https://api.example.com/movies}
+    timeout: 3000  # 3 seconds
+
+# Resilience4j configuration
+resilience4j:
+  circuitbreaker:
+    instances:
+      externalMovieInfo:
+        registerHealthIndicator: true
+        slidingWindowSize: 10
+        minimumNumberOfCalls: 5
+        permittedNumberOfCallsInHalfOpenState: 3
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        waitDurationInOpenState: 10s
+        failureRateThreshold: 50
+        eventConsumerBufferSize: 10
+  retry:
+    instances:
+      externalMovieInfo:
+        maxAttempts: 3
+        waitDuration: 500ms
+        enableExponentialBackoff: true
+        exponentialBackoffMultiplier: 2
+  timelimiter:
+    instances:
+      externalMovieInfo:
+        timeoutDuration: 5s
+        cancelRunningFuture: true
+  bulkhead:
+    instances:
+      externalMovieInfo:
+        maxConcurrentCalls: 10
+        maxWaitDuration: 1s
+
+# Actuator configuration for monitoring
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus,loggers
+  endpoint:
+    health:
+      show-details: when_authorized
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+  info:
+    git:
+      mode: full
+
+# Distributed tracing configuration
+spring:
+  zipkin:
+    base-url: http://zipkin:9411
+    enabled: true
+    service:
+      name: streaming-catalog-service
+  sleuth:
+    sampler:
+      probability: 1.0
+    web:
+      client:
+        enabled: true

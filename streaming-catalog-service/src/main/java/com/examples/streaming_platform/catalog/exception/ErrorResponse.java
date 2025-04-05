@@ -17,6 +17,9 @@ public class ErrorResponse {
     private int status;
     private String message;
     private LocalDateTime timestamp;
+    private String traceId;
+    private String path;
+    private String exception;
 
     // Optional: If you need a no-argument constructor
     public ErrorResponse() {

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Streaming Platform API Versioning</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #2980b9;
+            margin-top: 30px;
+        }
+        h3 {
+            color: #16a085;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        code {
+            background-color: #f8f8f8;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: Consolas, monospace;
+        }
+        .endpoint {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-left: 4px solid #3498db;
+        }
+        .deprecated {
+            text-decoration: line-through;
+            color: #999;
+        }
+        .new {
+            background-color: #e8f8f5;
+            border-left: 4px solid #2ecc71;
+        }
+        .warning {
+            background-color: #fff3cd;
+            padding: 10px;
+            border-left: 4px solid #ffc107;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Streaming Platform API Versioning</h1>
+        
+        <p>This document outlines the versioning strategy for the Streaming Platform API and provides information about available versions.</p>
+        
+        <div class="warning">
+            <strong>Note:</strong> Always use the latest API version for new integrations. Older versions may be deprecated in the future.
+        </div>
+        
+        <h2>Versioning Strategy</h2>
+        
+        <p>The Streaming Platform API uses URI versioning with the following format:</p>
+        
+        <code>https://api.streaming-platform.example.com/api/v{version_number}/{resource}</code>
+        
+        <p>For example:</p>
+        <ul>
+            <li><code>https://api.streaming-platform.example.com/api/v1/movies</code></li>
+            <li><code>https://api.streaming-platform.example.com/api/v2/movies</code></li>
+        </ul>
+        
+        <h2>Available Versions</h2>
+        
+        <table>
+            <tr>
+                <th>Version</th>
+                <th>Status</th>
+                <th>Release Date</th>
+                <th>End of Support</th>
+            </tr>
+            <tr>
+                <td>v1</td>
+                <td>Stable</td>
+                <td>January 1, 2023</td>
+                <td>January 1, 2025</td>
+            </tr>
+            <tr>
+                <td>v2</td>
+                <td>Latest</td>
+                <td>July 1, 2023</td>
+                <td>TBD</td>
+            </tr>
+        </table>
+        
+        <h2>Version Differences</h2>
+        
+        <h3>V1 vs V2</h3>
+        
+        <p>V2 introduces the following improvements:</p>
+        
+        <ul>
+            <li>Enhanced filtering capabilities for movie listings</li>
+            <li>Detailed movie information endpoint with external data</li>
+            <li>Movie recommendations endpoint</li>
+            <li>Advanced search functionality</li>
+            <li>Improved error responses with more detailed information</li>
+        </ul>
+        
+        <h2>Endpoint Comparison</h2>
+        
+        <div class="endpoint">
+            <h3>Get All Movies</h3>
+            <p><strong>V1:</strong> <code>GET /api/v1/movies</code></p>
+            <p>Basic pagination with size and page parameters.</p>
+            
+            <p><strong>V2:</strong> <code>GET /api/v2/movies</code></p>
+            <p>Enhanced with filtering by genre, release year, and minimum rating.</p>
+        </div>
+        
+        <div class="endpoint">
+            <h3>Get Movie by ID</h3>
+            <p><strong>V1:</strong> <code>GET /api/v1/movies/{id}</code></p>
+            <p>Returns basic movie information.</p>
+            
+            <p><strong>V2:</strong> <code>GET /api/v2/movies/{id}</code></p>
+            <p>Same as V1 for backward compatibility.</p>
+        </div>
+        
+        <div class="endpoint new">
+            <h3>Get Detailed Movie Information (New in V2)</h3>
+            <p><strong>V2:</strong> <code>GET /api/v2/movies/{id}/detailed</code></p>
+            <p>Returns enhanced movie information including cast, external ratings, and additional metadata.</p>
+        </div>
+        
+        <div class="endpoint">
+            <h3>Search Movies</h3>
+            <p><strong>V1:</strong> <code>GET /api/v1/movies/search?title={title}</code></p>
+            <p>Basic search by title only.</p>
+            
+            <p><strong>V2:</strong> <code>GET /api/v2/movies/search?query={query}&includeAdult={boolean}&sortBy={field}</code></p>
+            <p>Advanced search with multiple parameters and sorting options.</p>
+        </div>
+        
+        <div class="endpoint new">
+            <h3>Get Movie Recommendations (New in V2)</h3>
+            <p><strong>V2:</strong> <code>GET /api/v2/movies/{id}/recommendations?limit={limit}</code></p>
+            <p>Returns movie recommendations based on the specified movie.</p>
+        </div>
+        
+        <h2>Migration Guide</h2>
+        
+        <p>When migrating from V1 to V2:</p>
+        
+        <ol>
+            <li>Update all API endpoint URLs to use <code>/api/v2/</code> instead of <code>/api/v1/</code></li>
+            <li>Review the new filtering options for the movies listing endpoint</li>
+            <li>Update search implementation to use the new parameters</li>
+            <li>Consider using the new detailed movie information and recommendations endpoints</li>
+        </ol>
+        
+        <h2>Deprecation Policy</h2>
+        
+        <p>API versions are supported for at least 24 months after the release of the next version. When a version is scheduled for deprecation:</p>
+        
+        <ol>
+            <li>An announcement will be made at least 6 months before the end of support date</li>
+            <li>Deprecation warnings will be included in API responses</li>
+            <li>Documentation will be updated to reflect the deprecation status</li>
+        </ol>
+        
+        <p>After the end of support date, the deprecated version may continue to function but will no longer receive updates or bug fixes.</p>
+    </div>
+</body>
+</html>
