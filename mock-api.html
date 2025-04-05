@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Streaming Platform Mock API</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #2980b9;
+            margin-top: 30px;
+        }
+        pre {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        .response {
+            background-color: #f1f1f1;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        .credentials {
+            background-color: #e8f8f5;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .error {
+            color: #e74c3c;
+        }
+    </style>
+</head>
+<body>
+    <h1>Streaming Platform Mock API</h1>
+    
+    <div class="credentials">
+        <h3>Test Credentials</h3>
+        <p><strong>Admin User:</strong> admin / admin123</p>
+        <p><strong>Regular User:</strong> user / user123</p>
+    </div>
+
+    <h2>Authentication</h2>
+    <div>
+        <label for="username">Username:</label>
+        <input type="text" id="username" value="admin">
+        <label for="password">Password:</label>
+        <input type="password" id="password" value="admin123">
+        <button onclick="login()">Login</button>
+    </div>
+    <div id="auth-response" class="response"></div>
+
+    <h2>Catalog API</h2>
+    <div>
+        <button onclick="getMovies()">Get Movies</button>
+        <button onclick="getMovieById(1)">Get Movie #1</button>
+    </div>
+    <div id="catalog-response" class="response"></div>
+
+    <h2>Recommendation API</h2>
+    <div>
+        <button onclick="getRecommendations('admin')">Get Personalized Recommendations</button>
+        <button onclick="getSimilarContent(1)">Get Similar Content</button>
+        <button onclick="getTrendingContent()">Get Trending Content</button>
+    </div>
+    <div id="recommendation-response" class="response"></div>
+
+    <h2>User Interactions</h2>
+    <div>
+        <button onclick="recordRating('admin', 1, 5)">Rate Movie #1 (5 stars)</button>
+        <button onclick="recordView('admin', 2)">View Movie #2</button>
+    </div>
+    <div id="interaction-response" class="response"></div>
+
+    <script>
+        // Mock data
+        const users = {
+            'admin': { password: 'admin123', roles: ['ROLE_ADMIN', 'ROLE_USER'] },
+            'user': { password: 'user123', roles: ['ROLE_USER'] }
+        };
+
+        const movies = [
+            { id: 1, title: 'Inception', description: 'A thief who steals corporate secrets through the use of dream-sharing technology.', releaseYear: 2010, director: 'Christopher Nolan', duration: 148, maturityRating: 'PG-13', averageRating: 4.8, genres: ['ACTION', 'SCIENCE_FICTION', 'THRILLER'] },
+            { id: 2, title: 'The Shawshank Redemption', description: 'Two imprisoned men bond over a number of years.', releaseYear: 1994, director: 'Frank Darabont', duration: 142, maturityRating: 'R', averageRating: 4.9, genres: ['DRAMA'] },
+            { id: 3, title: 'The Godfather', description: 'The aging patriarch of an organized crime dynasty transfers control to his son.', releaseYear: 1972, director: 'Francis Ford Coppola', duration: 175, maturityRating: 'R', averageRating: 4.8, genres: ['CRIME', 'DRAMA'] },
+            { id: 4, title: 'The Dark Knight', description: 'Batman fights the menace known as the Joker.', releaseYear: 2008, director: 'Christopher Nolan', duration: 152, maturityRating: 'PG-13', averageRating: 4.7, genres: ['ACTION', 'CRIME', 'DRAMA'] },
+            { id: 5, title: 'Pulp Fiction', description: 'The lives of two mob hitmen, a boxer, a gangster and his wife intertwine.', releaseYear: 1994, director: 'Quentin Tarantino', duration: 154, maturityRating: 'R', averageRating: 4.6, genres: ['CRIME', 'DRAMA'] }
+        ];
+
+        const userInteractions = [];
+
+        let authToken = '';
+
+        // Authentication
+        function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const authResponseDiv = document.getElementById('auth-response');
+
+            if (users[username] && users[username].password === password) {
+                // Generate a mock JWT token
+                authToken = btoa(JSON.stringify({
+                    sub: username,
+                    roles: users[username].roles,
+                    exp: Math.floor(Date.now() / 1000) + 3600
+                }));
+
+                authResponseDiv.innerHTML = `
+                    <h3>Authentication Successful</h3>
+                    <p><strong>Token:</strong> ${authToken}</p>
+                    <p><strong>Username:</strong> ${username}</p>
+                    <p><strong>Roles:</strong> ${users[username].roles.join(', ')}</p>
+                `;
+            } else {
+                authResponseDiv.innerHTML = `
+                    <h3 class="error">Authentication Failed</h3>
+                    <p>Invalid username or password</p>
+                `;
+                authToken = '';
+            }
+        }
+
+        // Catalog API
+        function getMovies() {
+            if (!authToken) {
+                document.getElementById('catalog-response').innerHTML = '<p class="error">Please login first</p>';
+                return;
+            }
+
+            document.getElementById('catalog-response').innerHTML = `
+                <h3>Movies</h3>
+                <pre>${JSON.stringify(movies, null, 2)}</pre>
+            `;
+        }
+
+        function getMovieById(id) {
+            if (!authToken) {
+                document.getElementById('catalog-response').innerHTML = '<p class="error">Please login first</p>';
+                return;
+            }
+
+            const movie = movies.find(m => m.id === id);
+            if (movie) {
+                document.getElementById('catalog-response').innerHTML = `
+                    <h3>Movie #${id}</h3>
+                    <pre>${JSON.stringify(movie, null, 2)}</pre>
+                `;
+            } else {
+                document.getElementById('catalog-response').innerHTML = `
+                    <h3 class="error">Movie Not Found</h3>
+                    <p>No movie found with ID ${id}</p>
+                `;
+            }
+        }
+
+        // Recommendation API
+        function getRecommendations(userId) {
+            if (!authToken) {
+                document.getElementById('recommendation-response').innerHTML = '<p class="error">Please login first</p>';
+                return;
+            }
+
+            // Get user's interactions
+            const userRatings = userInteractions.filter(i => i.userId === userId && i.type === 'RATING');
+            
+            // Generate recommendations based on ratings
+            let recommendations = [];
+            
+            if (userRatings.length > 0) {
+                // Find genres the user likes
+                const ratedMovieIds = userRatings.map(r => r.itemId);
+                const ratedMovies = movies.filter(m => ratedMovieIds.includes(m.id));
+                const likedGenres = new Set();
+                
+                ratedMovies.forEach(movie => {
+                    movie.genres.forEach(genre => likedGenres.add(genre));
+                });
+                
+                // Recommend movies with similar genres that the user hasn't rated
+                recommendations = movies
+                    .filter(m => !ratedMovieIds.includes(m.id))
+                    .filter(m => m.genres.some(g => likedGenres.has(g)))
+                    .map(m => ({
+                        itemId: m.id.toString(),
+                        itemType: 'MOVIE',
+                        score: 0.9,
+                        reason: 'Based on your genre preferences',
+                        algorithm: 'content_based'
+                    }));
+            }
+            
+            // If no recommendations based on ratings, return popular movies
+            if (recommendations.length === 0) {
+                recommendations = movies
+                    .sort((a, b) => b.averageRating - a.averageRating)
+                    .slice(0, 3)
+                    .map(m => ({
+                        itemId: m.id.toString(),
+                        itemType: 'MOVIE',
+                        score: 0.8,
+                        reason: 'Popular on our platform',
+                        algorithm: 'popularity'
+                    }));
+            }
+
+            document.getElementById('recommendation-response').innerHTML = `
+                <h3>Personalized Recommendations for ${userId}</h3>
+                <pre>${JSON.stringify(recommendations, null, 2)}</pre>
+            `;
+        }
+
+        function getSimilarContent(itemId) {
+            if (!authToken) {
+                document.getElementById('recommendation-response').innerHTML = '<p class="error">Please login first</p>';
+                return;
+            }
+
+            const movie = movies.find(m => m.id === itemId);
+            if (!movie) {
+                document.getElementById('recommendation-response').innerHTML = `
+                    <h3 class="error">Movie Not Found</h3>
+                    <p>No movie found with ID ${itemId}</p>
+                `;
+                return;
+            }
+
+            // Find movies with similar genres
+            const similarMovies = movies
+                .filter(m => m.id !== itemId)
+                .filter(m => m.genres.some(g => movie.genres.includes(g)))
+                .map(m => ({
+                    itemId: m.id.toString(),
+                    itemType: 'MOVIE',
+                    score: 0.85,
+                    reason: 'Similar to ' + movie.title,
+                    algorithm: 'content_based'
+                }));
+
+            document.getElementById('recommendation-response').innerHTML = `
+                <h3>Similar Content to "${movie.title}"</h3>
+                <pre>${JSON.stringify(similarMovies, null, 2)}</pre>
+            `;
+        }
+
+        function getTrendingContent() {
+            if (!authToken) {
+                document.getElementById('recommendation-response').innerHTML = '<p class="error">Please login first</p>';
+                return;
+            }
+
+            // Get most viewed movies
+            const viewCounts = {};
+            userInteractions.forEach(i => {
+                if (i.type === 'VIEW') {
+                    viewCounts[i.itemId] = (viewCounts[i.itemId] || 0) + 1;
+                }
+            });
+
+            // Sort by view count
+            const trendingMovies = Object.keys(viewCounts)
+                .sort((a, b) => viewCounts[b] - viewCounts[a])
+                .map(id => {
+                    const movie = movies.find(m => m.id === parseInt(id));
+                    return {
+                        itemId: id,
+                        itemType: 'MOVIE',
+                        score: 0.95,
+                        reason: 'Trending this week',
+                        algorithm: 'trending'
+                    };
+                });
+
+            // If no trending movies, return top rated
+            if (trendingMovies.length === 0) {
+                const topRated = movies
+                    .sort((a, b) => b.averageRating - a.averageRating)
+                    .slice(0, 3)
+                    .map(m => ({
+                        itemId: m.id.toString(),
+                        itemType: 'MOVIE',
+                        score: 0.9,
+                        reason: 'Top rated on our platform',
+                        algorithm: 'trending'
+                    }));
+
+                document.getElementById('recommendation-response').innerHTML = `
+                    <h3>Trending Content</h3>
+                    <pre>${JSON.stringify(topRated, null, 2)}</pre>
+                `;
+            } else {
+                document.getElementById('recommendation-response').innerHTML = `
+                    <h3>Trending Content</h3>
+                    <pre>${JSON.stringify(trendingMovies, null, 2)}</pre>
+                `;
+            }
+        }
+
+        // User Interactions
+        function recordRating(userId, itemId, rating) {
+            if (!authToken) {
+                document.getElementById('interaction-response').innerHTML = '<p class="error">Please login first</p>';
+                return;
+            }
+
+            const movie = movies.find(m => m.id === itemId);
+            if (!movie) {
+                document.getElementById('interaction-response').innerHTML = `
+                    <h3 class="error">Movie Not Found</h3>
+                    <p>No movie found with ID ${itemId}</p>
+                `;
+                return;
+            }
+
+            // Record the rating
+            userInteractions.push({
+                userId,
+                itemId,
+                type: 'RATING',
+                value: rating,
+                timestamp: new Date().toISOString()
+            });
+
+            document.getElementById('interaction-response').innerHTML = `
+                <h3>Rating Recorded</h3>
+                <p>User ${userId} rated "${movie.title}" with ${rating} stars</p>
+                <pre>${JSON.stringify(userInteractions[userInteractions.length - 1], null, 2)}</pre>
+            `;
+        }
+
+        function recordView(userId, itemId) {
+            if (!authToken) {
+                document.getElementById('interaction-response').innerHTML = '<p class="error">Please login first</p>';
+                return;
+            }
+
+            const movie = movies.find(m => m.id === itemId);
+            if (!movie) {
+                document.getElementById('interaction-response').innerHTML = `
+                    <h3 class="error">Movie Not Found</h3>
+                    <p>No movie found with ID ${itemId}</p>
+                `;
+                return;
+            }
+
+            // Record the view
+            userInteractions.push({
+                userId,
+                itemId,
+                type: 'VIEW',
+                timestamp: new Date().toISOString()
+            });
+
+            document.getElementById('interaction-response').innerHTML = `
+                <h3>View Recorded</h3>
+                <p>User ${userId} viewed "${movie.title}"</p>
+                <pre>${JSON.stringify(userInteractions[userInteractions.length - 1], null, 2)}</pre>
+            `;
+        }
+    </script>
+</body>
+</html>
